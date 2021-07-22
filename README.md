@@ -1,2 +1,2 @@
 # Antoinette
-Functional tests framework. Targeted toward Epitech IT students
+Functional tests framework. Targeted towards Epitech IT students
