@@ -172,7 +172,7 @@ class Displayer
      */
     public function resetAll(): self
     {
-        $this->resetBackground()->resetColor()->resetStyle();
+        $this->resetBackground()->resetColor()->resetStyles();
         
         return $this;
     }

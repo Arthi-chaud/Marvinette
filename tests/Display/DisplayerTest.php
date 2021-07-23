@@ -44,4 +44,30 @@ final class DisplayerTest extends TestCase
         $displayer->resetStyles();
         $this->assertEmpty($displayer->getStyles());
     }
+
+    public function testSetterAndResetter(): void
+    {
+        $displayer = new Displayer();
+
+        $displayer->set([Style::Bold], Color::Blue, Color::Black);
+        $this->assertEquals($displayer->getStyles(), [Style::Bold]);
+        $this->assertEquals($displayer->getColor(), Color::Blue);
+        $this->assertEquals($displayer->getBackground(), Color::Black);
+        $displayer->resetAll();
+        $this->assertEmpty($displayer->getStyles());
+        $this->assertEquals($displayer->getColor(), Color::Default);
+        $this->assertEquals($displayer->getBackground(), Color::Default);
+    }
+
+    public function testDisplayTextOnTty(): void
+    {
+        $this->expectOutputString("Hello World\nHello World");
+        $displayer = new Displayer();
+
+        $displayer->setStyle(Style::Dim)
+                  ->setColor(Color::Red)
+                  ->displayText("Hello World\n")
+                  ->resetAll();
+        $displayer->displayText("Hello World");
+    }
 }
