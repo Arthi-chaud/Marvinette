@@ -1,5 +1,7 @@
 <?php
 
+use phpDocumentor\Reflection\Types\Boolean;
+
 /**
  * @brief Object representing the project's important infos
 */
@@ -17,15 +19,15 @@ class Project
 	protected string $binaryName;
 
 	/**
-	 * @brief Path to the binary to execute
+	 * @brief Path to the binary to execute, by default cwd
 	 * @details Can be either realtive or absolute
 	 */
-	protected string $binaryPath;
+	protected string $binaryPath = "./";
 
 	/**
 	 * @brief name of the interpreter, if needed
 	 */
-	protected ?string $interpreter;
+	protected ?string $interpreter = null;
 
 	/**
 	 * @brief Relative path to the folder holding tests files
@@ -69,6 +71,8 @@ class Project
 	 */ 
 	public function setBinaryName($binaryName)
 	{
+		if (strchr($binaryName, DIRECTORY_SEPARATOR))
+			throw new Exception("The binary name should not contain a '". DIRECTORY_SEPARATOR. "'");
 		$this->binaryName = $binaryName;
 
 		return $this;
@@ -89,6 +93,8 @@ class Project
 	 */ 
 	public function setBinaryPath($binaryPath)
 	{
+		if ($binaryPath == "")
+			$binaryPath = ".";
 		$this->binaryPath = $binaryPath;
 
 		return $this;
@@ -109,6 +115,8 @@ class Project
 	 */ 
 	public function setInterpreter($interpreter)
 	{
+		if ($interpreter == "")
+			$interpreter = null;
 		$this->interpreter = $interpreter;
 
 		return $this;
@@ -132,6 +140,73 @@ class Project
 		$this->testsFolder = $testsFolder;
 
 		return $this;
+	}
+
+	/**
+	 * Returns true if all necessary fields are set
+	 * interpreter can be null
+	 */
+	public function readyToExport(): bool
+	{
+		return $this->name && $this->binaryPath && $this->binaryName && $this->testsFolder;
+	}
+
+	/**
+	 * build binary access path
+	 */
+	protected function buildBinaryAccessPath(): string
+	{
+		if (substr($this->binaryPath, strlen($this->binaryPath) - 1, 1) != DIRECTORY_SEPARATOR)
+			$this->binaryPath .= DIRECTORY_SEPARATOR;
+		return $this->binaryPath . $this->binaryName;
+	}
+
+	/**
+	 * Using PATh Env var, checks if interpreter exists
+	 * throw if no interpreter is set
+	 */
+	protected function interpreterExists(): bool
+	{
+		if (!$this->interpreter)
+			throw new Exception("No Interpreter set");
+		foreach (explode(':', getenv('PATH')) as $path) {
+			if (file_exists($path . DIRECTORY_SEPARATOR . $this->interpreter))
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if the binary exists the interpreter exists (if set) (need to be ready to export)
+	 */
+	public function isReadyToBeTested(): bool
+	{
+		if (!$this->readyToExport())
+			return false;
+		if (!file_exists($this->buildBinaryAccessPath()))
+			return false;
+		if ($this->interpreter && !$this->interpreterExists())
+			return false;
+		return true;
+	}
+
+	/**
+	 * Export Project to JSON formatted file
+	 * @param $outfile name of file with JSON-ed Project class
+	 */
+	public function export(string $outfile): bool
+	{
+		$project['name'] = $this->name;
+		$project['binary name'] = $this->binaryName;
+		$project['binary path'] = $this->binaryPath;
+		$project['interpreter'] = $this->interpreter;
+		$project['tests folder'] = $this->testsFolder;
+
+		if (!$this->readyToExport())
+			throw new Exception("Project is not ready to be exported, missing mandatory field");
+		$jsoned = json_encode($project);
+		//to do: if file already exists, prompt to overwite
+		return file_put_contents($outfile, $jsoned);
 	}
 }
 
