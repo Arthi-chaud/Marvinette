@@ -13,19 +13,19 @@ class Displayer
      * @brief Color to display the text with
      * @warn must be an const from Display\Color
      */
-    protected int $color = Color::Default;
+    protected $color = Color::Default;
 
     /**
      * @brief array of Styles to display the text with
      * @warn must hold consts from Display\Style
      */
-    protected array $styles = [];
+    protected $styles = [];
 
     /**
      * @brief Background to display the text with
      * @warn must be an const from Display\Color
      */
-    protected ?int $background = Color::Default;
+    protected $background = Color::Default;
     
     /**
      * Display text, using previously set style / color / background
