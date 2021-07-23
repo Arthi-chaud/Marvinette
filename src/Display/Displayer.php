@@ -24,15 +24,22 @@ class Displayer
 
     /**
      * @brief Background to display the text with
-     * @warn must be an const from Display\Background
+     * @warn must be an const from Display\Color
      */
-    protected ?int $background = Color::Default + Color::BACKGROUND_OFFSET;
+    protected ?int $background = Color::Default;
     
+    /**
+     * Display text, using previously set style / color / background
+     * The style... will not be displayed if stdout is a TTY
+     * @param $text the text to display
+     * @param $resetAfter if true, resets style / color / background
+     */
     public function displayText(string $text, bool $resetAfter = true): self
     {
         if (!stream_isatty(STDOUT)) {
             echo $this->getSequence($this->color);
-            echo $this->getSequence($this->background);
+            echo $this->getSequence($this->background + Color::BACKGROUND_OFFSET);
+            echo $this->getSequence(Style::Default);
             foreach ($this->styles as $style)
                 echo $this->getSequence("\e[%dm", $style);
         }
@@ -41,7 +48,6 @@ class Displayer
             $this->resetAll();
         return $this;
     }
-    
     
     /**
      * Get the value of color
@@ -88,14 +94,17 @@ class Displayer
      */ 
     public function setBackground($background)
     {
-        $this->background = $background + Color::BACKGROUND_OFFSET;
+        $this->background = $background;
         
         return $this;
     }
     
+    /**
+     * Reset Background color value to default
+     */
     public function resetBackground(): self
     {
-        $this->background = null;
+        $this->background = Color::Default;
 
         return $this;
     }
@@ -120,13 +129,22 @@ class Displayer
         return $this;
     }
 
-    public function resetStyle(): self
+    /**
+     * Reset Styles value to none
+     */
+    public function resetStyles(): self
     {
         $this->styles = [];
 
         return $this;
     }
 
+    /**
+     * Set styles and color to use
+     * @param $styles an array of styles id
+     * @param $color a color id
+     * @param $background a background id (without offset, using straight color id)
+     */
     public function set(array $styles, $color, $background): self
     {
         $this->styles = array_merge($this->styles, $styles);
@@ -135,6 +153,9 @@ class Displayer
         return $this;
     }
     
+    /**
+     * resets all presets values, using rest memeber functions
+     */
     public function resetAll(): self
     {
         $this->resetBackground()->resetColor()->resetStyle();
@@ -142,6 +163,9 @@ class Displayer
         return $this;
     }
 
+    /**
+     * @return string formatted string for terminal setting
+     */
     protected function getSequence($id): string
     {
         return sprintf("\e[%dm", $id);

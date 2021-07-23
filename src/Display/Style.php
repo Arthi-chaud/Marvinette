@@ -7,6 +7,10 @@ namespace Display;
  */
 class Style {
     /**
+     * @brief id letting the terminal know to write using default style
+     */
+    const Default = 0;
+    /**
 	 * @brief id letting the terminal know to write in bold
 	 */
 	const Bold = 1;
