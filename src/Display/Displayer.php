@@ -1,13 +1,12 @@
 <?php
 
 namespace Display;
-include "Display\Color";
-include "Display\Style";
+require_once "src/Display/Color.php";
+require_once "src/Display/Style.php";
 
 /**
  * @brief Display utility class
  */
-
 class Displayer
 {
     /**
