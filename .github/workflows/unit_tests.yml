@@ -15,7 +15,7 @@ jobs:
       - name: compile unit tests
         run: |
           sudo apt update
-          sudo apt-get install php7.4 php7.4-common php7.4-xml
+          sudo apt-get install php7.3-common php7.3-xml
           php --ini
           composer require --dev phpunit/phpunit ^9
           ./vendor/bin/phpunit tests --testdox --coverage-html tests/coverage --coverage-filter src
