@@ -116,7 +116,7 @@ class Displayer
      */ 
     public function getStyles()
     {
-        return $this->style;
+        return $this->styles;
     }
 
     /**
@@ -127,6 +127,18 @@ class Displayer
     public function setStyle($style)
     {
         $this->styles[] = $style;
+
+        return $this;
+    }
+
+    /**
+     * Set styles
+     *
+     * @return  self
+     */ 
+    public function setStyles($styles)
+    {
+        $this->styles = $styles;
 
         return $this;
     }
