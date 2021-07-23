@@ -5,7 +5,7 @@ include "Display\Color";
 include "Display\Style";
 
 /**
- * @brief Display utlity class
+ * @brief Display utility class
  */
 
 class Displayer
