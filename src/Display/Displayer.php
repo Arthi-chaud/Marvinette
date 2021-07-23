@@ -10,18 +10,21 @@ require_once "src/Display/Style.php";
 class Displayer
 {
     /**
+     * @var int
      * @brief Color to display the text with
      * @warn must be an const from Display\Color
      */
     protected $color = Color::Default;
 
     /**
+     * @var array
      * @brief array of Styles to display the text with
      * @warn must hold consts from Display\Style
      */
     protected $styles = [];
 
     /**
+     * @var int
      * @brief Background to display the text with
      * @warn must be an const from Display\Color
      */
