@@ -38,10 +38,10 @@ class Displayer
      */
     public function displayText(string $text, bool $resetAfter = true): self
     {
-        if (!stream_isatty(STDOUT)) {
+        if (stream_isatty(STDOUT)) {
+            echo $this->getSequence(Style::Default);
             echo $this->getSequence($this->color);
             echo $this->getSequence($this->background + Color::BACKGROUND_OFFSET);
-            echo $this->getSequence(Style::Default);
             foreach ($this->styles as $style)
                 echo $this->getSequence("\e[%dm", $style);
         }

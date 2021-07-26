@@ -1,7 +1,7 @@
 <?php
 
-require_once 'Project.php';
-require_once 'Displayer.php';
+require_once 'src/Project.php';
+require_once 'src/Display/Displayer.php';
 
 use Display\Displayer;
 use Display\Color;
@@ -11,6 +11,11 @@ use Display\Color;
 */
 class Marvinette {
 
+    public function __construct()
+    {
+        $this->displayer = new Displayer();
+    }
+
     const ConfigurationFile = "Marvinette.json";
 
     protected Displayer $displayer;
@@ -18,7 +23,7 @@ class Marvinette {
     protected function displayCLIFrame(string $text): self
     {
         $this->displayer->setColor(Color::Green)
-                        ->displayText("| $text |");
+                        ->displayText("| $text |\t");
         return $this;
     }
 
@@ -34,12 +39,46 @@ class Marvinette {
         return null;
     }
 
+    protected function displayNoConfigFileFound($displayFrameTitle): void
+    {
+        $this->displayCLIFrame($displayFrameTitle)
+             ->displayer->setColor(Color::Red)->displayText("No Configuration File Found!\n");
+    }
+
+
+    public function modProject(): bool
+    {
+        $displayFrameTitle = "Modify Project";
+        if (!file_exists(self::ConfigurationFile)) {
+            $this->displayNoConfigFileFound($displayFrameTitle);
+            return false;
+        }
+        $project = new Project();
+        $project->import(self::ConfigurationFile);
+        foreach (Project::Fields as $field) {
+            $this->displayCLIFrame($displayFrameTitle)
+                 ->displayer->setColor(Color::Green)->displayText("Enter the project's new ". ucwords($displayFrameTitle) . ":");
+            $this->displayCLIFrame($displayFrameTitle)
+                 ->displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed)");
+            if (($value = fgets(STDIN)) == null)
+                return false;
+            $object[$displayFrameTitle] = $value;
+        }
+        $project->setName($object['name'] ? $object['name'] : $project->getName())
+			 ->setBinaryPath($object['binary path'] ? $object['binary path'] : $project->getBinaryPath())
+			 ->setBinaryName($object['binary name'] ? $object['binary name'] : $project->getBinaryName())
+			 ->setInterpreter($object['interpreter'] ? $object['interpreter'] : $project->getInterpreter())
+			 ->setTestsFolder($object['tests folder'] ? $object['tests folder'] : $project->getTestsFolder());
+        unlink(self::ConfigurationFile);
+        $project->export(self::ConfigurationFile);
+        return true;
+    }
+
     public function deleteProject(): bool
     {
         $displayFrameTitle = "Delete Project";
         if (!file_exists(self::ConfigurationFile)) {
-            $this->displayCLIFrame($displayFrameTitle)
-                 ->displayer->setColor(Color::Red)->displayText("No COnfiguration File Found!");
+            $this->displayNoConfigFileFound($displayFrameTitle);
             return false;
         }
         $project = new Project();
@@ -97,5 +136,6 @@ class Marvinette {
                 return false;
         }
         //todo create project
+        return true;
     }
 }
