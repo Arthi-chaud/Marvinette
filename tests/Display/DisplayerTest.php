@@ -70,4 +70,11 @@ final class DisplayerTest extends TestCase
                   ->resetAll();
         $displayer->displayText("Hello World");
     }
+
+    public function testGetSequence(): void
+    {
+        $displayer = new Displayer();
+        $this->assertEquals("\e[1m", callMethod($displayer, 'getSequence', [1]));
+    }
+
 }

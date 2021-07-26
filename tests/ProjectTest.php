@@ -57,15 +57,12 @@ final class ProjectTest extends TestCase
     {
         $project = new Project();
 
-        $this->expectError();
         $this->assertFalse($project->readyToExport());
         
         $project->setName("Hello");
-        $this->expectError();
         $this->assertFalse($project->readyToExport());
         
         $project->setBinaryName("my_project");
-        $this->expectError();
         $this->assertFalse($project->readyToExport());
         
         $project->setTestsFolder("tests/");
