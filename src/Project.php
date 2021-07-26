@@ -204,9 +204,33 @@ class Project
 
 		if (!$this->readyToExport())
 			throw new Exception("Project is not ready to be exported, missing mandatory field");
-		$jsoned = json_encode($project);
+		$jsoned = json_encode($project, JSON_PRETTY_PRINT);
 		//to do: if file already exists, prompt to overwite
 		return file_put_contents($outfile, $jsoned);
+	}
+
+	public function import(string $infile): void
+	{
+		$expectedKeys = [
+			'name',
+			'binary name',
+			'binary path',
+			'interpreter',
+			'tests folder',	
+		];
+		if (!file_exists($infile))
+			throw new Exception("$infile does not exists.");
+		$object = json_decode(file_get_contents($infile), true);
+		foreach ($expectedKeys as $expectedKey) {
+			if (!array_key_exists($expectedKey, $object))
+				throw new Exception("File $infile: No $expectedKey field.");
+		}
+		$this->setName($object['name'])
+			 ->setBinaryPath($object['binary path'])
+			 ->setBinaryName($object['binary name'])
+			 ->setInterpreter($object['interpreter'])
+			 ->setTestsFolder($object['tests folder']);
+		
 	}
 }
 

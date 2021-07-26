@@ -99,4 +99,73 @@ final class ProjectTest extends TestCase
         $this->expectException(Exception::class);
         callMethod($project, 'interpreterExists');
     }
+
+    public function testIsReadyToBeTested(): void
+    {
+        $project = new Project();
+
+        //ok
+        $project->setName("Name");
+        $project->setBinaryName("LICENSE");
+        $project->setTestsFolder("tests/");
+        $this->assertTrue($project->isReadyToBeTested());
+        $project->setBinaryPath("");
+        $project->setInterpreter("bash");
+        $this->assertTrue($project->isReadyToBeTested());
+    }
+
+    public function testIsReadyToBeTestedWhenInvalidBinaryPath(): void
+    {
+        $project = new Project();
+
+        $project->setName("Name");
+        $project->setBinaryName("LICENSE");
+        $project->setTestsFolder("tests/");
+        $project->setBinaryPath("BYE");
+        $this->assertFalse($project->isReadyToBeTested());
+    }
+
+    public function testIsReadyToBeTestedWhenInvalidInterpreter(): void
+    {
+        $project = new Project();
+
+        $project->setName("Name");
+        $project->setBinaryName("LICENSE");
+        $project->setTestsFolder("tests/");
+        $project->setInterpreter("trololol");
+        $this->assertFalse($project->isReadyToBeTested());
+        $project->setName("")->setBinaryPath("")->setBinaryName("");
+        $this->assertFalse($project->isReadyToBeTested());
+    }
+
+    public function testExport(): void
+    {
+        $project = new Project();
+
+        $project->setName("Name");
+        $project->setBinaryName("LICENSE");
+        $project->setTestsFolder("tests/");
+        $this->assertTrue($project->export("Marvinette.json"));
+        $this->assertTrue(file_exists("Marvinette.json"));
+        $fileContent = file_get_contents("Marvinette.json");
+        $object = json_decode($fileContent, true);
+        $this->assertEquals($object["name"], "Name");
+        $this->assertEquals($object["binary name"], "LICENSE");
+        $this->assertEquals($object["tests folder"], "tests/");
+    }
+
+    /**
+    * @depends ProjectTest::testExport
+    */
+    public function testImport(): void
+    {
+        $project = new Project();
+
+        $project->import("Marvinette.json");
+        $this->assertEquals($project->getName(), "Name");
+        $this->assertEquals($project->getBinaryName(), "LICENSE");
+        $this->assertEquals($project->getBinaryPath(), "./");
+        $this->assertNull($project->getInterpreter());
+        $this->assertEquals($project->getTestsFolder(), "tests/");
+    }
 }
