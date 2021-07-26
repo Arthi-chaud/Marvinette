@@ -83,21 +83,33 @@ final class ProjectTest extends TestCase
         $this->assertEquals("hello/world", callMethod($project, 'buildBinaryAccessPath'));
     }
 
-    public function testInterpreterExists(): void
+    public function testInterpreterExistsValid(): void
     {
         $project = new Project();
 
-        $project->setInterpreter("trololol");
-        $this->assertEquals(callMethod($project, 'interpreterExists'), false);
         $project->setInterpreter("bash");
         $this->assertEquals(callMethod($project, 'interpreterExists'), true);
         $project->setInterpreter("zsh");
         $this->assertEquals(callMethod($project, 'interpreterExists'), true);
-        $project->setInterpreter("python1");
-        $this->assertEquals(callMethod($project, 'interpreterExists'), false);
+    }
+
+    public function testInterpreterExistsEmptyField(): void
+    {
+        $project = new Project();
+
         $project->setInterpreter("");
         $this->expectException(Exception::class);
         callMethod($project, 'interpreterExists');
+    }
+    
+    public function testInterpreterExistsWhenNoSuchInterpreter(): void
+    {
+        $project = new Project();
+        
+        $project->setInterpreter("trololol");
+        $this->assertEquals(callMethod($project, 'interpreterExists'), false);
+        $project->setInterpreter("python1");
+        $this->assertEquals(callMethod($project, 'interpreterExists'), false);
     }
 
     public function testIsReadyToBeTested(): void
@@ -138,7 +150,7 @@ final class ProjectTest extends TestCase
         $this->assertFalse($project->isReadyToBeTested());
     }
 
-    public function testExport(): void
+    public function testExportingProject(): void
     {
         $project = new Project();
 
@@ -155,9 +167,9 @@ final class ProjectTest extends TestCase
     }
 
     /**
-    * @depends ProjectTest::testExport
+    * @depends ProjectTest::testExportingProject
     */
-    public function testImport(): void
+    public function testImportValidProject(): void
     {
         $project = new Project();
 
@@ -167,5 +179,35 @@ final class ProjectTest extends TestCase
         $this->assertEquals($project->getBinaryPath(), "./");
         $this->assertNull($project->getInterpreter());
         $this->assertEquals($project->getTestsFolder(), "tests/");
+        unlink("Marvinette.json");
+    }
+
+    public function testImportNoSuchFile(): void
+    {
+        $project = new Project();
+
+        $this->expectException(Exception::class);
+        $project->import("Marinette.json");
+    }
+
+    public function testImportInvalidJson(): void
+    {
+        $project = new Project();
+
+        $this->expectException(Exception::class);
+        $project->import("LICENSE");
+    }
+
+    public function testImportMissingKey(): void
+    {
+        $project = new Project();
+
+        $object['name'] = "1";
+        $object['binary name'] = "2";
+        file_put_contents("Trolette.json", json_encode($object, JSON_PRETTY_PRINT));
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("File Trolette.json: No 'binary path' field.");
+        $project->import("Trolette.json");
+        unlink("Trolette.json");
     }
 }

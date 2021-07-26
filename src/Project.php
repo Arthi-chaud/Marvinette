@@ -221,9 +221,11 @@ class Project
 		if (!file_exists($infile))
 			throw new Exception("$infile does not exists.");
 		$object = json_decode(file_get_contents($infile), true);
+		if (!$object)
+			throw new Exception("File $infile: Invalid JSON File.");
 		foreach ($expectedKeys as $expectedKey) {
 			if (!array_key_exists($expectedKey, $object))
-				throw new Exception("File $infile: No $expectedKey field.");
+				throw new Exception("File $infile: No '$expectedKey' field.");
 		}
 		$this->setName($object['name'])
 			 ->setBinaryPath($object['binary path'])
