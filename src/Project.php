@@ -1,7 +1,5 @@
 <?php
 
-use phpDocumentor\Reflection\Types\Boolean;
-
 /**
  * @brief Object representing the project's important infos
 */
