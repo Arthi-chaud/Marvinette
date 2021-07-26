@@ -9,30 +9,35 @@ class Project
 {
 	/**
 	 * @brief The name of the project
+	 * @var string
 	*/
-	protected string $name;
+	protected $name;
 
 	/**
 	 * @brief Name of the binary to execute
 	 * @details not a path, just the binary name
+	 * @var string
 	*/
-	protected string $binaryName;
+	protected $binaryName;
 
 	/**
 	 * @brief Path to the binary to execute, by default cwd
 	 * @details Can be either realtive or absolute
+	 * @var string
 	 */
-	protected string $binaryPath = "./";
+	protected $binaryPath = "./";
 
 	/**
 	 * @brief name of the interpreter, if needed
+	 * @var string
 	 */
 	protected ?string $interpreter = null;
 
 	/**
 	 * @brief Relative path to the folder holding tests files
+	 * @var string
 	 */
-	protected string $testsFolder;
+	protected $testsFolder;
 
 	/**
 	 * Set the value of name
