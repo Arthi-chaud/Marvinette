@@ -20,6 +20,56 @@ class Marvinette {
 
     protected Displayer $displayer;
 
+    protected function getOptions(): array
+    {
+        $shortopt = "h";
+        $longopts = [
+            'create-project',
+            'del-project',
+            'mod-project',
+            'add-test',
+            'mod-test',
+            'del-test',
+            'help',
+        ];
+        return getopt($shortopt, $longopts);
+    }
+
+    public function launch(): bool
+    {
+        $optionsCalls = [
+            'create-project' => 'createProject',
+            'del-project' => 'deleteProject',
+            'mod-project' => 'modProject',
+            'add-test' => 'addTest',
+            'mod-test' => 'modTest',
+            'del-test' => 'deleteTest',
+            'help' => 'displayHelp',
+            'h' => 'displayHelp',
+        ];
+        $options = $this->getOptions();
+        foreach ($optionsCalls as $option => $call) {
+            if (array_key_exists($option, $options))
+                return $this->$call();
+        }
+        $this->displayHelp();
+        return false;
+    }
+
+    protected function displayHelp(): bool
+    {
+        echo "marvinette [option]\n";
+        echo "\toption:
+        --create-project: Create a main configuration file, required to make tests
+        --del-project: Delete configuration file and existing tests
+        --mod-project: Modify the project's info.\n
+        --add-test: Create a functionnal test
+        --mod-test: Modify/Change an existing functionnal test\n
+        --del-test: Delete a functionnal test
+        -h, --help: display this usage\n";
+        return true;
+    }
+
     protected function displayCLIFrame(string $text): self
     {
         $this->displayer->setColor(Color::Green)
@@ -46,8 +96,7 @@ class Marvinette {
              ->displayer->setColor(Color::Red)->displayText("No Configuration File Found!\n");
     }
 
-
-    public function modProject(): bool
+    protected function modProject(): bool
     {
         $displayFrameTitle = "Modify Project";
         if (!file_exists(self::ConfigurationFile)) {
@@ -75,7 +124,7 @@ class Marvinette {
         return true;
     }
 
-    public function deleteProject(): bool
+    protected function deleteProject(): bool
     {
         $displayFrameTitle = "Delete Project";
         if (!file_exists(self::ConfigurationFile)) {
@@ -89,8 +138,7 @@ class Marvinette {
         $delete = $this->getOption(function () use ($displayFrameTitle)
         {
             $this->displayCLIFrame($displayFrameTitle)
-                ->displayer->setColor(Color::Red)->displayText("Do you want to continue? [Y/n]");
-            $this->displayCLIFrame($displayFrameTitle);
+                ->displayer->setColor(Color::Red)->displayText("Do you want to continue? [Y/n]: ", false);
         }, ['Y', 'n']);
         if ($delete == 'Y')
             unlink(self::ConfigurationFile);
@@ -99,17 +147,18 @@ class Marvinette {
         $delete = $this->getOption(function () use ($displayFrameTitle)
         {
             $this->displayCLIFrame($displayFrameTitle)
-             ->displayer->setColor(Color::Yellow)->displayText("Do you want to delete your tests?");
+                 ->displayer->setColor(Color::Yellow)->displayText("Do you want to delete your tests?: ", false);
         }, ['Y', 'n']);
         if ($delete == 'Y') {
             $testsFolder = $project->getTestsFolder();
-            array_map('unlink', glob("$testsFolder/*.*"));
-            rmdir($testsFolder);
+            //todo remove folder
+            //array_map('unlink', glob("$testsFolder/*.*"));
+            //rmdir($testsFolder);
         }
         return true;
     }
 
-    public function overwriteProject(): bool
+    protected function overwriteProject(): bool
     {
         $displayFrameTitle = "Create Project";
         $this->displayCLIFrame($displayFrameTitle)
@@ -121,15 +170,14 @@ class Marvinette {
         $overwrite = $this->getOption(function () use ($displayFrameTitle)
         {
             $this->displayCLIFrame($displayFrameTitle)
-                ->displayer->setColor(Color::Red)->displayText("Do you want to continue? [Y/n]");
-            $this->displayCLIFrame($displayFrameTitle);
+                ->displayer->setColor(Color::Red)->displayText("Do you want to continue? [Y/n]: ", false);
         }, ['Y', 'n']);
         if ($overwrite == 'Y')
             return true;
         return false;
     }
 
-    public function createProject(): bool
+    protected function createProject(): bool
     {
         $displayFrameTitle = "Create Project";
         if (file_exists(self::ConfigurationFile)) {
@@ -141,8 +189,13 @@ class Marvinette {
         $project = new Project();
         foreach (Project::Fields as $field => $setter) {
             for ($choosen = false; !$choosen; ) {
+                $advice = "";
+                if ($field == 'binary path')
+                    $advice = " (Empty if current folder)";
+                if ($field == 'interpreter')
+                    $advice = " (Empty none)";
                 $this->displayCLIFrame($displayFrameTitle)
-                     ->displayer->setColor(Color::Blue)->displayText("Enter the project's $field: ", false);
+                     ->displayer->setColor(Color::Blue)->displayText("Enter the project's $field$advice: ", false);
                 if (($value = fgets(STDIN)) == null)
                     return false;
                 try {

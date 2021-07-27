@@ -232,7 +232,7 @@ class Project
 		$object = json_decode(file_get_contents($infile), true);
 		if (!$object)
 			throw new Exception("File $infile: Invalid JSON File.");
-		foreach (self::Fields as $expectedKey) {
+		foreach (self::Fields as $expectedKey => $_) {
 			if (!array_key_exists($expectedKey, $object))
 				throw new Exception("File $infile: No '$expectedKey' field.");
 		}
