@@ -23,7 +23,7 @@ class Marvinette {
     protected function displayCLIFrame(string $text): self
     {
         $this->displayer->setColor(Color::Green)
-                        ->displayText("| $text |\t");
+                        ->displayText("| $text |\t", false);
         return $this;
     }
 
@@ -32,6 +32,7 @@ class Marvinette {
         $questionPrompt();
         while ($line = fgets(STDIN))
         {
+            $line = rtrim($line);
             if (in_array($line, $options))
                 return $line;
             $questionPrompt();
@@ -55,14 +56,14 @@ class Marvinette {
         }
         $project = new Project();
         $project->import(self::ConfigurationFile);
-        foreach (Project::Fields as $field) {
+        foreach (Project::Fields as $field => $_) {
             $this->displayCLIFrame($displayFrameTitle)
                  ->displayer->setColor(Color::Green)->displayText("Enter the project's new ". ucwords($displayFrameTitle) . ":");
             $this->displayCLIFrame($displayFrameTitle)
                  ->displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed)");
             if (($value = fgets(STDIN)) == null)
                 return false;
-            $object[$displayFrameTitle] = $value;
+            $object[$displayFrameTitle] = rtrim($value);
         }
         $project->setName($object['name'] ? $object['name'] : $project->getName())
 			 ->setBinaryPath($object['binary path'] ? $object['binary path'] : $project->getBinaryPath())
@@ -89,6 +90,7 @@ class Marvinette {
         {
             $this->displayCLIFrame($displayFrameTitle)
                 ->displayer->setColor(Color::Red)->displayText("Do you want to continue? [Y/n]");
+            $this->displayCLIFrame($displayFrameTitle);
         }, ['Y', 'n']);
         if ($delete == 'Y')
             unlink(self::ConfigurationFile);
@@ -120,6 +122,7 @@ class Marvinette {
         {
             $this->displayCLIFrame($displayFrameTitle)
                 ->displayer->setColor(Color::Red)->displayText("Do you want to continue? [Y/n]");
+            $this->displayCLIFrame($displayFrameTitle);
         }, ['Y', 'n']);
         if ($overwrite == 'Y')
             return true;
@@ -135,7 +138,25 @@ class Marvinette {
             else
                 return false;
         }
-        //todo create project
+        $project = new Project();
+        foreach (Project::Fields as $field => $setter) {
+            for ($choosen = false; !$choosen; ) {
+                $this->displayCLIFrame($displayFrameTitle)
+                     ->displayer->setColor(Color::Blue)->displayText("Enter the project's $field: ", false);
+                if (($value = fgets(STDIN)) == null)
+                    return false;
+                try {
+                    $project->$setter(rtrim($value));
+                    $choosen = true;
+                } catch (Exception $e) {
+                    $this->displayCLIFrame($displayFrameTitle)
+                        ->displayer->setColor(Color::Red)->displayText($e->getMessage());
+                }
+            }
+        }
+        $project->export(Marvinette::ConfigurationFile);
+        $this->displayCLIFrame($displayFrameTitle)
+            ->displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is created!");
         return true;
     }
 }

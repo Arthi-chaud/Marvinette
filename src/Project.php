@@ -6,11 +6,11 @@
 class Project
 {
 	const Fields = [
-		'name',
-		'binary name',
-		'binary path',
-		'interpreter',
-		'tests folder',	
+		'name' => 'setName',
+		'binary name' => 'setBinaryName',
+		'binary path' => 'setBinaryPath',
+		'interpreter' => 'setInterpreter',
+		'tests folder' => 'setTestsFolder',	
 	];
 	/**
 	 * @brief The name of the project
@@ -241,7 +241,6 @@ class Project
 			 ->setBinaryName($object['binary name'])
 			 ->setInterpreter($object['interpreter'])
 			 ->setTestsFolder($object['tests folder']);
-		
 	}
 }
 

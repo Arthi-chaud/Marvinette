@@ -36,9 +36,10 @@ class Displayer
      * @param $text the text to display
      * @param $resetAfter if true, resets style / color / background
      */
-    public function displayText(string $text, bool $resetAfter = true): self
+    public function displayText(string $text, bool $newline = true, bool $resetAfter = true): self
     {
-        if (stream_isatty(STDOUT)) {
+        $isTTY = stream_isatty(STDOUT);
+        if ($isTTY) {
             echo $this->getSequence(Style::Default);
             echo $this->getSequence($this->color);
             echo $this->getSequence($this->background + Color::BACKGROUND_OFFSET);
@@ -46,8 +47,15 @@ class Displayer
                 echo $this->getSequence("\e[%dm", $style);
         }
         echo $text;
+        if ($isTTY) {
+            echo $this->getSequence(Style::Default);
+            echo $this->getSequence(Color::Default);
+            echo $this->getSequence(Color::Default + Color::BACKGROUND_OFFSET);
+        }
         if ($resetAfter)
             $this->resetAll();
+        if ($newline)
+            echo "\n";
         return $this;
     }
     
