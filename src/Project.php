@@ -51,6 +51,8 @@ class Project
 	 */ 
 	public function setName($name)
 	{
+		if (!$name)
+			throw new Exception("The Project's name shouldn't be empty");
 		$this->name = $name;
 
 		return $this;
@@ -81,6 +83,8 @@ class Project
 	 */ 
 	public function setBinaryName($binaryName)
 	{
+		if (!$binaryName)
+			throw new Exception("The Project's binary name shouldn't be empty");
 		if (strchr($binaryName, DIRECTORY_SEPARATOR))
 			throw new Exception("The binary name should not contain a '". DIRECTORY_SEPARATOR. "'");
 		$this->binaryName = $binaryName;
@@ -147,6 +151,8 @@ class Project
 	 */ 
 	public function setTestsFolder($testsFolder)
 	{
+		if (!$testsFolder)
+			throw new Exception("The Project's tests folder shouldn't be empty");
 		$this->testsFolder = $testsFolder;
 
 		return $this;
