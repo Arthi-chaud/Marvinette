@@ -221,7 +221,6 @@ class Project
 		if (!$this->readyToExport())
 			throw new Exception("Project is not ready to be exported, missing mandatory field");
 		$jsoned = json_encode($project, JSON_PRETTY_PRINT);
-		//to do: if file already exists, prompt to overwite
 		return file_put_contents($outfile, $jsoned);
 	}
 
