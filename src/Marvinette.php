@@ -212,4 +212,10 @@ class Marvinette {
             ->displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is created!");
         return true;
     }
+
+    protected function getNextTestID(Project $project): int
+    {
+        if (is_dir($project->getTestsFolder()) == false)
+            throw new Exception("The project's folder doesn't exists");
+    } 
 }

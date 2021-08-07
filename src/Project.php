@@ -1,5 +1,7 @@
 <?php
 
+require_once 'src/Field.php';
+
 /**
  * @brief Object representing the project's important infos
 */
@@ -16,7 +18,12 @@ class Project
 	 * @brief The name of the project
 	 * @var string
 	*/
-	protected $name;
+	public Field $name = new Field(
+		function($name) {
+			if (!$name)
+				throw new Exception("The Project's name shouldn't be empty");
+			$this->name = $name;
+		});
 
 	/**
 	 * @brief Name of the binary to execute
