@@ -5,13 +5,12 @@
 */
 class Field
 {
-
-    public static function defaultDataCleaner($data)
+    public static function defaultDataCleaner(mixed $data)
     {
         return $data;
     }
 
-    public function __construct($errorHandler, $dataCleaner = Field::defaultDataCleaner, $promptHelp = [])
+    public function __construct($errorHandler, $dataCleaner = "Field::defaultDataCleaner", $promptHelp = [])
     {
         $this->errorHandler = $errorHandler;
         $this->dataCleaner = $dataCleaner;
