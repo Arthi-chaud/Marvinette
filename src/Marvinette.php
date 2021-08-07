@@ -104,21 +104,19 @@ class Marvinette {
             return false;
         }
         $project = new Project();
+        
         $project->import(self::ConfigurationFile);
-        foreach (Project::Fields as $field => $_) {
+        foreach (get_object_vars($project) as $fieldName => $_) {
             $this->displayCLIFrame($displayFrameTitle)
-                 ->displayer->setColor(Color::Green)->displayText("Enter the project's new ". ucwords($displayFrameTitle) . ":");
+                 ->displayer->setColor(Color::Green)->displayText("Enter the project's new ". ucwords($fieldName) . ":");
             $this->displayCLIFrame($displayFrameTitle)
                  ->displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed)");
             if (($value = fgets(STDIN)) == null)
                 return false;
-            $object[$displayFrameTitle] = rtrim($value);
+            $value = rtrim($value);
+            if ($value != "")
+                $project->$$fieldName = $value;
         }
-        $project->setName($object['name'] ? $object['name'] : $project->getName())
-			 ->setBinaryPath($object['binary path'] ? $object['binary path'] : $project->getBinaryPath())
-			 ->setBinaryName($object['binary name'] ? $object['binary name'] : $project->getBinaryName())
-			 ->setInterpreter($object['interpreter'] ? $object['interpreter'] : $project->getInterpreter())
-			 ->setTestsFolder($object['tests folder'] ? $object['tests folder'] : $project->getTestsFolder());
         unlink(self::ConfigurationFile);
         $project->export(self::ConfigurationFile);
         return true;
@@ -150,10 +148,7 @@ class Marvinette {
                  ->displayer->setColor(Color::Yellow)->displayText("Do you want to delete your tests?: ", false);
         }, ['Y', 'n']);
         if ($delete == 'Y') {
-            $testsFolder = $project->getTestsFolder();
             //todo remove folder
-            //array_map('unlink', glob("$testsFolder/*.*"));
-            //rmdir($testsFolder);
         }
         return true;
     }
@@ -187,19 +182,17 @@ class Marvinette {
                 return false;
         }
         $project = new Project();
-        foreach (Project::Fields as $field => $setter) {
+        foreach (get_object_vars($project) as $fieldName => $field) {
             for ($choosen = false; !$choosen; ) {
-                $advice = "";
-                if ($field == 'binary path')
-                    $advice = " (Empty if current folder)";
-                if ($field == 'interpreter')
-                    $advice = " (Empty none)";
                 $this->displayCLIFrame($displayFrameTitle)
-                     ->displayer->setColor(Color::Blue)->displayText("Enter the project's $field$advice: ", false);
+                     ->displayer->setColor(Color::Blue)->displayText("Enter the project's $field: ", false);
+                foreach ($field->getPromptHelp() as $help)
+                    $this->displayCLIFrame($displayFrameTitle)
+                        ->displayer->setColor(Color::Blue)->displayText("($help)", false);
                 if (($value = fgets(STDIN)) == null)
                     return false;
                 try {
-                    $project->$setter(rtrim($value));
+                    $project->$$fieldName->set(rtrim($value));
                     $choosen = true;
                 } catch (Exception $e) {
                     $this->displayCLIFrame($displayFrameTitle)
@@ -212,10 +205,4 @@ class Marvinette {
             ->displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is created!");
         return true;
     }
-
-    protected function getNextTestID(Project $project): int
-    {
-        if (is_dir($project->getTestsFolder()) == false)
-            throw new Exception("The project's folder doesn't exists");
-    } 
 }

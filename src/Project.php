@@ -7,13 +7,6 @@ require_once 'src/Field.php';
 */
 class Project
 {
-	const Fields = [
-		'name' => 'setName',
-		'binary name' => 'setBinaryName',
-		'binary path' => 'setBinaryPath',
-		'interpreter' => 'setInterpreter',
-		'tests folder' => 'setTestsFolder',	
-	];
 
 	public function __construct()
 	{
@@ -155,15 +148,11 @@ class Project
 		$object = json_decode(file_get_contents($infile), true);
 		if (!$object)
 			throw new Exception("File $infile: Invalid JSON File.");
-		foreach (self::Fields as $expectedKey => $_) {
-			if (!array_key_exists($expectedKey, $object))
-				throw new Exception("File $infile: No '$expectedKey' field.");
-		}
-		$this->setName($object['name'])
-			 ->setBinaryPath($object['binary path'])
-			 ->setBinaryName($object['binary name'])
-			 ->setInterpreter($object['interpreter'])
-			 ->setTestsFolder($object['tests folder']);
+		$this->name->set($object['name'])
+			 ->binaryPath->set($object['binary path'])
+			 ->binaryName->set($object['binary name'])
+			 ->interpreter->set($object['interpreter'])
+			 ->testsFolder->set($object['tests folder']);
 	}
 }
 

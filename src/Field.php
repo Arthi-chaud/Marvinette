@@ -17,6 +17,7 @@ class Field
         $this->dataCleaner = $dataCleaner;
         $this->promptHelp = $promptHelp;
     }
+
     /**
      * @brief the data in itself, by default is null
      * @var mixed
@@ -58,7 +59,8 @@ class Field
      */
     public function set($data): void
     {
-        ($this->setter)($data);
+        ($this->errorHandler)($data);
+        $this->data = ($this->dataCleaner)($data);
     }
 
     /**
