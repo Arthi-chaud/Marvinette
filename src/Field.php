@@ -6,9 +6,15 @@
 class Field
 {
 
-    public function __construct($setter, $promptHelp = [])
+    public static function defaultDataCleaner($data)
     {
-        $this->setter = $setter;
+        return $data;
+    }
+
+    public function __construct($errorHandler, $dataCleaner = Field::defaultDataCleaner, $promptHelp = [])
+    {
+        $this->errorHandler = $errorHandler;
+        $this->dataCleaner = $dataCleaner;
         $this->promptHelp = $promptHelp;
     }
     /**
@@ -18,11 +24,18 @@ class Field
     protected $data = null;
 
     /**
-     * @brief the function to set the data, where all the error handling is done
-     * @info it must trow on error and return void
+     * @brief the function to handle errrors
+     * @info throw on error or return void
      * @var callable
      */
-    protected $setter;
+    protected $errorHandler;
+
+    /**
+     * @brief the function to clean data
+     * @info return the cleaned data
+     * @var callable
+     */
+    protected $dataCleaner;
 
     /**
      * @brief an array of string to display on prompt to help the user

@@ -14,156 +14,73 @@ class Project
 		'interpreter' => 'setInterpreter',
 		'tests folder' => 'setTestsFolder',	
 	];
+
+	public function __construct()
+	{
+		$this->name = new Field(function($name) {
+			if (!$name)
+				throw new Exception("The Project's name shouldn't be empty");
+			return $name;
+		});
+
+		$this->binaryName = new Field(function($binaryName) {
+			if (!$binaryName)
+				throw new Exception("The Project's binary name shouldn't be empty");
+			if (strchr($binaryName, DIRECTORY_SEPARATOR))
+				throw new Exception("The binary name should not contain a '". DIRECTORY_SEPARATOR. "'");
+		});
+
+		$this->binaryPath = new Field(function($binaryPath) {}, function($binaryPath) {
+			if ($binaryPath == "")
+				$binaryPath = ".";
+			return $binaryPath;
+		});
+		$this->binaryPath->set(".");
+		
+		$this->interpreter = new Field(function($interpreter) {}, function($interpreter) {
+			if ($interpreter == "")
+				$interpreter = null;
+			return $interpreter;
+		});
+
+		$this->testsFolder = new Field(function($testFolder) {
+			if ($testsFolder == "")
+				throw new Exception("The Project's tests folder shouldn't be empty");
+		});
+	}
+
 	/**
 	 * @brief The name of the project
 	 * @var string
 	*/
-	public Field $name = new Field(
-		function($name) {
-			if (!$name)
-				throw new Exception("The Project's name shouldn't be empty");
-			$this->name = $name;
-		});
+	public Field $name;	
 
 	/**
 	 * @brief Name of the binary to execute
 	 * @details not a path, just the binary name
 	 * @var string
 	*/
-	protected $binaryName;
+	public Field $binaryName;
 
 	/**
 	 * @brief Path to the binary to execute, by default cwd
 	 * @details Can be either realtive or absolute
 	 * @var string
 	 */
-	protected $binaryPath = "./";
+	public Field $binaryPath;
 
 	/**
 	 * @brief name of the interpreter, if needed
 	 * @var string
 	 */
-	protected ?string $interpreter = null;
+	public Field $interpreter;
 
 	/**
 	 * @brief Relative path to the folder holding tests files
 	 * @var string
 	 */
-	protected $testsFolder;
+	public Field $testsFolder;
 
-	/**
-	 * Set the value of name
-	 *
-	 * @return  self
-	 */ 
-	public function setName($name)
-	{
-		if (!$name)
-			throw new Exception("The Project's name shouldn't be empty");
-		$this->name = $name;
-
-		return $this;
-	}
-
-	/**
-	 * Get the name of the project
-	 *
-	 * @return  string
-	 */ 
-	public function getName()
-	{
-		return $this->name;
-	}
-
-	/**
-	 * Get the value of binaryName
-	 */ 
-	public function getBinaryName()
-	{
-		return $this->binaryName;
-	}
-
-	/**
-	 * Set the value of binaryName
-	 *
-	 * @return  self
-	 */ 
-	public function setBinaryName($binaryName)
-	{
-		if (!$binaryName)
-			throw new Exception("The Project's binary name shouldn't be empty");
-		if (strchr($binaryName, DIRECTORY_SEPARATOR))
-			throw new Exception("The binary name should not contain a '". DIRECTORY_SEPARATOR. "'");
-		$this->binaryName = $binaryName;
-
-		return $this;
-	}
-
-	/**
-	 * Get the value of binaryPath
-	 */ 
-	public function getBinaryPath()
-	{
-		return $this->binaryPath;
-	}
-
-	/**
-	 * Set the value of binaryPath
-	 *
-	 * @return  self
-	 */ 
-	public function setBinaryPath($binaryPath)
-	{
-		if ($binaryPath == "")
-			$binaryPath = ".";
-		$this->binaryPath = $binaryPath;
-
-		return $this;
-	}
-
-	/**
-	 * Get the value of interpreter
-	 */ 
-	public function getInterpreter()
-	{
-		return $this->interpreter;
-	}
-
-	/**
-	 * Set the value of interpreter
-	 *
-	 * @return  self
-	 */ 
-	public function setInterpreter($interpreter)
-	{
-		if ($interpreter == "")
-			$interpreter = null;
-		$this->interpreter = $interpreter;
-
-		return $this;
-	}
-
-	/**
-	 * Get the value of testsFolder
-	 */ 
-	public function getTestsFolder()
-	{
-		return $this->testsFolder;
-	}
-
-	/**
-	 * Set the value of testsFolder
-	 *
-	 * @return  self
-	 */ 
-	public function setTestsFolder($testsFolder)
-	{
-		if (!$testsFolder)
-			throw new Exception("The Project's tests folder shouldn't be empty");
-		$this->testsFolder = $testsFolder;
-
-		return $this;
-	}
 
 	/**
 	 * Returns true if all necessary fields are set
