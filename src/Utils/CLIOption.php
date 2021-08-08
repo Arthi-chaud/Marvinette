@@ -10,7 +10,7 @@ Class CLIOption
             if (strlen($option) == 1)
                 $shortopt .= $option;
             else
-                $longopts .= $options;
+                $longopts[] = $option;
         }
         return getopt($shortopt, $longopts);
     }
