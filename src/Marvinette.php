@@ -184,15 +184,17 @@ class Marvinette {
         $project = new Project();
         foreach (get_object_vars($project) as $fieldName => $field) {
             for ($choosen = false; !$choosen; ) {
+                $help = $field->getPromptHelp();
+                if ($help)
+                    $help = " ($help)";
+                else
+                    $help = "";
                 $this->displayCLIFrame($displayFrameTitle)
-                     ->displayer->setColor(Color::Blue)->displayText("Enter the project's $fieldName: ", false);
-                foreach ($field->getPromptHelp() as $help)
-                    $this->displayCLIFrame($displayFrameTitle)
-                        ->displayer->setColor(Color::Blue)->displayText("($help)", false);
+                     ->displayer->setColor(Color::Blue)->displayText("Enter the project's $fieldName$help: ", false);
                 if (($value = fgets(STDIN)) == null)
                     return false;
                 try {
-                    ($project->$$fieldName)->set(rtrim($value));
+                    $project->$fieldName->set(rtrim($value));
                     $choosen = true;
                 } catch (Exception $e) {
                     $this->displayCLIFrame($displayFrameTitle)

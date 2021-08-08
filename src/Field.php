@@ -5,12 +5,18 @@
 */
 class Field
 {
-    public static function defaultDataCleaner(mixed $data)
+    private function defaultDataCleaner($data)
     {
         return $data;
     }
 
-    public function __construct($errorHandler, $dataCleaner = "Field::defaultDataCleaner", $promptHelp = [])
+    /**
+     * @brief A Field constructor, should be called in constructor of class
+     * @param callable $errorHandler the function to handle error: must throw when error occurs
+     * @param callable $datacleaner the function to clean the data (can be null)
+     * @param string $promptHelp a helpe message, which will be displayed when the user is prompted to type the field
+     */
+    public function __construct(callable $errorHandler, callable $dataCleaner = null, ?string $promptHelp = null)
     {
         $this->errorHandler = $errorHandler;
         $this->dataCleaner = $dataCleaner;
@@ -59,7 +65,9 @@ class Field
     public function set($data): void
     {
         ($this->errorHandler)($data);
-        $this->data = ($this->dataCleaner)($data);
+        if ($this->dataCleaner)
+            $data = ($this->dataCleaner)($data);
+        $this->data = $data;
     }
 
     /**

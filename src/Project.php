@@ -27,19 +27,22 @@ class Project
 			if ($binaryPath == "")
 				$binaryPath = ".";
 			return $binaryPath;
-		});
+		}, "By default: Current directory");
 		$this->binaryPath->set(".");
 		
 		$this->interpreter = new Field(function($interpreter) {}, function($interpreter) {
 			if ($interpreter == "")
 				$interpreter = null;
 			return $interpreter;
-		});
+		}, "By default: none (for exmaple if is an ELF file or using a shebang)");
 
-		$this->testsFolder = new Field(function($testFolder) {
-			if ($testsFolder == "")
-				throw new Exception("The Project's tests folder shouldn't be empty");
-		});
+		$this->testsFolder = new Field(function($testFolder) {}, function($testFolder) {
+			if ($testFolder == "")
+				$testFolder = "tests";
+			if (substr($testFolder, -1, 1) == '/')
+				$testFolder = substr($testFolder, 0, strlen($testFolder) - 1);
+			return $testFolder;
+		}, "By default in 'tests' folder");
 	}
 
 	/**
@@ -129,11 +132,11 @@ class Project
 	 */
 	public function export(string $outfile): bool
 	{
-		$project['name'] = $this->name;
-		$project['binary name'] = $this->binaryName;
-		$project['binary path'] = $this->binaryPath;
-		$project['interpreter'] = $this->interpreter;
-		$project['tests folder'] = $this->testsFolder;
+		$project['name'] = $this->name->get();
+		$project['binary name'] = $this->binaryName->get();
+		$project['binary path'] = $this->binaryPath->get();
+		$project['interpreter'] = $this->interpreter->get();
+		$project['tests folder'] = $this->testsFolder->get();
 
 		if (!$this->readyToExport())
 			throw new Exception("Project is not ready to be exported, missing mandatory field");
