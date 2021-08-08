@@ -4,6 +4,7 @@ require_once 'src/Project.php';
 require_once 'src/Display/Displayer.php';
 require_once 'src/Utils/UserInput.php';
 require_once 'src/Utils/UserInterface.php';
+require_once 'Utils/CLIOption.php';
 
 use Display\Color;
 
@@ -14,21 +15,6 @@ class Marvinette
 {
 
     const ConfigurationFile = "Marvinette.json";
-
-    protected function getOptions(): array
-    {
-        $shortopt = "h";
-        $longopts = [
-            'create-project',
-            'del-project',
-            'mod-project',
-            'add-test',
-            'mod-test',
-            'del-test',
-            'help',
-        ];
-        return getopt($shortopt, $longopts);
-    }
 
     public function launch(): bool
     {
@@ -42,7 +28,7 @@ class Marvinette
             'help' => 'displayHelp',
             'h' => 'displayHelp',
         ];
-        $options = $this->getOptions();
+        $options = CLIOption::get(array_keys($optionsCalls));
         foreach ($optionsCalls as $option => $call) {
             if (array_key_exists($option, $options))
                 return $this->$call();
