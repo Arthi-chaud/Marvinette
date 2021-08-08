@@ -51,7 +51,7 @@ class Marvinette
 			for ($choosen = false; !$choosen; ) {
 				$helpMsg = $field->getPromptHelp();
 				$help = $helpMsg ? " ($helpMsg)" : "";
-				$cleanedFieldName = mb_convert_case($fieldName, MB_CASE_LOWER);
+				$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
 				UserInterface::displayCLIFrame($displayFrameTitle);
 				UserInterface::$displayer->setColor(Color::Blue)->displayText("Enter the project's $cleanedFieldName$help: ", false);
 				if (($value = fgets(STDIN)) == null)
@@ -89,7 +89,7 @@ class Marvinette
 		$project->import(self::ConfigurationFile);
 		foreach (get_object_vars($project) as $fieldName => $_) {
 			UserInterface::displayCLIFrame($displayFrameTitle);
-			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the project's new ". ucwords($fieldName) . ":");
+			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the project's new ". UserInterface::cleanCamelCase($fieldName) . ":");
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed)");
 			if (($value = fgets(STDIN)) == null)

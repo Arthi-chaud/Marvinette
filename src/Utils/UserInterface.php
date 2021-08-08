@@ -35,4 +35,16 @@ class UserInterface
 		-h, --help: display this usage\n";
 		return true;
 	}
+
+	public static function cleanCamelCase(string $str): string
+	{
+		$cleaned = "";
+		for ($i = 0; $i < strlen($str); $i++) {
+			$c = $str[$i];
+			if ($i && ctype_upper($c))
+				$cleaned .= " ";
+			$cleaned .= strtolower($c);
+		}
+		return $cleaned;
+	}
 }
