@@ -90,6 +90,15 @@ class Marvinette {
         return null;
     }
 
+    protected function getYesNoOption(string $displayFrameTitle, string $msg, $color): ?string
+    {
+        return $this->getOption(function () use ($displayFrameTitle, $msg, $color)
+        {
+            $this->displayCLIFrame($displayFrameTitle)
+                ->displayer->setColor($color)->displayText("$msg [Y/n]: ", false);
+        }, ['Y', 'n']);
+    }
+
     protected function displayNoConfigFileFound($displayFrameTitle): void
     {
         $this->displayCLIFrame($displayFrameTitle)
@@ -133,20 +142,12 @@ class Marvinette {
         $project->import(self::ConfigurationFile);
         $this->displayCLIFrame($displayFrameTitle)
              ->displayer->setColor(Color::Red)->displayText("Warning: You Are about to delete all your configuration file");
-        $delete = $this->getOption(function () use ($displayFrameTitle)
-        {
-            $this->displayCLIFrame($displayFrameTitle)
-                ->displayer->setColor(Color::Red)->displayText("Do you want to continue? [Y/n]: ", false);
-        }, ['Y', 'n']);
+        $delete = $this->getYesNoOption($displayFrameTitle, "Do you want to continue?", Color::Red);
         if ($delete == 'Y')
             unlink(self::ConfigurationFile);
         else
             return false;
-        $delete = $this->getOption(function () use ($displayFrameTitle)
-        {
-            $this->displayCLIFrame($displayFrameTitle)
-                 ->displayer->setColor(Color::Yellow)->displayText("Do you want to delete your tests?: ", false);
-        }, ['Y', 'n']);
+        $delete = $delete = $this->getYesNoOption($displayFrameTitle, "Do you want to delete your tests?", Color::Red);
         if ($delete == 'Y') {
             //todo remove folder
         }
@@ -155,7 +156,7 @@ class Marvinette {
 
     protected function overwriteProject(): bool
     {
-        $displayFrameTitle = "Create Project";
+        $displayFrameTitle = "Existing Project";
         $this->displayCLIFrame($displayFrameTitle)
              ->displayer->setColor(Color::Red)->displayText("Warning:");
         $this->displayCLIFrame($displayFrameTitle)
@@ -184,11 +185,8 @@ class Marvinette {
         $project = new Project();
         foreach (get_object_vars($project) as $fieldName => $field) {
             for ($choosen = false; !$choosen; ) {
-                $help = $field->getPromptHelp();
-                if ($help)
-                    $help = " ($help)";
-                else
-                    $help = "";
+                $helpMsg = $field->getPromptHelp();
+                $help = $helpMsg ? " ($helpMsg)" : "";
                 $this->displayCLIFrame($displayFrameTitle)
                      ->displayer->setColor(Color::Blue)->displayText("Enter the project's $fieldName$help: ", false);
                 if (($value = fgets(STDIN)) == null)

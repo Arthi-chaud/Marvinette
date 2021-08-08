@@ -34,7 +34,7 @@ class Project
 			if ($interpreter == "")
 				$interpreter = null;
 			return $interpreter;
-		}, "By default: none (for exmaple if is an ELF file or using a shebang)");
+		}, "By default: none (when it is an ELF file or a script using a shebang)");
 
 		$this->testsFolder = new Field(function($testFolder) {}, function($testFolder) {
 			if ($testFolder == "")
