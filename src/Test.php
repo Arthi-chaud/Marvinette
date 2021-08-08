@@ -1,5 +1,7 @@
 <?php
 
+require_once "src/Field.php";
+
 /**
  * @brief Object representing the test's instruction
 */

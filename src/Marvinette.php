@@ -2,23 +2,18 @@
 
 require_once 'src/Project.php';
 require_once 'src/Display/Displayer.php';
+require_once 'src/Utils/UserInput.php';
+require_once 'src/Utils/UserInterface.php';
 
-use Display\Displayer;
 use Display\Color;
 
 /**
  * @brief Object holding method where the main functions are
 */
-class Marvinette {
-
-    public function __construct()
-    {
-        $this->displayer = new Displayer();
-    }
+class Marvinette
+{
 
     const ConfigurationFile = "Marvinette.json";
-
-    protected Displayer $displayer;
 
     protected function getOptions(): array
     {
@@ -52,57 +47,14 @@ class Marvinette {
             if (array_key_exists($option, $options))
                 return $this->$call();
         }
-        $this->displayHelp();
+        UserInterface::displayHelp();
         return false;
-    }
-
-    protected function displayHelp(): bool
-    {
-        echo "marvinette [option]\n";
-        echo "\toption:
-        --create-project: Create a main configuration file, required to make tests
-        --del-project: Delete configuration file and existing tests
-        --mod-project: Modify the project's info.\n
-        --add-test: Create a functionnal test
-        --mod-test: Modify/Change an existing functionnal test\n
-        --del-test: Delete a functionnal test
-        -h, --help: display this usage\n";
-        return true;
-    }
-
-    protected function displayCLIFrame(string $text): self
-    {
-        $this->displayer->setColor(Color::Green)
-                        ->displayText("| $text |\t", false);
-        return $this;
-    }
-
-    protected function getOption(callable $questionPrompt, $options): ?string
-    {
-        $questionPrompt();
-        while ($line = fgets(STDIN))
-        {
-            $line = rtrim($line);
-            if (in_array($line, $options))
-                return $line;
-            $questionPrompt();
-        }
-        return null;
-    }
-
-    protected function getYesNoOption(string $displayFrameTitle, string $msg, $color): ?string
-    {
-        return $this->getOption(function () use ($displayFrameTitle, $msg, $color)
-        {
-            $this->displayCLIFrame($displayFrameTitle)
-                ->displayer->setColor($color)->displayText("$msg [Y/n]: ", false);
-        }, ['Y', 'n']);
     }
 
     protected function displayNoConfigFileFound($displayFrameTitle): void
     {
-        $this->displayCLIFrame($displayFrameTitle)
-             ->displayer->setColor(Color::Red)->displayText("No Configuration File Found!\n");
+        UserInterface::displayCLIFrame($displayFrameTitle);
+        UserInterface::$displayer->setColor(Color::Red)->displayText("No Configuration File Found!\n");
     }
 
     protected function modProject(): bool
@@ -116,10 +68,10 @@ class Marvinette {
         
         $project->import(self::ConfigurationFile);
         foreach (get_object_vars($project) as $fieldName => $_) {
-            $this->displayCLIFrame($displayFrameTitle)
-                 ->displayer->setColor(Color::Green)->displayText("Enter the project's new ". ucwords($fieldName) . ":");
-            $this->displayCLIFrame($displayFrameTitle)
-                 ->displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed)");
+            UserInterface::displayCLIFrame($displayFrameTitle);
+            UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the project's new ". ucwords($fieldName) . ":");
+            UserInterface::displayCLIFrame($displayFrameTitle);
+            UserInterface::$displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed)");
             if (($value = fgets(STDIN)) == null)
                 return false;
             $value = rtrim($value);
@@ -140,14 +92,14 @@ class Marvinette {
         }
         $project = new Project();
         $project->import(self::ConfigurationFile);
-        $this->displayCLIFrame($displayFrameTitle)
-             ->displayer->setColor(Color::Red)->displayText("Warning: You Are about to delete all your configuration file");
-        $delete = $this->getYesNoOption($displayFrameTitle, "Do you want to continue?", Color::Red);
+        UserInterface::displayCLIFrame($displayFrameTitle);
+        UserInterface::$displayer->setColor(Color::Red)->displayText("Warning: You Are about to delete all your configuration file");
+        $delete = UserInput::getYesNoOption($displayFrameTitle, "Do you want to continue?", Color::Red);
         if ($delete == 'Y')
             unlink(self::ConfigurationFile);
         else
             return false;
-        $delete = $delete = $this->getYesNoOption($displayFrameTitle, "Do you want to delete your tests?", Color::Red);
+        $delete = $delete = UserInput::getYesNoOption($displayFrameTitle, "Do you want to delete your tests?", Color::Red);
         if ($delete == 'Y') {
             //todo remove folder
         }
@@ -157,16 +109,16 @@ class Marvinette {
     protected function overwriteProject(): bool
     {
         $displayFrameTitle = "Existing Project";
-        $this->displayCLIFrame($displayFrameTitle)
-             ->displayer->setColor(Color::Red)->displayText("Warning:");
-        $this->displayCLIFrame($displayFrameTitle)
-             ->displayer->setColor(Color::Blue)->displayText("A configuration file already exists");
-        $this->displayCLIFrame($displayFrameTitle)
-             ->displayer->setColor(Color::Blue)->displayText("Creating a new project will overwrite this file");
-        $overwrite = $this->getOption(function () use ($displayFrameTitle)
+        UserInterface::displayCLIFrame($displayFrameTitle);
+        UserInterface::$displayer->setColor(Color::Red)->displayText("Warning:");
+        UserInterface::displayCLIFrame($displayFrameTitle);
+        UserInterface::$displayer->setColor(Color::Blue)->displayText("A configuration file already exists");
+        UserInterface::displayCLIFrame($displayFrameTitle);
+        UserInterface::$displayer->setColor(Color::Blue)->displayText("Creating a new project will overwrite this file");
+        $overwrite = UserInput::getOption(function () use ($displayFrameTitle)
         {
-            $this->displayCLIFrame($displayFrameTitle)
-                ->displayer->setColor(Color::Red)->displayText("Do you want to continue? [Y/n]: ", false);
+            UserInterface::displayCLIFrame($displayFrameTitle);
+            UserInterface::$displayer->setColor(Color::Red)->displayText("Do you want to continue? [Y/n]: ", false);
         }, ['Y', 'n']);
         if ($overwrite == 'Y')
             return true;
@@ -187,22 +139,23 @@ class Marvinette {
             for ($choosen = false; !$choosen; ) {
                 $helpMsg = $field->getPromptHelp();
                 $help = $helpMsg ? " ($helpMsg)" : "";
-                $this->displayCLIFrame($displayFrameTitle)
-                     ->displayer->setColor(Color::Blue)->displayText("Enter the project's $fieldName$help: ", false);
+                $cleanedFieldName = mb_convert_case($fieldName, MB_CASE_LOWER);
+                UserInterface::displayCLIFrame($displayFrameTitle);
+                UserInterface::$displayer->setColor(Color::Blue)->displayText("Enter the project's $cleanedFieldName$help: ", false);
                 if (($value = fgets(STDIN)) == null)
                     return false;
                 try {
                     $project->$fieldName->set(rtrim($value));
                     $choosen = true;
                 } catch (Exception $e) {
-                    $this->displayCLIFrame($displayFrameTitle)
-                        ->displayer->setColor(Color::Red)->displayText($e->getMessage());
+                    UserInterface::displayCLIFrame($displayFrameTitle);
+                    UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
                 }
             }
         }
         $project->export(Marvinette::ConfigurationFile);
-        $this->displayCLIFrame($displayFrameTitle)
-            ->displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is created!");
+        UserInterface::displayCLIFrame($displayFrameTitle);
+        UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is created!");
         return true;
     }
 }
