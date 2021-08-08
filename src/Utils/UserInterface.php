@@ -11,28 +11,28 @@ use Display\Color;
  */
 class UserInterface
 {
-    public static Displayer $displayer;
+	public static Displayer $displayer;
 
-    public static function displayCLIFrame(string $text): void
-    {
-        if (!isset($displayer))
-            self::$displayer = new Displayer();
-        UserInterface::$displayer->setColor(Color::Green)
-                        ->displayText("| $text |\t", false);
-        
-    }
+	public static function displayCLIFrame(string $text): void
+	{
+		if (!isset($displayer))
+			self::$displayer = new Displayer();
+		UserInterface::$displayer->setColor(Color::Green)
+						->displayText("| $text |\t", false);
+		
+	}
 
-    public static function displayHelp(): bool
-    {
-        echo "marvinette [option]\n";
-        echo "\toption:
-        --create-project: Create a main configuration file, required to make tests
-        --del-project: Delete configuration file and existing tests
-        --mod-project: Modify the project's info.\n
-        --add-test: Create a functionnal test
-        --mod-test: Modify/Change an existing functionnal test\n
-        --del-test: Delete a functionnal test
-        -h, --help: display this usage\n";
-        return true;
-    }
+	public static function displayHelp(): bool
+	{
+		echo "marvinette [option]\n";
+		echo "\toption:
+		--create-project: Create a main configuration file, required to make tests
+		--del-project: Delete configuration file and existing tests
+		--mod-project: Modify the project's info.\n
+		--add-test: Create a functionnal test
+		--mod-test: Modify/Change an existing functionnal test\n
+		--del-test: Delete a functionnal test
+		-h, --help: display this usage\n";
+		return true;
+	}
 }
