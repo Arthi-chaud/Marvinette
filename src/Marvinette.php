@@ -158,11 +158,7 @@ class Marvinette
 		UserInterface::$displayer->setColor(Color::Blue)->displayText("A configuration file already exists");
 		UserInterface::displayCLIFrame($displayFrameTitle);
 		UserInterface::$displayer->setColor(Color::Blue)->displayText("Creating a new project will overwrite this file");
-		$overwrite = UserInput::getOption(function () use ($displayFrameTitle)
-		{
-			UserInterface::displayCLIFrame($displayFrameTitle);
-			UserInterface::$displayer->setColor(Color::Red)->displayText("Do you want to continue? [Y/n]: ", false);
-		}, ['Y', 'n']);
+		$overwrite = UserInput::getYesNoOption($displayFrameTitle, "Do you want to continue?", Color::Red);
 		if ($overwrite == 'Y')
 			return true;
 		return false;
