@@ -30,8 +30,11 @@ class Marvinette
 		];
 		$options = CLIOption::get(array_keys($optionsCalls));
 		foreach ($optionsCalls as $option => $call) {
-			if (array_key_exists($option, $options))
+			if (array_key_exists($option, $options)) {
+				UserInterface::displayCLIFrame("Marvinette\t");
+				echo "\n";
 				return $this->$call();
+			}
 		}
 		UserInterface::displayHelp();
 		return false;
@@ -74,7 +77,7 @@ class Marvinette
 	protected function displayNoConfigFileFound($displayFrameTitle): void
 	{
 		UserInterface::displayCLIFrame($displayFrameTitle);
-		UserInterface::$displayer->setColor(Color::Red)->displayText("No Configuration File Found!\n");
+		UserInterface::$displayer->setColor(Color::Red)->displayText("No Configuration File Found!");
 	}
 
 	protected function modProject(): bool
@@ -87,19 +90,29 @@ class Marvinette
 		$project = new Project();
 		
 		$project->import(self::ConfigurationFile);
-		foreach (get_object_vars($project) as $fieldName => $_) {
-			UserInterface::displayCLIFrame($displayFrameTitle);
-			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the project's new ". UserInterface::cleanCamelCase($fieldName) . ":");
-			UserInterface::displayCLIFrame($displayFrameTitle);
-			UserInterface::$displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed)");
-			if (($value = fgets(STDIN)) == null)
-				return false;
-			$value = rtrim($value);
-			if ($value != "")
-				$project->$$fieldName = $value;
+		foreach (get_object_vars($project) as $fieldName => $field) {
+			for ($choosen = false; !$choosen; ) {
+				UserInterface::displayCLIFrame($displayFrameTitle);
+				UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the project's new ". UserInterface::cleanCamelCase($fieldName) . " ", false);
+				UserInterface::$displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed): ", false);
+				if (($value = fgets(STDIN)) == null)
+					return false;
+				$value = rtrim($value);
+				if ($value == "")
+					$value = $field->get();
+				try {
+					$field->set($value);
+					$choosen = true;
+				} catch (Exception $e) {
+					UserInterface::displayCLIFrame($displayFrameTitle);
+					UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
+				}
+			}
 		}
 		unlink(self::ConfigurationFile);
 		$project->export(self::ConfigurationFile);
+		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is updated!");
 		return true;
 	}
 

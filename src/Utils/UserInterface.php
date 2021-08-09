@@ -47,4 +47,19 @@ class UserInterface
 		}
 		return $cleaned;
 	}
+
+	public static function toCamelCase(string $str): string
+	{
+		$cleaned = "";
+		for ($i = 0; $i < strlen($str); $i++) {
+			$c = $str[$i];
+			if ($c == ' ')
+				continue;
+			if ($i && $str[$i - 1]  == ' ')
+				$cleaned .= strtoupper($c);
+			else
+				$cleaned .= $c;
+		}
+		return $cleaned;
+	}
 }

@@ -151,11 +151,10 @@ class Project
 		$object = json_decode(file_get_contents($infile), true);
 		if (!$object)
 			throw new Exception("File $infile: Invalid JSON File.");
-		$this->name->set($object['name'])
-			 ->binaryPath->set($object['binary path'])
-			 ->binaryName->set($object['binary name'])
-			 ->interpreter->set($object['interpreter'])
-			 ->testsFolder->set($object['tests folder']);
+		foreach($object as $fieldName => $field) {
+			$cameCalseName = UserInterface::toCamelCase($fieldName);
+			$this->$cameCalseName->set($field);
+		}
 	}
 }
 
