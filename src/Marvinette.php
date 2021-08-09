@@ -126,16 +126,26 @@ class Marvinette
 		$project = new Project();
 		$project->import(self::ConfigurationFile);
 		UserInterface::displayCLIFrame($displayFrameTitle);
-		UserInterface::$displayer->setColor(Color::Red)->displayText("Warning: You Are about to delete all your configuration file");
+		UserInterface::$displayer->setColor(Color::Red)->displayText("Warning: You are about to delete your configuration file");
 		$delete = UserInput::getYesNoOption($displayFrameTitle, "Do you want to continue?", Color::Red);
 		if ($delete == 'Y')
 			unlink(self::ConfigurationFile);
-		else
+		else {
+			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file has not been deleted!");
 			return false;
+		}
+		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is deleted!");
 		$delete = $delete = UserInput::getYesNoOption($displayFrameTitle, "Do you want to delete your tests?", Color::Red);
 		if ($delete == 'Y') {
 			//todo remove folder
+			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are deleted!");
+			return false;
 		}
+		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are not deleted!");
 		return true;
 	}
 
