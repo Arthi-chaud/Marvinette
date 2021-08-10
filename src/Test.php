@@ -17,7 +17,7 @@ class Test
 			return $name;
 		});
 
-		$this->commandLineArguments = new Field(function($args) {});
+		$this->commandLineArguments = new Field(function($args) {}, null, "The arguments to pass to the program");
 
 		$this->expectedReturnCode = new Field(
 		function($r) {
@@ -29,28 +29,60 @@ class Test
 			if ($r == "")
 				return null;
 			return intval($r);
-		}, "Leave empty to ignore");
+		}, "A number between 0 and 255, Leave empty to ignore");
 
-		$this->stdoutFilter = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner']);
+		$this->stdoutFilter = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner'], "A command that will grep the stdout of the program");
 
-		$this->stderrFilter = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner']);
+		$this->stderrFilter = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner'], "A command that will grep the stderr of the program");
 
-		$this->stdin = new Field(
+		$this->stdinput = new Field(
 			[Field::class, 'YesNoErrorHandler'],
 			[Field::class, 'YesNoDataCleaner'],
-			"By default no. If you say yes, an empty file will be created so you can set what to write on stdin");
+			"[Y/n] By default no. If you say yes, an empty file will be created so you can set what to write on stdin");
 		$this->expectedStdout = new Field(
 			[Field::class, 'YesNoErrorHandler'],
 			[Field::class, 'YesNoDataCleaner'],
-			"By default no. If you say yes, an empty file will be created so you can set what to expect on stdout");
+			"[Y/n] By default none. If you say yes, an empty file will be created so you can set what to expect on stdout");
 		$this->expectedStderr = new Field(
 			[Field::class, 'YesNoErrorHandler'],
 			[Field::class, 'YesNoDataCleaner'],
-			"By default no. If you say yes, an empty file will be created so you can set what to expect on stderr");
+			"[Y/n] By default none. If you say yes, an empty file will be created so you can set what to expect on stderr");
 		
 		$this->setup = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner'], "Command to execute before executing program");
 
 		$this->teardown = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner'], "Command to execute after program's execution");
+	}
+
+	public function export(?Project $project)
+	{
+		if (!$project) {
+			$project = new Project();
+			$project->import(Marvinette::ConfigurationFile);
+		}
+		$testsFolder = $project->testsFolder->get();
+		$testPath = "$testsFolder" . DIRECTORY_SEPARATOR . $this->name->get();
+		if (!is_dir($testPath))
+			mkdir($testPath, 0777, true);
+
+		if ($this->setup->get() != null)
+			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "setup", $this->setup->get());
+		if ($this->teardown->get() != null)
+			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "stderrFilter", $this->teardown->get());
+		if ($this->stdoutFilter->get() != null)
+			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "stdoutFilter", $this->stdoutFilter->get());
+		if ($this->stderrFilter->get() != null)
+			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "stderrFilter", $this->stderrFilter->get());
+		if ($this->expectedReturnCode->get() != null)
+			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "expectedReturnCode", $this->expectedReturnCode->get());
+		if ($this->stdinput->get() == true)
+			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "stdinput", '');
+		if ($this->expectedStderr->get() == true)
+			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "expectedStderr", '');
+		if ($this->expectedStdout->get() == true)
+			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "expectedStdout", '');
+		file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "command",
+			$project->binaryPath->get() . DIRECTORY_SEPARATOR . $project->binaryName->get() . " " . $this->commandLineArguments->get());
+		return true;
 	}
 	/**
 	 * @brief The name of the test

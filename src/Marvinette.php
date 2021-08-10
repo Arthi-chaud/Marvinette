@@ -5,6 +5,7 @@ require_once 'src/Display/Displayer.php';
 require_once 'src/Utils/UserInput.php';
 require_once 'src/Utils/UserInterface.php';
 require_once 'Utils/CLIOption.php';
+require_once 'src/Test.php';
 
 use Display\Color;
 
@@ -69,6 +70,10 @@ class Marvinette
 		$project->export(Marvinette::ConfigurationFile);
 		UserInterface::displayCLIFrame($displayFrameTitle);
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is created!");
+
+		$addNow = UserInput::getYesNoOption($displayFrameTitle, "Would You Like to add a test now", Color::Blue);
+		if ($addNow == 'Y')
+			return $this->addTest($project);
 		return true;
 	}
 
@@ -111,6 +116,9 @@ class Marvinette
 		$project->export(self::ConfigurationFile);
 		UserInterface::displayCLIFrame($displayFrameTitle);
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is updated!");
+		$addNow = UserInput::getYesNoOption($displayFrameTitle, "Would You Like to add a test now", Color::Blue);
+		if ($addNow == 'Y')
+			return $this->addTest($project);
 		return true;
 	}
 
@@ -160,5 +168,36 @@ class Marvinette
 		if ($overwrite == 'Y')
 			return true;
 		return false;
+	}
+
+	protected function addTest(?Project $project = null)
+	{
+		$displayFrameTitle = "Add Test";
+		if (!$project) {
+			$project = new Project();
+			$project->import(self::ConfigurationFile);
+		}
+		$test = new Test();
+		foreach (get_object_vars($test) as $fieldName => $field) {
+			for ($choosen = false; !$choosen; ) {
+				$helpMsg = $field->getPromptHelp();
+				$help = $helpMsg ? " ($helpMsg)" : "";
+				$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
+				UserInterface::displayCLIFrame($displayFrameTitle);
+				UserInterface::$displayer->setColor(Color::Blue)->displayText("Test's $cleanedFieldName$help: ", false);
+				if (($value = fgets(STDIN)) == null)
+					return false;
+				try {
+					$test->$fieldName->set(rtrim($value));
+					$choosen = true;
+				} catch (Exception $e) {
+					UserInterface::displayCLIFrame($displayFrameTitle);
+					UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
+				}
+			}
+		}
+		$test->export($project);
+		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
 	}
 }
