@@ -13,13 +13,14 @@ class UserInterface
 {
 	public static Displayer $displayer;
 
-	public static function displayCLIFrame(string $text): void
+	public static function displayCLIFrame(string $text, bool $newline = false): void
 	{
 		if (!isset($displayer))
 			self::$displayer = new Displayer();
 		UserInterface::$displayer->setColor(Color::Green)
 						->displayText("| $text |\t", false);
-		
+		if ($newline)
+			echo "\n";
 	}
 
 	public static function displayHelp(): bool

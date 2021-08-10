@@ -5,6 +5,11 @@
 */
 class Field
 {
+	public function __toString(): string
+	{
+		return $this->data;
+	}
+
 	public static function YesNoErrorHandler($choice)
 	{
 		if (!in_array($choice, ['Y', 'N', '', 'y', 'n']))

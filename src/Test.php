@@ -9,6 +9,10 @@ require_once "src/Field.php";
 */
 class Test
 {
+	const TMPFOLDER = 'tmp';
+
+	const TMPFILEPREFIX = 'Marvi';
+
 	public function __construct()
 	{
 		$this->name = new Field(function($name) {

@@ -30,8 +30,7 @@ class Marvinette
 		$options = CLIOption::get(array_keys($optionsCalls));
 		foreach ($optionsCalls as $option => $call) {
 			if (array_key_exists($option, $options)) {
-				UserInterface::displayCLIFrame("Marvinette\t");
-				echo "\n";
+				UserInterface::displayCLIFrame("Marvinette\t", true);
 				return $this->$call();
 			}
 		}
@@ -199,5 +198,86 @@ class Marvinette
 		$test->export($project);
 		UserInterface::displayCLIFrame($displayFrameTitle);
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
+	}
+
+	protected function executeTest(Project $project, string $testName): bool
+	{
+		$testPath = $project->testsFolder->get() . DIRECTORY_SEPARATOR . $testName;
+
+		$expectedReturnCode = null;
+		$commandLineArgs = "";
+		if (!is_dir($testPath))
+			throw new Exception('Invalid Test Path');
+		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'expectedReturnCode'))
+			$expectedReturnCode = intval(file_get_contents($testPath . DIRECTORY_SEPARATOR . 'expectedReturnCode'));
+		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'commandLineArguments'))
+			$commandLineArgs = file_get_contents($testPath . DIRECTORY_SEPARATOR . 'commandLineArguments');
+		$returnCode = 0;
+		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'setup')) {
+			system(file_get_contents($testPath . DIRECTORY_SEPARATOR . 'setup'), $returnCode);
+			if ($returnCode != 0)
+				throw new Exception("Test's setup failed. Return code: $returnCode");
+		}
+		$command = $project->binaryPath->get() . DIRECTORY_SEPARATOR . $project->binaryName->get() . ' ' . $commandLineArgs;
+		system($command . "> tmp/MarvinetteStdout 2> tmp/MarvinetteStderr", $returnCode);
+		if ($expectedReturnCode != null && $expectedReturnCode != $returnCode)
+			throw new Exception("The program didn't return the expected code. Expected: $returnCode, actual: $expectedReturnCode");
+		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'stdoutFilter')) {
+			$stdoutFilterCommand = file_get_contents($testPath . DIRECTORY_SEPARATOR . 'stdoutFilter');
+			system("cat tmp/MarvinetteStdout | $stdoutFilterCommand > tmp/MarvinetteFilteredStdout", $returnCode);
+			if ($returnCode != 0)
+				throw new Exception("Test's stdout filtering failed. Return code: $returnCode");
+			system("cat tmp/MarvinetteFilteredStdout > tmp/MarvinetteStdout");
+		}
+		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'stderrFilter')) {
+			$stderrFilterCommand = file_get_contents($testPath . DIRECTORY_SEPARATOR . 'stderrFilter');
+			system("cat tmp/MarvinetteStderr | $stderrFilterCommand > tmp/MarvinetteFilteredStderr", $returnCode);
+			if ($returnCode != 0)
+				throw new Exception("Test's stderr filtering failed. Return code: $returnCode");
+			system("cat tmp/MarvinetteFilteredStderr > tmp/MarvinetteStderr");
+		}
+		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'expectedStdout')) {
+			$expectedStdoutFile = $testPath . DIRECTORY_SEPARATOR . 'expectedStdout';
+			system("diff $expectedStdoutFile tmp/MarvinetteStdout", $returnCode);
+			if ($returnCode != 0)
+				return false;
+		}
+		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'expectedStderr')) {
+			$expectedStderrFile = $testPath . DIRECTORY_SEPARATOR . 'expectedStderr';
+			system("diff $expectedStderrFile tmp/MarvinetteStderr", $returnCode);
+			if ($returnCode != 0)
+				return false;
+		}
+		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'teardown')) {
+			system(file_get_contents($testPath . DIRECTORY_SEPARATOR . 'teardown'), $returnCode);
+			if ($returnCode != 0)
+				throw new Exception("Test's teardown failed. Return code: $returnCode");
+		}
+		return true;
+	}
+
+	protected function selectTest(Project $project): ?string
+	{
+		$displayFrameTitle = "Select a Test";
+		$testsFolder = $project->testsFolder->get();
+		$testsNames = glob($testsFolder . DIRECTORY_SEPARATOR . "/*");
+		$testCount = count($testsNames);
+		sort($testsNames);
+		if ($testsNames == []) {
+			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::$displayer->setColor(Color::Red)->displayText("No tests available");
+			return null;
+		}
+		for ($i = 0; $i < $testCount; $i++) {
+			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::$displayer->setColor(Color::Blue)->displayText("$i - " . $testsNames[$i]);
+		}
+		UserInterface::displayCLIFrame($displayFrameTitle, true);
+		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::$displayer->setColor(Color::Green)->displayText("Select a test (between 0 and " . ($testCount - 1) . ')', false);
+		$selected = UserInput::getOption("Select a test (between 0 and " . ($testCount - 1) . ')', range(0, $testCount));
+		if ($selected == null)
+			return null;
+		return $testsNames[$i];
 	}
 }
