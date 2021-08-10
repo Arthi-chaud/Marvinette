@@ -5,18 +5,33 @@
 */
 class Field
 {
-	private function defaultDataCleaner($data)
+	public static function YesNoErrorHandler($choice)
 	{
-		return $data;
+		if (!in_array($choice, ['Y', 'N', '', 'y', 'n']))
+			throw new Exception("Please type 'Y', 'N' or leave empty");
+	}
+
+	public static function YesNoDataCleaner($choice)
+	{
+		if (in_array($choice, ['Y', 'y']))
+			return true;
+		return false;
+	}
+
+	public static function EmptyDataCleaner($input)
+	{
+		if ($input == "")
+			return null;
+		return $input;
 	}
 
 	/**
 	 * @brief A Field constructor, should be called in constructor of class
-	 * @param callable $errorHandler the function to handle error: must throw when error occurs
-	 * @param callable $datacleaner the function to clean the data (can be null)
-	 * @param string $promptHelp a helpe message, which will be displayed when the user is prompted to type the field
+	 * @param callable $errorHandler the function to handle error: must throw when error occurs (will be called using call_user_func)
+	 * @param callable $datacleaner the function to clean the data (can be null) (will be called using call_user_func)
+	 * @param string $promptHelp a help message, which will be displayed when the user is prompted to type the field
 	 */
-	public function __construct(callable $errorHandler, callable $dataCleaner = null, ?string $promptHelp = null)
+	public function __construct(callable $errorHandler, $dataCleaner = null, ?string $promptHelp = null)
 	{
 		$this->errorHandler = $errorHandler;
 		$this->dataCleaner = $dataCleaner;
@@ -64,9 +79,9 @@ class Field
 	 */
 	public function set($data): void
 	{
-		($this->errorHandler)($data);
+		call_user_func($this->errorHandler, $data);
 		if ($this->dataCleaner)
-			$data = ($this->dataCleaner)($data);
+			$data = call_user_func($this->dataCleaner, $data);
 		$this->data = $data;
 	}
 

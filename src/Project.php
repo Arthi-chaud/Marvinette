@@ -30,11 +30,7 @@ class Project
 		}, "By default: Current directory");
 		$this->binaryPath->set(".");
 		
-		$this->interpreter = new Field(function($interpreter) {}, function($interpreter) {
-			if ($interpreter == "")
-				$interpreter = null;
-			return $interpreter;
-		}, "By default: none (when it is an ELF file or a script using a shebang)");
+		$this->interpreter = new Field(function($interpreter) {}, [Field::class, 'EmptyDataCleaner'], "By default: none (when it is an ELF file or a script using a shebang)");
 
 		$this->testsFolder = new Field(function($testFolder) {}, function($testFolder) {
 			if ($testFolder == "")

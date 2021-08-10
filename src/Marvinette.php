@@ -25,8 +25,6 @@ class Marvinette
 			'add-test' => 'addTest',
 			'mod-test' => 'modTest',
 			'del-test' => 'deleteTest',
-			'help' => 'displayHelp',
-			'h' => 'displayHelp',
 		];
 		$options = CLIOption::get(array_keys($optionsCalls));
 		foreach ($optionsCalls as $option => $call) {

@@ -1,5 +1,7 @@
 <?php
 
+use function PHPUnit\Framework\throwException;
+
 require_once "src/Field.php";
 
 /**
@@ -7,65 +9,106 @@ require_once "src/Field.php";
 */
 class Test
 {
+	public function __construct()
+	{
+		$this->name = new Field(function($name) {
+			if (!$name)
+				throw new Exception("The test's name shouldn't be empty");
+			return $name;
+		});
+
+		$this->commandLineArguments = new Field(function($args) {});
+
+		$this->expectedReturnCode = new Field(
+		function($r) {
+			if ($r == "")
+				return;
+			if (!is_numeric($r) || (intval($r) < 0))
+				throw new Exception("Please enter a number superior/equal to 0 (or nothing to ignore)");
+		}, function($r) {
+			if ($r == "")
+				return null;
+			return intval($r);
+		}, "Leave empty to ignore");
+
+		$this->stdoutFilter = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner']);
+
+		$this->stderrFilter = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner']);
+
+		$this->stdin = new Field(
+			[Field::class, 'YesNoErrorHandler'],
+			[Field::class, 'YesNoDataCleaner'],
+			"By default no. If you say yes, an empty file will be created so you can set what to write on stdin");
+		$this->expectedStdout = new Field(
+			[Field::class, 'YesNoErrorHandler'],
+			[Field::class, 'YesNoDataCleaner'],
+			"By default no. If you say yes, an empty file will be created so you can set what to expect on stdout");
+		$this->expectedStderr = new Field(
+			[Field::class, 'YesNoErrorHandler'],
+			[Field::class, 'YesNoDataCleaner'],
+			"By default no. If you say yes, an empty file will be created so you can set what to expect on stderr");
+		
+		$this->setup = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner'], "Command to execute before executing program");
+
+		$this->teardown = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner'], "Command to execute after program's execution");
+	}
 	/**
 	 * @brief The name of the test
 	 * @var string
 	 */
-	protected $name;
+	public Field $name;
 
 	/**
 	 * @brief The arguements to send to the programm
 	 * @var array
 	*/
-	protected $projectArgs;
+	public Field $commandLineArguments;
 
 	/**
 	 * @brief The return code expected at the end of the test
-	 * @var array
+	 * @var int
 	*/
-	protected $expectedReturnCode = 0;
+	public Field $expectedReturnCode;
 
 	/**
 	 * @brief command (and args) to execute piped to the std output of the program
 	 * @var array
 	 */
-	protected ?string $stdoutFilter = null;
+	public Field $stdoutFilter;
 
 	/**
 	 * @brief command (and args) to execute piped to the error output of the program
 	 * @var array
 	 */
-	protected ?string $stderrFilter = null;
+	public Field $stderrFilter;
 
 	/**
-	 * @brief path to the file with what should be read on the std input (the file will be copied)
-	 * @var string
+	 * @brief the test should read from stdin
+	 * @var bool
 	 */
-	protected ?string $stdinput = null;
+	public Field $stdinput;
 
 	/**
-	 * @brief path to the file with what is expected on the stdout (the file will be copied)
-	 * @warn if none, or invalid, an empty file will be created and the user would have to fill it
-	 * @var string
+	 * @brief if true, will compare program's stdout to file
+	 * @var bool
 	 */
-	protected ?string $expectedStdout = null;
+	public Field $expectedStdout;
 
 	/**
-	 * @brief path to the file with what is expected on the stdout (the file will be copied)
-	 * @warn if none, or invalid, no file will be created
+	 * @brief if true, will compare program's stderr to file
 	 * @var string
 	 */
-	protected ?string $expectedStderr = null;
+	public Field $expectedStderr;
 
 	/**
 	 * @brief command to execute before test
 	 * @var string
 	 */
-	protected ?string $setup = null;
+	public Field $setup;
 
 	/**
 	 * @brief command to execute after test
 	 * @var string
 	 */
-	protected ?string $teardown = null;
+	public Field $teardown;
 }
