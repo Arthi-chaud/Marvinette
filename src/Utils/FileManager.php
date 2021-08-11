@@ -4,8 +4,7 @@ class FileManager
 {
     public static function deleteFolder(string $folderPath): void
     {
-        foreach(glob("$folderPath/*") as $file) {
-            $filePath = "$folderPath/$file";
+        foreach(glob("$folderPath/*") as $filePath) {
             if (is_dir($filePath))
                 FileManager::deleteFolder($filePath);
             else

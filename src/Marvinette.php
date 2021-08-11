@@ -214,7 +214,9 @@ class Marvinette
 	protected function executeTest(Project $project, string $testName): bool
 	{
 		$test = new Test();
-		return $test->execute($project, $testName);
+		$testPath = FileManager::getCPPath($project->testsFolder->get() . "/$testName");
+		$test->import($testPath);
+		return $test->execute($project);
 	}
 
 	protected function deleteTest(): bool
@@ -226,6 +228,7 @@ class Marvinette
 		if ($testName == null)
 			return false;
 		FileManager::deleteFolder($project->testsFolder->get() . DIRECTORY_SEPARATOR . $testName);
+		return true;
 	}
 	
 	protected function selectTest(Project $project): ?string
@@ -234,6 +237,7 @@ class Marvinette
 		$testsFolder = $project->testsFolder->get();
 		$testsNames = glob(FileManager::getCPPath("$testsFolder/*"));
 		$testCount = count($testsNames);
+		$choices = [];
 		sort($testsNames);
 		if ($testsNames == []) {
 			UserInterface::displayCLIFrame($displayFrameTitle);
@@ -242,14 +246,17 @@ class Marvinette
 		}
 		for ($i = 0; $i < $testCount; $i++) {
 			UserInterface::displayCLIFrame($displayFrameTitle);
-			UserInterface::$displayer->setColor(Color::Blue)->displayText("$i - " . $testsNames[$i]);
+			UserInterface::$displayer->setColor(Color::Blue)->displayText("$i - " . basename($testsNames[$i]));
+			$choices[] = "$i";
 		}
+		var_dump($choices);
 		UserInterface::displayCLIFrame($displayFrameTitle, true);
-		UserInterface::displayCLIFrame($displayFrameTitle);
-		UserInterface::$displayer->setColor(Color::Green)->displayText("Select a test (between 0 and " . ($testCount - 1) . ')', false);
-		$selected = UserInput::getOption("Select a test (between 0 and " . ($testCount - 1) . ')', range(0, $testCount));
+		$selected = UserInput::getOption(function () use ($displayFrameTitle, $testCount) {
+			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::$displayer->setColor(Color::Green)->displayText("Select a test (between 0 and " . ($testCount - 1) . '): ', false);
+		}, $choices);
 		if ($selected == null)
 			return null;
-		return $testsNames[$i];
+		return basename($testsNames[$selected]);
 	}
 }

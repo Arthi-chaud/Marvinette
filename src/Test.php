@@ -116,11 +116,8 @@ class Test
 			}
 	}
 
-	public function execute(Project $project, string $testName): bool
+	public function execute(Project $project): bool
 	{
-		$testPath = FileManager::getCPPath($project->testsFolder->get() . "/$testName");
-		$this->import($testPath);
-
 		$expectedReturnCode = $this->expectedReturnCode->get();
 		$interpreter = $project->interpreter->get();
 		$actualReturnCode = 0;
