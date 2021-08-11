@@ -217,6 +217,7 @@ class Marvinette
 		
 		$expectedReturnCode = null;
 		$commandLineArgs = "";
+		$interpreter = $project->interpreter->get();
 		if (!is_dir($testPath))
 			throw new Exception('Invalid Test Path');
 		if (file_exists(FileManager::getCPPath("$testPath/expectedReturnCode")))
@@ -230,6 +231,8 @@ class Marvinette
 			throw new Exception("Test's setup failed. Return code: $returnCode");
 		}
 		$command = $project->binaryPath->get() . DIRECTORY_SEPARATOR . $project->binaryName->get() . ' ' . $commandLineArgs;
+		if ($interpreter != null)
+			$command = "$interpreter $command";
 		system($command . "> tmp/MarvinetteStdout 2> tmp/MarvinetteStderr", $returnCode);
 		if ($expectedReturnCode != null && $expectedReturnCode != $returnCode)
 			throw new Exception("The program didn't return the expected code. Expected: $returnCode, actual: $expectedReturnCode");
