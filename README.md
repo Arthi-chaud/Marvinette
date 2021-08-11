@@ -14,6 +14,7 @@ marvinette [option]
         --mod-project: Modify the projec's info.
         
         --add-test: Create a functionnal test
+        --mod-test: Modify a functionnal test
         --del-test: Delete a functionnal test
 
         -h, --help: display this usage

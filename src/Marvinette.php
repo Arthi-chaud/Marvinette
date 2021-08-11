@@ -37,6 +37,7 @@ class Marvinette
 			'mod-project' => 'modProject',
 			'add-test' => 'addTest',
 			'del-test' => 'deleteTest',
+			'mod-test' => 'modTest'
 		];
 		$options = CLIOption::get(array_keys($optionsCalls));
 		foreach ($optionsCalls as $option => $call) {
