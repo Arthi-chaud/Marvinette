@@ -213,61 +213,8 @@ class Marvinette
 	
 	protected function executeTest(Project $project, string $testName): bool
 	{
-		$testPath = FileManager::getCPPath($project->testsFolder->get() . "/$testName");
-		
-		$expectedReturnCode = null;
-		$commandLineArgs = "";
-		$interpreter = $project->interpreter->get();
-		if (!is_dir($testPath))
-			throw new Exception('Invalid Test Path');
-		if (file_exists(FileManager::getCPPath("$testPath/expectedReturnCode")))
-			$expectedReturnCode = intval(file_get_contents(FileManager::getCPPath("$testPath/expectedReturnCode")));
-		if (file_exists(FileManager::getCPPath("$testPath/commandLineArguments")))
-			$commandLineArgs = file_get_contents(FileManager::getCPPath("$testPath/commandLineArguments"));
-		$returnCode = 0;
-		if (file_exists(FileManager::getCPPath("$testPath/setup"))) {
-			system(file_get_contents(FileManager::getCPPath("$testPath/setup")), $returnCode);
-			if ($returnCode != 0)
-			throw new Exception("Test's setup failed. Return code: $returnCode");
-		}
-		$command = $project->binaryPath->get() . DIRECTORY_SEPARATOR . $project->binaryName->get() . ' ' . $commandLineArgs;
-		if ($interpreter != null)
-			$command = "$interpreter $command";
-		system($command . "> tmp/MarvinetteStdout 2> tmp/MarvinetteStderr", $returnCode);
-		if ($expectedReturnCode != null && $expectedReturnCode != $returnCode)
-			throw new Exception("The program didn't return the expected code. Expected: $returnCode, actual: $expectedReturnCode");
-		if (file_exists(FileManager::getCPPath("$testPath/stdoutFilter"))) {
-			$stdoutFilterCommand = file_get_contents(FileManager::getCPPath("$testPath/stdoutFilter"));
-			system("cat tmp/MarvinetteStdout | $stdoutFilterCommand > tmp/MarvinetteFilteredStdout", $returnCode);
-			if ($returnCode != 0)
-				throw new Exception("Test's stdout filtering failed. Return code: $returnCode");
-			system("cat tmp/MarvinetteFilteredStdout > tmp/MarvinetteStdout");
-		}
-		if (file_exists(FileManager::getCPPath("$testPath/stderrFilter"))) {
-			$stderrFilterCommand = file_get_contents(FileManager::getCPPath("$testPath/stderrFilter"));
-			system("cat tmp/MarvinetteStderr | $stderrFilterCommand > tmp/MarvinetteFilteredStderr", $returnCode);
-			if ($returnCode != 0)
-				throw new Exception("Test's stderr filtering failed. Return code: $returnCode");
-			system("cat tmp/MarvinetteFilteredStderr > tmp/MarvinetteStderr");
-		}
-		if (file_exists(FileManager::getCPPath("$testPath/expectedStdout"))) {
-			$expectedStdoutFile = FileManager::getCPPath("$testPath/expectedStdout");
-			system("diff $expectedStdoutFile tmp/MarvinetteStdout", $returnCode);
-			if ($returnCode != 0)
-				return false;
-		}
-		if (file_exists(FileManager::getCPPath("$testPath/expectedStderr"))) {
-			$expectedStderrFile = FileManager::getCPPath("$testPath/expectedStderr");
-			system("diff $expectedStderrFile tmp/MarvinetteStderr", $returnCode);
-			if ($returnCode != 0)
-				return false;
-		}
-		if (file_exists(FileManager::getCPPath("$testPath/teardown"))) {
-			system(file_get_contents(FileManager::getCPPath("$testPath/teardown")), $returnCode);
-			if ($returnCode != 0)
-				throw new Exception("Test's teardown failed. Return code: $returnCode");
-		}
-		return true;
+		$test = new Test();
+		return $test->execute($project, $testName);
 	}
 
 	protected function deleteTest(): bool

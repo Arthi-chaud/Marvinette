@@ -13,7 +13,23 @@ class Test
 {
 	const TMPFOLDER = 'tmp';
 
-	const TMPFILEPREFIX = 'Marvi';
+	const setupFileName = 'setup';
+
+	const teardownFileName = 'teardown';
+
+	const stdoutFilterFileName = 'stdoutFilter';
+
+	const stderrFilterFileName = 'stderrFilter';
+
+	const expectedReturnCodeFile = 'expectedReturnCode';
+
+	const stdinputFile = 'stdinput';
+
+	const expectedStderrFile = 'expectedStderr';
+
+	const expectedStdoutFile = 'expectedStdout';
+
+	const commandFile = 'command';
 
 	public function __construct()
 	{
@@ -69,25 +85,84 @@ class Test
 		$testPath = FileManager::getCPPath("$testsFolder/" . $this->name->get());
 		if (!is_dir($testPath))
 			mkdir($testPath, 0777, true);
-		if ($this->setup->get() != null)
-			file_put_contents(FileManager::getCPPath("$testPath/setup"), $this->setup->get());
-		if ($this->teardown->get() != null)
-			file_put_contents(FileManager::getCPPath("$testPath/stderrFilter"), $this->teardown->get());
-		if ($this->stdoutFilter->get() != null)
-			file_put_contents(FileManager::getCPPath("$testPath/stdoutFilter"), $this->stdoutFilter->get());
-		if ($this->stderrFilter->get() != null)
-			file_put_contents(FileManager::getCPPath("$testPath/stderrFilter"), $this->stderrFilter->get());
-		if ($this->expectedReturnCode->get() != null)
-			file_put_contents(FileManager::getCPPath("$testPath/expectedReturnCode"), $this->expectedReturnCode->get());
-		if ($this->stdinput->get() == true)
-			file_put_contents(FileManager::getCPPath("$testPath/stdinput"), '');
-		if ($this->expectedStderr->get() == true)
-			file_put_contents(FileManager::getCPPath("$testPath/expectedStderr"), '');
-		if ($this->expectedStdout->get() == true)
-			file_put_contents(FileManager::getCPPath("$testPath/expectedStdout"), '');
-		file_put_contents(FileManager::getCPPath("$testPath/command"), $this->commandLineArguments->get());
+		foreach(get_object_vars($this) as $fieldName => $field) {
+			if ($fieldName == 'name')
+				continue;
+			if (is_bool($field->get()) && $field->get())
+				file_put_contents(FileManager::getCPPath("$testPath/$fieldName"), '');
+			else if (is_string($field->get()) && $field->get())
+				file_put_contents(FileManager::getCPPath("$testPath/$fieldName"), $field->get());
+		}
 		return true;
 	}
+
+	/**
+	 * @brief import test from file in folder
+	 * @param $testsFolder the path to the test folder
+	 */
+	public function import(string $testFolder)
+	{
+		$testName = basename($testFolder);
+
+		if (!is_dir($testFolder))
+			throw new Exception('Invalid test path');
+		$this->name->set($testName);
+		foreach(get_object_vars($this) as $fieldName => $_)
+			if (file_exists(FileManager::getCPPath("$testFolder/$fieldName"))) {
+				$fileContent = file_get_contents(FileManager::getCPPath("$testFolder/$fieldName"));
+				if (is_numeric($fileContent))
+					$fileContent = intval($fileContent);
+				$this->$fieldName->set(file_get_contents(FileManager::getCPPath("$testFolder/$fieldName")));
+			}
+	}
+
+	public function execute(Project $project, string $testName): bool
+	{
+		$testPath = FileManager::getCPPath($project->testsFolder->get() . "/$testName");
+		$this->import($testPath);
+
+		$expectedReturnCode = $this->expectedReturnCode->get();
+		$interpreter = $project->interpreter->get();
+		$actualReturnCode = 0;
+		if ($this->setup->get()) {
+			system($this->setup->get(), $actualReturnCode);
+			if ($actualReturnCode != 0)
+				throw new Exception("Test's setup failed. Return code: $actualReturnCode");
+		}
+		$command = $project->binaryPath->get() . DIRECTORY_SEPARATOR . $project->binaryName->get();
+		if ($this->commandLineArguments->get())
+			$command .= ' ' . $this->commandLineArguments->get();
+		if ($interpreter != null)
+			$command = "$interpreter $command";
+		system($command . "> tmp/MarvinetteStdout 2> tmp/MarvinetteStderr", $actualReturnCode);
+		if ($expectedReturnCode != null && $expectedReturnCode != $actualReturnCode)
+			throw new Exception("The program didn't return the expected code. Expected: $actualReturnCode, actual: $expectedReturnCode");
+		foreach(['stdout', 'stderr'] as $output) {
+			$filter = $output . 'Filter';
+			$ustream = ucwords($output);
+			$expected = "expected$ustream";
+			if ($this->$filter->get()) {
+				$filterCommand = $this->$filter->get();
+				system("cat tmp/Marvinette$ustream | $filterCommand > tmp/MarvinetteFiltered$ustream", $actualReturnCode);
+				if ($actualReturnCode != 0)
+					throw new Exception("Test's $output filtering failed. Return code: $actualReturnCode");
+				system("cat tmp/MarvinetteFiltered$ustream > tmp/Marvinette$ustream");
+			}
+			if ($this->$expected->get()) {
+				$expectedStdoutFile = FileManager::getCPPath("$testPath/expectedStdout");
+				system(FileManager::getCPPath("diff $expectedStdoutFile tmp/Marvinette$ustream"), $actualReturnCode);
+				if ($actualReturnCode != 0)
+					return false;
+			}
+		}
+		if ($this->teardown->get()) {
+			system($this->teardown->get(), $actualReturnCode);
+			if ($actualReturnCode != 0)
+				throw new Exception("Test's teardown failed. Return code: $actualReturnCode");
+		}
+		return true;
+	}
+
 	/**
 	 * @brief The name of the test
 	 * @var string
