@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\TextUI\XmlConfiguration\File;
+
 use function PHPUnit\Framework\throwException;
 
 require_once "src/Field.php";
@@ -64,28 +66,26 @@ class Test
 			$project->import(Marvinette::ConfigurationFile);
 		}
 		$testsFolder = $project->testsFolder->get();
-		$testPath = "$testsFolder" . DIRECTORY_SEPARATOR . $this->name->get();
+		$testPath = FileManager::getCPPath("$testsFolder/" . $this->name->get());
 		if (!is_dir($testPath))
 			mkdir($testPath, 0777, true);
-
 		if ($this->setup->get() != null)
-			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "setup", $this->setup->get());
+			file_put_contents(FileManager::getCPPath("$testPath/setup"), $this->setup->get());
 		if ($this->teardown->get() != null)
-			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "stderrFilter", $this->teardown->get());
+			file_put_contents(FileManager::getCPPath("$testPath/stderrFilter"), $this->teardown->get());
 		if ($this->stdoutFilter->get() != null)
-			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "stdoutFilter", $this->stdoutFilter->get());
+			file_put_contents(FileManager::getCPPath("$testPath/stdoutFilter"), $this->stdoutFilter->get());
 		if ($this->stderrFilter->get() != null)
-			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "stderrFilter", $this->stderrFilter->get());
+			file_put_contents(FileManager::getCPPath("$testPath/stderrFilter"), $this->stderrFilter->get());
 		if ($this->expectedReturnCode->get() != null)
-			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "expectedReturnCode", $this->expectedReturnCode->get());
+			file_put_contents(FileManager::getCPPath("$testPath/expectedReturnCode"), $this->expectedReturnCode->get());
 		if ($this->stdinput->get() == true)
-			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "stdinput", '');
+			file_put_contents(FileManager::getCPPath("$testPath/stdinput"), '');
 		if ($this->expectedStderr->get() == true)
-			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "expectedStderr", '');
+			file_put_contents(FileManager::getCPPath("$testPath/expectedStderr"), '');
 		if ($this->expectedStdout->get() == true)
-			file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "expectedStdout", '');
-		file_put_contents("$testPath" . DIRECTORY_SEPARATOR . "command",
-			$project->binaryPath->get() . DIRECTORY_SEPARATOR . $project->binaryName->get() . " " . $this->commandLineArguments->get());
+			file_put_contents(FileManager::getCPPath("$testPath/expectedStdout"), '');
+		file_put_contents(FileManager::getCPPath("$testPath/command"), $this->commandLineArguments->get());
 		return true;
 	}
 	/**

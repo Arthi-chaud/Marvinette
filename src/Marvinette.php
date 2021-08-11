@@ -6,6 +6,7 @@ require_once 'src/Utils/UserInput.php';
 require_once 'src/Utils/UserInterface.php';
 require_once 'Utils/CLIOption.php';
 require_once 'src/Test.php';
+require_once 'src/Utils/FileManager.php';
 
 use Display\Color;
 
@@ -17,6 +18,17 @@ class Marvinette
 
 	const ConfigurationFile = "Marvinette.json";
 
+	private function forEachObjectField(&$obj, callable $callable): bool
+	{
+		foreach (get_object_vars($obj) as $fieldName => $field)
+			for ($choosen = false; !$choosen; ) {
+				$choosen = $callable($obj, $fieldName, $field);
+				if ($choosen == null)
+					return false;
+			}
+		return true;
+	}
+
 	public function launch(): bool
 	{
 		$optionsCalls = [
@@ -24,7 +36,6 @@ class Marvinette
 			'del-project' => 'deleteProject',
 			'mod-project' => 'modProject',
 			'add-test' => 'addTest',
-			'mod-test' => 'modTest',
 			'del-test' => 'deleteTest',
 		];
 		$options = CLIOption::get(array_keys($optionsCalls));
@@ -48,24 +59,23 @@ class Marvinette
 				return false;
 		}
 		$project = new Project();
-		foreach (get_object_vars($project) as $fieldName => $field) {
-			for ($choosen = false; !$choosen; ) {
-				$helpMsg = $field->getPromptHelp();
-				$help = $helpMsg ? " ($helpMsg)" : "";
-				$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
+		$this->forEachObjectField($project, function($project, $fieldName, $field) use ($displayFrameTitle) {
+			$helpMsg = $field->getPromptHelp();
+			$help = $helpMsg ? " ($helpMsg)" : "";
+			$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
+			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::$displayer->setColor(Color::Blue)->displayText("Enter the project's $cleanedFieldName$help: ", false);
+			if (($value = fgets(STDIN)) == null)
+				return null;
+			try {
+				$project->$fieldName->set(rtrim($value));
+				return true;
+			} catch (Exception $e) {
 				UserInterface::displayCLIFrame($displayFrameTitle);
-				UserInterface::$displayer->setColor(Color::Blue)->displayText("Enter the project's $cleanedFieldName$help: ", false);
-				if (($value = fgets(STDIN)) == null)
-					return false;
-				try {
-					$project->$fieldName->set(rtrim($value));
-					$choosen = true;
-				} catch (Exception $e) {
-					UserInterface::displayCLIFrame($displayFrameTitle);
-					UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
-				}
+				UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
+				return false;
 			}
-		}
+		});
 		$project->export(Marvinette::ConfigurationFile);
 		UserInterface::displayCLIFrame($displayFrameTitle);
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is created!");
@@ -92,25 +102,24 @@ class Marvinette
 		$project = new Project();
 		
 		$project->import(self::ConfigurationFile);
-		foreach (get_object_vars($project) as $fieldName => $field) {
-			for ($choosen = false; !$choosen; ) {
+		$this->forEachObjectField($project, function($_, $fieldName, $field) use ($project, $displayFrameTitle) {
+			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the project's new ". UserInterface::cleanCamelCase($fieldName) . " ", false);
+			UserInterface::$displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed): ", false);
+			if (($value = fgets(STDIN)) == null)
+				return null;
+			$value = rtrim($value);
+			if ($value == "")
+				$value = $project->$fieldName->get();
+			try {
+				$project->$fieldName->set($value);
+				return true;
+			} catch (Exception $e) {
 				UserInterface::displayCLIFrame($displayFrameTitle);
-				UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the project's new ". UserInterface::cleanCamelCase($fieldName) . " ", false);
-				UserInterface::$displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed): ", false);
-				if (($value = fgets(STDIN)) == null)
-					return false;
-				$value = rtrim($value);
-				if ($value == "")
-					$value = $field->get();
-				try {
-					$field->set($value);
-					$choosen = true;
-				} catch (Exception $e) {
-					UserInterface::displayCLIFrame($displayFrameTitle);
-					UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
-				}
+				UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
+				return false;
 			}
-		}
+		});
 		unlink(self::ConfigurationFile);
 		$project->export(self::ConfigurationFile);
 		UserInterface::displayCLIFrame($displayFrameTitle);
@@ -121,6 +130,7 @@ class Marvinette
 		return true;
 	}
 
+	
 	protected function deleteProject(): bool
 	{
 		$displayFrameTitle = "Delete Project";
@@ -134,7 +144,7 @@ class Marvinette
 		UserInterface::$displayer->setColor(Color::Red)->displayText("Warning: You are about to delete your configuration file");
 		$delete = UserInput::getYesNoOption($displayFrameTitle, "Do you want to continue?", Color::Red);
 		if ($delete == 'Y')
-			unlink(self::ConfigurationFile);
+		unlink(self::ConfigurationFile);
 		else {
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file has not been deleted!");
@@ -142,9 +152,9 @@ class Marvinette
 		}
 		UserInterface::displayCLIFrame($displayFrameTitle);
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is deleted!");
-		$delete = $delete = UserInput::getYesNoOption($displayFrameTitle, "Do you want to delete your tests?", Color::Red);
+		$delete = UserInput::getYesNoOption($displayFrameTitle, "Do you want to delete your tests?", Color::Red);
 		if ($delete == 'Y') {
-			//todo remove folder
+			FileManager::deleteFolder($project->testsFolder->get());
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are deleted!");
 			return false;
@@ -153,7 +163,7 @@ class Marvinette
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are not deleted!");
 		return true;
 	}
-
+	
 	protected function overwriteProject(): bool
 	{
 		$displayFrameTitle = "Existing Project";
@@ -165,10 +175,10 @@ class Marvinette
 		UserInterface::$displayer->setColor(Color::Blue)->displayText("Creating a new project will overwrite this file");
 		$overwrite = UserInput::getYesNoOption($displayFrameTitle, "Do you want to continue?", Color::Red);
 		if ($overwrite == 'Y')
-			return true;
+		return true;
 		return false;
 	}
-
+	
 	protected function addTest(?Project $project = null)
 	{
 		$displayFrameTitle = "Add Test";
@@ -185,7 +195,7 @@ class Marvinette
 				UserInterface::displayCLIFrame($displayFrameTitle);
 				UserInterface::$displayer->setColor(Color::Blue)->displayText("Test's $cleanedFieldName$help: ", false);
 				if (($value = fgets(STDIN)) == null)
-					return false;
+				return false;
 				try {
 					$test->$fieldName->set(rtrim($value));
 					$choosen = true;
@@ -198,69 +208,81 @@ class Marvinette
 		$test->export($project);
 		UserInterface::displayCLIFrame($displayFrameTitle);
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
+		return true;
 	}
-
+	
 	protected function executeTest(Project $project, string $testName): bool
 	{
-		$testPath = $project->testsFolder->get() . DIRECTORY_SEPARATOR . $testName;
-
+		$testPath = FileManager::getCPPath($project->testsFolder->get() . "/$testName");
+		
 		$expectedReturnCode = null;
 		$commandLineArgs = "";
 		if (!is_dir($testPath))
 			throw new Exception('Invalid Test Path');
-		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'expectedReturnCode'))
-			$expectedReturnCode = intval(file_get_contents($testPath . DIRECTORY_SEPARATOR . 'expectedReturnCode'));
-		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'commandLineArguments'))
-			$commandLineArgs = file_get_contents($testPath . DIRECTORY_SEPARATOR . 'commandLineArguments');
+		if (file_exists(FileManager::getCPPath("$testPath/expectedReturnCode")))
+			$expectedReturnCode = intval(file_get_contents(FileManager::getCPPath("$testPath/expectedReturnCode")));
+		if (file_exists(FileManager::getCPPath("$testPath/commandLineArguments")))
+			$commandLineArgs = file_get_contents(FileManager::getCPPath("$testPath/commandLineArguments"));
 		$returnCode = 0;
-		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'setup')) {
-			system(file_get_contents($testPath . DIRECTORY_SEPARATOR . 'setup'), $returnCode);
+		if (file_exists(FileManager::getCPPath("$testPath/setup"))) {
+			system(file_get_contents(FileManager::getCPPath("$testPath/setup")), $returnCode);
 			if ($returnCode != 0)
-				throw new Exception("Test's setup failed. Return code: $returnCode");
+			throw new Exception("Test's setup failed. Return code: $returnCode");
 		}
 		$command = $project->binaryPath->get() . DIRECTORY_SEPARATOR . $project->binaryName->get() . ' ' . $commandLineArgs;
 		system($command . "> tmp/MarvinetteStdout 2> tmp/MarvinetteStderr", $returnCode);
 		if ($expectedReturnCode != null && $expectedReturnCode != $returnCode)
 			throw new Exception("The program didn't return the expected code. Expected: $returnCode, actual: $expectedReturnCode");
-		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'stdoutFilter')) {
-			$stdoutFilterCommand = file_get_contents($testPath . DIRECTORY_SEPARATOR . 'stdoutFilter');
+		if (file_exists(FileManager::getCPPath("$testPath/stdoutFilter"))) {
+			$stdoutFilterCommand = file_get_contents(FileManager::getCPPath("$testPath/stdoutFilter"));
 			system("cat tmp/MarvinetteStdout | $stdoutFilterCommand > tmp/MarvinetteFilteredStdout", $returnCode);
 			if ($returnCode != 0)
 				throw new Exception("Test's stdout filtering failed. Return code: $returnCode");
 			system("cat tmp/MarvinetteFilteredStdout > tmp/MarvinetteStdout");
 		}
-		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'stderrFilter')) {
-			$stderrFilterCommand = file_get_contents($testPath . DIRECTORY_SEPARATOR . 'stderrFilter');
+		if (file_exists(FileManager::getCPPath("$testPath/stderrFilter"))) {
+			$stderrFilterCommand = file_get_contents(FileManager::getCPPath("$testPath/stderrFilter"));
 			system("cat tmp/MarvinetteStderr | $stderrFilterCommand > tmp/MarvinetteFilteredStderr", $returnCode);
 			if ($returnCode != 0)
 				throw new Exception("Test's stderr filtering failed. Return code: $returnCode");
 			system("cat tmp/MarvinetteFilteredStderr > tmp/MarvinetteStderr");
 		}
-		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'expectedStdout')) {
-			$expectedStdoutFile = $testPath . DIRECTORY_SEPARATOR . 'expectedStdout';
+		if (file_exists(FileManager::getCPPath("$testPath/expectedStdout"))) {
+			$expectedStdoutFile = FileManager::getCPPath("$testPath/expectedStdout");
 			system("diff $expectedStdoutFile tmp/MarvinetteStdout", $returnCode);
 			if ($returnCode != 0)
 				return false;
 		}
-		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'expectedStderr')) {
-			$expectedStderrFile = $testPath . DIRECTORY_SEPARATOR . 'expectedStderr';
+		if (file_exists(FileManager::getCPPath("$testPath/expectedStderr"))) {
+			$expectedStderrFile = FileManager::getCPPath("$testPath/expectedStderr");
 			system("diff $expectedStderrFile tmp/MarvinetteStderr", $returnCode);
 			if ($returnCode != 0)
 				return false;
 		}
-		if (file_exists($testPath . DIRECTORY_SEPARATOR . 'teardown')) {
-			system(file_get_contents($testPath . DIRECTORY_SEPARATOR . 'teardown'), $returnCode);
+		if (file_exists(FileManager::getCPPath("$testPath/teardown"))) {
+			system(file_get_contents(FileManager::getCPPath("$testPath/teardown")), $returnCode);
 			if ($returnCode != 0)
 				throw new Exception("Test's teardown failed. Return code: $returnCode");
 		}
 		return true;
 	}
 
+	protected function deleteTest(): bool
+	{
+		$project = new Project();
+		$project->import(self::ConfigurationFile);
+		$testName = $this->selectTest($project);
+
+		if ($testName == null)
+			return false;
+		FileManager::deleteFolder($project->testsFolder->get() . DIRECTORY_SEPARATOR . $testName);
+	}
+	
 	protected function selectTest(Project $project): ?string
 	{
 		$displayFrameTitle = "Select a Test";
 		$testsFolder = $project->testsFolder->get();
-		$testsNames = glob($testsFolder . DIRECTORY_SEPARATOR . "/*");
+		$testsNames = glob(FileManager::getCPPath("$testsFolder/*"));
 		$testCount = count($testsNames);
 		sort($testsNames);
 		if ($testsNames == []) {
