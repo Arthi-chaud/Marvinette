@@ -42,6 +42,7 @@ class Test
 		function($r) {
 			if ($r == "")
 				return;
+			var_dump($r);
 			if (!is_numeric($r) || (intval($r) < 0))
 				throw new Exception("Please enter a number superior/equal to 0 (or nothing to ignore)");
 		}, function($r) {
@@ -104,12 +105,15 @@ class Test
 		if (!is_dir($testFolder))
 			throw new Exception('Invalid test path');
 		$this->name->set($testName);
-		foreach(get_object_vars($this) as $fieldName => $_)
+		foreach(get_object_vars($this) as $fieldName => $field)
 			if (file_exists(FileManager::getCPPath("$testFolder/$fieldName"))) {
 				$fileContent = file_get_contents(FileManager::getCPPath("$testFolder/$fieldName"));
 				if (is_numeric($fileContent))
 					$fileContent = intval($fileContent);
-				$this->$fieldName->set(file_get_contents(FileManager::getCPPath("$testFolder/$fieldName")));
+				if ($fileContent == '' && is_string($fileContent))
+					$this->$fieldName->set(true);
+				else
+					$this->$fieldName->set($fileContent);
 			}
 	}
 

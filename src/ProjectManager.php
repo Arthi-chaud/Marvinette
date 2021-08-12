@@ -17,32 +17,11 @@ use Display\Color;
 class ProjectManager
 {
 
-	public function launch(): bool
-	{
-		$optionsCalls = [
-			'create-project' => 'createProject',
-			'del-project' => 'deleteProject',
-			'mod-project' => 'modProject',
-			'add-test' => 'addTest',
-			'del-test' => 'deleteTest',
-			'mod-test' => 'modTest'
-		];
-		$options = CLIOption::get(array_keys($optionsCalls));
-		foreach ($optionsCalls as $option => $call) {
-			if (array_key_exists($option, $options)) {
-				UserInterface::displayCLIFrame("Marvinette\t", true);
-				return $this->$call();
-			}
-		}
-		UserInterface::displayHelp();
-		return false;
-	}
-	
-	protected function createProject(): bool
+	public static function createProject(): bool
 	{
 		$displayFrameTitle = "Create Project";
 		if (file_exists(Project::ConfigurationFile)) {
-			if ($this->overWriteProject())
+			if (self::overWriteProject())
 				unlink(Project::ConfigurationFile);
 			else
 				return false;
@@ -75,17 +54,17 @@ class ProjectManager
 		return true;
 	}
 
-	protected function displayNoConfigFileFound($displayFrameTitle): void
+	public static function displayNoConfigFileFound($displayFrameTitle): void
 	{
 		UserInterface::displayCLIFrame($displayFrameTitle);
 		UserInterface::$displayer->setColor(Color::Red)->displayText("No Configuration File Found!");
 	}
 
-	protected function modProject(): bool
+	public static function modProject(): bool
 	{
 		$displayFrameTitle = "Modify Project";
 		if (!file_exists(Project::ConfigurationFile)) {
-			$this->displayNoConfigFileFound($displayFrameTitle);
+			self::displayNoConfigFileFound($displayFrameTitle);
 			return false;
 		}
 		$project = new Project();
@@ -120,11 +99,11 @@ class ProjectManager
 	}
 
 	
-	protected function deleteProject(): bool
+	public static function deleteProject(): bool
 	{
 		$displayFrameTitle = "Delete Project";
 		if (!file_exists(Project::ConfigurationFile)) {
-			$this->displayNoConfigFileFound($displayFrameTitle);
+			self::displayNoConfigFileFound($displayFrameTitle);
 			return false;
 		}
 		$project = new Project();
@@ -153,7 +132,7 @@ class ProjectManager
 		return true;
 	}
 	
-	protected function overwriteProject(): bool
+	public static function overwriteProject(): bool
 	{
 		$displayFrameTitle = "Existing Project";
 		UserInterface::displayCLIFrame($displayFrameTitle);
