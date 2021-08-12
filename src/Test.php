@@ -36,7 +36,8 @@ class Test
 		$this->name = new Field(function($name) {
 			if (!$name)
 				throw new Exception("The test's name shouldn't be empty");
-			return $name;
+			if (strchr($name, DIRECTORY_SEPARATOR))
+				throw new Exception("The test's name should not contain a '". DIRECTORY_SEPARATOR. "'");
 		});
 
 		$this->commandLineArguments = new Field(function($args) {}, null, "The arguments to pass to the program");
@@ -118,6 +119,7 @@ class Test
 
 	public function execute(Project $project): bool
 	{
+		$testPath = $project->testsFolder->get() . DIRECTORY_SEPARATOR . $this->name->get();
 		$expectedReturnCode = $this->expectedReturnCode->get();
 		$interpreter = $project->interpreter->get();
 		$actualReturnCode = 0;

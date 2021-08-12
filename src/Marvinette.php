@@ -211,9 +211,67 @@ class Marvinette
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
 		return true;
 	}
-	
-	protected function executeTest(Project $project, string $testName): bool
+
+	protected function modTest()
 	{
+		$displayFrameTitle = 'Modify Test';
+		$project = new Project();
+		$project->import(self::ConfigurationFile);
+		$testsFolder = $project->testsFolder->get();
+		$testName = $this->selectTest($project);
+		$testTmp = new Test();
+		$finalTest = new Test();
+		$finalTest->import(FileManager::getCPPath("$testsFolder/$testName"));
+
+		if ($testName == null)
+			return false;
+		$this->forEachObjectField($finalTest, function($_, $fieldName, $field) use ($displayFrameTitle, $finalTest, $testTmp) {
+			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the test's new ". UserInterface::cleanCamelCase($fieldName) . " ", false);
+			UserInterface::$displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed): ", false);
+			if (($value = fgets(STDIN)) == null)
+				return null;
+			$value = rtrim($value);
+			if ($value == "")
+				$value = $finalTest->$fieldName->get();
+			try {
+				$testTmp->$fieldName->set($value);
+				return true;
+			} catch (Exception $e) {
+				UserInterface::displayCLIFrame($displayFrameTitle);
+				UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
+				return false;
+			}
+		});
+
+		foreach(['stdout', 'stderr'] as $out) {
+			foreach(['Filter', 'expected'] as $action) {
+				$fieldName = '';
+				$fileFilterName = '';
+				if ($action == 'Filter') {
+					$fieldName = "$out$action";
+					$fileFilterName = "$testsFolder/$testName/$out$action";
+				} else {
+					$fieldName = $action . ucwords($out);
+					$fileFilterName = "$testsFolder/$testName/" . $action . ucwords($out);
+				}
+			}
+			if ($testTmp->$fieldName->get() && !file_exists(FileManager::getCPPath($fileFilterName)))
+				file_put_contents(FileManager::getCPPath($fileFilterName), '');
+			else if (file_exists(FileManager::getCPPath($fileFilterName)))
+				unlink(FileManager::getCPPath($fileFilterName));
+		}
+		rename(FileManager::getCPPath("$testsFolder/$testName"), FileManager::getCPPath("$testsFolder/" . $testTmp->name->get()));
+		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
+	}
+	
+	protected function executeTest(string $testName, ?Project $project = null): bool
+	{
+		if (!$project) {
+			$project = new Project();
+			$project->import(self::ConfigurationFile);
+		}
 		$test = new Test();
 		$testPath = FileManager::getCPPath($project->testsFolder->get() . "/$testName");
 		$test->import($testPath);
