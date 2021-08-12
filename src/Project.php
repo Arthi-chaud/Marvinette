@@ -8,6 +8,8 @@ require_once 'src/Field.php';
 class Project
 {
 
+	const ConfigurationFile = "Marvinette.json";
+
 	public function __construct()
 	{
 		$this->name = new Field(function($name) {

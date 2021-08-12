@@ -1,9 +1,5 @@
 <?php
 
-use PHPUnit\TextUI\XmlConfiguration\File;
-
-use function PHPUnit\Framework\throwException;
-
 require_once "src/Field.php";
 
 /**
@@ -80,7 +76,7 @@ class Test
 	{
 		if (!$project) {
 			$project = new Project();
-			$project->import(Marvinette::ConfigurationFile);
+			$project->import(Project::ConfigurationFile);
 		}
 		$testsFolder = $project->testsFolder->get();
 		$testPath = FileManager::getCPPath("$testsFolder/" . $this->name->get());
