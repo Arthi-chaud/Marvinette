@@ -244,22 +244,21 @@ class Marvinette
 			}
 		});
 
-		foreach(['stdout', 'stderr'] as $out) {
-			foreach(['Filter', 'expected'] as $action) {
-				$fieldName = '';
-				$fileFilterName = '';
-				if ($action == 'Filter') {
-					$fieldName = "$out$action";
-					$fileFilterName = "$testsFolder/$testName/$out$action";
-				} else {
-					$fieldName = $action . ucwords($out);
-					$fileFilterName = "$testsFolder/$testName/" . $action . ucwords($out);
-				}
+		foreach(get_object_vars($testTmp) as $fieldName => $field) {
+			$fieldValue = $field->get();
+			$fieldFileName = FileManager::getCPPath("$testsFolder/$testName/$fieldName");
+			$fileExists = file_exists(FileManager::getCPPath($fieldFileName));
+			if (is_bool($fieldValue)) {
+				if ($fieldValue && !$fileExists)
+					file_put_contents($fieldFileName, '');
+				if (!$fieldValue && $fileExists)
+					unlink($fieldFileName);
+			} else if (is_string($fieldValue) || is_null($fieldValue)) {
+				if ($fieldValue)
+					file_put_contents($fieldFileName, $fieldValue);
+				if (!$fieldValue && $fileExists)
+					unlink($fieldFileName);
 			}
-			if ($testTmp->$fieldName->get() && !file_exists(FileManager::getCPPath($fileFilterName)))
-				file_put_contents(FileManager::getCPPath($fileFilterName), '');
-			else if (file_exists(FileManager::getCPPath($fileFilterName)))
-				unlink(FileManager::getCPPath($fileFilterName));
 		}
 		rename(FileManager::getCPPath("$testsFolder/$testName"), FileManager::getCPPath("$testsFolder/" . $testTmp->name->get()));
 		UserInterface::displayCLIFrame($displayFrameTitle);

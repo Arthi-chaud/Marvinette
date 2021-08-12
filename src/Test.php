@@ -170,7 +170,7 @@ class Test
 
 	/**
 	 * @brief The arguements to send to the programm
-	 * @var array
+	 * @var ?string
 	*/
 	public Field $commandLineArguments;
 
