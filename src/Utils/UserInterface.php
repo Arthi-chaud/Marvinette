@@ -7,7 +7,7 @@ use Display\Displayer;
 use Display\Color;
 
 /**
- * @brief Everythong related to user interface
+ *  Everythong related to user interface
  */
 class UserInterface
 {

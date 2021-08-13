@@ -3,7 +3,7 @@
 require_once "src/Field.php";
 
 /**
- * @brief Object representing the test's instruction
+ *  Object representing the test's instruction
 */
 class Test
 {
@@ -95,7 +95,7 @@ class Test
 	}
 
 	/**
-	 * @brief import test from file in folder
+	 *  import test from file in folder
 	 * @param $testsFolder the path to the test folder
 	 */
 	public function import(string $testFolder)
@@ -163,61 +163,61 @@ class Test
 	}
 
 	/**
-	 * @brief The name of the test
+	 *  The name of the test
 	 * @var string
 	 */
 	public Field $name;
 
 	/**
-	 * @brief The arguements to send to the programm
+	 *  The arguements to send to the programm
 	 * @var ?string
 	*/
 	public Field $commandLineArguments;
 
 	/**
-	 * @brief The return code expected at the end of the test
+	 *  The return code expected at the end of the test
 	 * @var int
 	*/
 	public Field $expectedReturnCode;
 
 	/**
-	 * @brief command (and args) to execute piped to the std output of the program
+	 *  command (and args) to execute piped to the std output of the program
 	 * @var array
 	 */
 	public Field $stdoutFilter;
 
 	/**
-	 * @brief command (and args) to execute piped to the error output of the program
+	 *  command (and args) to execute piped to the error output of the program
 	 * @var array
 	 */
 	public Field $stderrFilter;
 
 	/**
-	 * @brief the test should read from stdin
+	 *  the test should read from stdin
 	 * @var bool
 	 */
 	public Field $stdinput;
 
 	/**
-	 * @brief if true, will compare program's stdout to file
+	 *  if true, will compare program's stdout to file
 	 * @var bool
 	 */
 	public Field $expectedStdout;
 
 	/**
-	 * @brief if true, will compare program's stderr to file
+	 *  if true, will compare program's stderr to file
 	 * @var string
 	 */
 	public Field $expectedStderr;
 
 	/**
-	 * @brief command to execute before test
+	 *  command to execute before test
 	 * @var string
 	 */
 	public Field $setup;
 
 	/**
-	 * @brief command to execute after test
+	 *  command to execute after test
 	 * @var string
 	 */
 	public Field $teardown;

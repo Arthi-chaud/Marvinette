@@ -5,36 +5,38 @@ require_once "src/Display/Color.php";
 require_once "src/Display/Style.php";
 
 /**
- * @brief Display utility class
+ *  Display utility class
  */
 class Displayer
 {
 	/**
 	 * @var int
-	 * @brief Color to display the text with
-	 * @warn must be an const from Display\Color
+	 * Code of the Color to display the text with
+	 * @info must be an const from Display\Color
 	 */
 	protected $color = Color::Default;
 
 	/**
 	 * @var array
-	 * @brief array of Styles to display the text with
-	 * @warn must hold consts from Display\Style
+	 * Array of Styles code to display the text with
+	 * @info must hold consts from Display\Style
 	 */
 	protected $styles = [];
 
 	/**
 	 * @var int
-	 * @brief Background to display the text with
-	 * @warn must be an const from Display\Color
+	 * Code of the Background color to display the text with
+	 * @info must be an const from Display\Color
 	 */
 	protected $background = Color::Default;
 	
 	/**
-	 * Display text, using previously set style / color / background
-	 * The style... will not be displayed if stdout is a TTY
-	 * @param $text the text to display
-	 * @param $resetAfter if true, resets style / color / background
+	 * Print text on STDOUT, using set style / color / background.
+	 * No format will be displayed if the STDOUT is a TTY
+	 * @param string $text the text to display
+	 * @param bool $newline if true, a newline is displayed after the text
+	 * @param bool $resetAfter if true, resets style / color / background
+	 * @return self
 	 */
 	public function displayText(string $text, bool $newline = true, bool $resetAfter = true): self
 	{
@@ -82,7 +84,7 @@ class Displayer
 	}
 	
 	/**
-	 * Set color filed to null
+	 * Set color field to null
 	 * 
 	 * @return self
 	 */
@@ -154,7 +156,7 @@ class Displayer
 	}
 
 	/**
-	 * Reset Styles value to none
+	 * Reset Styles values, the array is emptied
 	 */
 	public function resetStyles(): self
 	{
@@ -165,9 +167,10 @@ class Displayer
 
 	/**
 	 * Set styles and color to use
-	 * @param $styles an array of styles id
-	 * @param $color a color id
-	 * @param $background a background id (without offset, using straight color id)
+	 * @param Display\Styles[] $styles an array of styles id
+	 * @param Display\Color $color a color id
+	 * @param Display\Color $background a color id for background
+	 * @return self
 	 */
 	public function set(array $styles, $color, $background): self
 	{
@@ -188,6 +191,7 @@ class Displayer
 	}
 
 	/**
+	 * @param int $id the ID of the style/color
 	 * @return string formatted string for terminal setting
 	 */
 	protected function getSequence($id): string

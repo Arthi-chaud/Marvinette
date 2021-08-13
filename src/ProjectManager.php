@@ -12,7 +12,7 @@ require_once 'Utils/ObjectHelper.php';
 use Display\Color;
 
 /**
- * @brief Object holding method where the main functions are
+ *  Object holding method where the main functions are
 */
 class ProjectManager
 {
