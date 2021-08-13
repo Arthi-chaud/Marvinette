@@ -43,8 +43,10 @@ class Displayer
 			echo $this->getSequence(Style::Default);
 			echo $this->getSequence($this->color);
 			echo $this->getSequence($this->background + Color::BACKGROUND_OFFSET);
-			foreach ($this->styles as $style)
-				echo $this->getSequence("\e[%dm", $style);
+			foreach ($this->styles as $style) {
+				if ($style != Style::Default)
+					echo $this->getSequence($style);
+			}
 		}
 		echo $text;
 		if ($isTTY) {
