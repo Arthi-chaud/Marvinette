@@ -4,12 +4,19 @@ require_once 'src/Utils/UserInterface.php';
 
 class UserInput
 {
-	public static function getOption(callable $questionPrompt, $options): ?string
+	/**
+	 * Reads a line from stdin. While what's entered is not in $options, $questionPromts is called and stdin is read
+	 * The line read is trimmed
+	 * @param callable $questionPrompt a function taking no parameter, called before each line read
+	 * @param array $options an aray of string holding what is expected from stdin
+	 * @return ?string null if stdin is closed or a string from $options read from the stream
+	 */
+	public static function getOption(callable $questionPrompt, array $options): ?string
 	{
 		$questionPrompt();
 		while ($line = fgets(STDIN))
 		{
-			$line = rtrim($line);
+			$line = trim($line);
 			if (in_array($line, $options))
 				return $line;
 			$questionPrompt();
