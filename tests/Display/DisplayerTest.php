@@ -13,22 +13,22 @@ final class DisplayerTest extends TestCase
 	{
 		$displayer = new Displayer();
 
-		$this->assertEquals($displayer->getColor(), Color::Default);
+		$this->assertEquals(Color::Default, $displayer->getColor());
 		$displayer->setColor(Color::DarkGray);
-		$this->assertEquals($displayer->getColor(), Color::DarkGray);
+		$this->assertEquals(Color::DarkGray, $displayer->getColor());
 		$displayer->resetColor();
-		$this->assertEquals($displayer->getColor(), Color::Default);
+		$this->assertEquals(Color::Default, $displayer->getColor());
 	}
 
 	public function testBackgroundSettersGettersAndReset(): void
 	{
 		$displayer = new Displayer();
 
-		$this->assertEquals($displayer->getBackground(), Color::Default);
+		$this->assertEquals(Color::Default, $displayer->getBackground());
 		$displayer->setBackground(Color::Green);
-		$this->assertEquals($displayer->getBackground(), Color::Green);
+		$this->assertEquals(Color::Green, $displayer->getBackground());
 		$displayer->resetBackground();
-		$this->assertEquals($displayer->getBackground(), Color::Default);
+		$this->assertEquals(Color::Default, $displayer->getBackground());
 	}
 
 	public function testStylesSettersGettersAndReset(): void

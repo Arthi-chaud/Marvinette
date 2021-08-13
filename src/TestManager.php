@@ -26,10 +26,10 @@ class TestManager {
 				$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
 				UserInterface::displayCLIFrame($displayFrameTitle);
 				UserInterface::$displayer->setColor(Color::Blue)->displayText("Test's $cleanedFieldName$help: ", false);
-				if (($value = fgets(STDIN)) == null)
+				if (($value = UserInput::getUserLine()) == null)
 				return false;
 				try {
-					$test->$fieldName->set(rtrim($value));
+					$test->$fieldName->set($value);
 					$choosen = true;
 				} catch (Exception $e) {
 					UserInterface::displayCLIFrame($displayFrameTitle);
@@ -62,9 +62,8 @@ class TestManager {
 			if ($field->getPromptHelp())
 				UserInterface::$displayer->setColor(Color::Yellow)->displayText(' (' . $field->getPromptHelp() . ')', false);
 			UserInterface::$displayer->setColor(Color::Yellow)->displayText( ', Leave empty if no change needed: ', false);
-			if (($value = fgets(STDIN)) == null)
+			if (($value = UserInput::getUserLine()) == null)
 				return null;
-			$value = rtrim($value);
 			if ($value == "")
 				$value = $field->get();
 			try {
