@@ -148,7 +148,7 @@ class Displayer
 	 *
 	 * @return  self
 	 */ 
-	public function setStyles($styles)
+	public function setStyles(array $styles)
 	{
 		$this->styles = $styles;
 

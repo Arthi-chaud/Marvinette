@@ -41,6 +41,7 @@ class Project
 				$testFolder = substr($testFolder, 0, strlen($testFolder) - 1);
 			return $testFolder;
 		}, "By default in 'tests' folder");
+		$this->testsFolder->set("tests");
 	}
 
 	/**

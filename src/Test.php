@@ -42,7 +42,6 @@ class Test
 		function($r) {
 			if ($r == "")
 				return;
-			var_dump($r);
 			if (!is_numeric($r) || (intval($r) < 0))
 				throw new Exception("Please enter a number superior/equal to 0 (or nothing to ignore)");
 		}, function($r) {

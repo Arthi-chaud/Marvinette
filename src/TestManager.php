@@ -56,7 +56,7 @@ class TestManager {
 
 		if ($testName == null)
 			return false;
-		$return = ObjectHelper::forEachObjectField($finalTest, function($_, $fieldName, $field) use ($displayFrameTitle, $finalTest, $testTmp) {
+		$return = ObjectHelper::forEachObjectField($finalTest, function($fieldName, $field) use ($displayFrameTitle, $testTmp) {
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the test's new ". UserInterface::cleanCamelCase($fieldName), false);
 			if ($field->getPromptHelp())
@@ -66,7 +66,7 @@ class TestManager {
 				return null;
 			$value = rtrim($value);
 			if ($value == "")
-				$value = $finalTest->$fieldName->get();
+				$value = $field->get();
 			try {
 				$testTmp->$fieldName->set($value);
 				return true;
@@ -145,7 +145,6 @@ class TestManager {
 			$choices[] = "$i";
 		}
 		UserInterface::displayCLIFrame($displayFrameTitle, true);
-		var_dump($choices);
 		$selected = UserInput::getOption(function () use ($displayFrameTitle, $testCount) {
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Select a test (between 0 and " . ($testCount - 1) . '): ', false);

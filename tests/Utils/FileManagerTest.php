@@ -1,7 +1,6 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit\TextUI\XmlConfiguration\File;
 
 require_once 'src/Utils/FileManager.php';
 

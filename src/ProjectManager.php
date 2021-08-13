@@ -12,7 +12,7 @@ require_once 'Utils/ObjectHelper.php';
 use Display\Color;
 
 /**
- *  Object holding method where the main functions are
+ * Object holding method where the main functions are
 */
 class ProjectManager
 {
@@ -27,7 +27,7 @@ class ProjectManager
 				return false;
 		}
 		$project = new Project();
-		ObjectHelper::forEachObjectField($project, function($project, $fieldName, $field) use ($displayFrameTitle) {
+		ObjectHelper::forEachObjectField($project, function($fieldName, $field) use ($displayFrameTitle) {
 			$helpMsg = $field->getPromptHelp();
 			$help = $helpMsg ? " ($helpMsg)" : "";
 			$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
@@ -36,7 +36,7 @@ class ProjectManager
 			if (($value = fgets(STDIN)) == null)
 				return null;
 			try {
-				$project->$fieldName->set(rtrim($value));
+				$field->set(rtrim($value));
 				return true;
 			} catch (Exception $e) {
 				UserInterface::displayCLIFrame($displayFrameTitle);
@@ -70,7 +70,7 @@ class ProjectManager
 		$project = new Project();
 		
 		$project->import(Project::ConfigurationFile);
-		ObjectHelper::forEachObjectField($project, function($_, $fieldName, $field) use ($project, $displayFrameTitle) {
+		ObjectHelper::forEachObjectField($project, function($fieldName, $field) use ($displayFrameTitle) {
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the project's new ". UserInterface::cleanCamelCase($fieldName) . " ", false);
 			UserInterface::$displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed): ", false);
@@ -78,9 +78,9 @@ class ProjectManager
 				return null;
 			$value = rtrim($value);
 			if ($value == "")
-				$value = $project->$fieldName->get();
+				$value = $field->get();
 			try {
-				$project->$fieldName->set($value);
+				$field->set($value);
 				return true;
 			} catch (Exception $e) {
 				UserInterface::displayCLIFrame($displayFrameTitle);
