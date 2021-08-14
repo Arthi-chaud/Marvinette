@@ -65,7 +65,7 @@ class TestManager {
 			} else {
 				if (!is_null($fieldValue))
 					file_put_contents($fieldFileName, $fieldValue);
-				if (!$fieldValue && $fileExists)
+				if (is_string($fieldValue) && !$fieldValue && $fileExists)
 					unlink($fieldFileName);
 			}
 		}

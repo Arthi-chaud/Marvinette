@@ -89,6 +89,8 @@ class Test
 				file_put_contents(FileManager::getCPPath("$testPath/$fieldName"), '');
 			else if (is_string($field->get()) && $field->get())
 				file_put_contents(FileManager::getCPPath("$testPath/$fieldName"), $field->get());
+			else if (is_numeric($field->get()))
+				file_put_contents(FileManager::getCPPath("$testPath/$fieldName"), $field->get());
 		}
 		return true;
 	}
