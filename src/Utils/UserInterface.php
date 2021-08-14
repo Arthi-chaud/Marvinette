@@ -19,6 +19,7 @@ class UserInterface
 
 	/**
 	 * @brief Set title to display on every call of `displayCLIFrame`
+	 * The title stack works like a stack, this is a push function
 	 * @param string $title the title string
 	 * @param bool $displayNow if true, will call displayTitle function
 	 */
@@ -33,6 +34,7 @@ class UserInterface
 
 	/**
 	 * Pops last set title from stack
+	 * The title stack works like a stack, this is a pop function
 	 */
 	public static function popTitle(): void
 	{
@@ -64,6 +66,11 @@ class UserInterface
 		-h, --help: display this usage\n";
 	}
 
+	/**
+	 * Turns camelCase-formatted string into 'normally'-cased string
+	 * @param string $str a camelCase string
+	 * @return string the formatted string;
+	 */
 	public static function cleanCamelCase(string $str): string
 	{
 		$cleaned = "";
@@ -76,6 +83,11 @@ class UserInterface
 		return $cleaned;
 	}
 
+	/**
+	 * Turns a normally'-cased string into a camelCase-formatted string
+	 * @param string $str a normally cased string
+	 * @return string the camel case string;
+	 */
 	public static function toCamelCase(string $str): string
 	{
 		$cleaned = "";
@@ -86,7 +98,7 @@ class UserInterface
 			if ($i && $str[$i - 1]  == ' ')
 				$cleaned .= strtoupper($c);
 			else
-				$cleaned .= $c;
+				$cleaned .= strtolower($c);
 		}
 		return $cleaned;
 	}

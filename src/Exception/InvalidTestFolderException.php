@@ -5,9 +5,9 @@ require_once 'src/Exception/MarvinetteException.php';
  * Exception class for test folder errors
  */
 class InvalidTestFolderException extends MarvinetteException {
-    
-    public function __construct()
-    {
-        parent::__construct("The folder is either non existant of contains no test");
-    }
+	
+	public function __construct()
+	{
+		parent::__construct("The folder is either non existant of contains no test");
+	}
 }
