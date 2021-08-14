@@ -86,6 +86,7 @@ final class DisplayerTest extends TestCase
 
 	public function testResetAfterOption(): void
 	{
+		$this->setOutputCallback(function() {});
 		$displayer = new Displayer();
 
 		$displayer->setStyle(Style::Blink)

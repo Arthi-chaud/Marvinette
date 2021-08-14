@@ -63,9 +63,10 @@ final class UserInputTest extends TestCase
 
     public function testGetYesNoOption(): void
     {
+        $this->setOutputCallback(function() {});
         $fileLines = ['Hello', 'Trololol', 'Y', "END"];
         defineStdinClone($fileLines);
         $answer = UserInput::getYesNoOption("", "", Display\Color::Black);
-        $this->assertEquals($answer, 'Y');
+        $this->assertEquals($answer, true);
     }
 }
