@@ -18,7 +18,7 @@ function launch(): bool
 	$options = CommandLine::getArguments(array_keys($optionsCalls));
 	foreach ($optionsCalls as $option => $call) {
 		if (array_key_exists($option, $options)) {
-			UserInterface::displayCLIFrame("Marvinette\t", true);
+			UserInterface::setTitle("Marvinette\t", true);
 			return call_user_func($call);
 		}
 	}

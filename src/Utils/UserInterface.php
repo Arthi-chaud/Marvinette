@@ -6,21 +6,49 @@ require_once 'src/Utils/UserInterface.php';
 use Display\Displayer;
 use Display\Color;
 
+use function PHPUnit\Framework\throwException;
+
 /**
  * @brief Everythong related to user interface
  */
 class UserInterface
 {
 	public static Displayer $displayer;
+	
+	public static $titlesStack = []; 
 
-	public static function displayCLIFrame(string $text, bool $newline = false): void
+	/**
+	 * @brief Set title to display on every call of `displayCLIFrame`
+	 * @param string $title the title string
+	 * @param bool $displayNow if true, will call displayTitle function
+	 */
+	public static function setTitle(string $title, bool $displayNow = false)
 	{
+		self::$titlesStack[] = $title;
+		if ($displayNow) {
+			self::displayTitle();
+			echo "\n";
+		}
+	}
+
+	/**
+	 * Pops last set title from stack
+	 */
+	public static function popTitle(): void
+	{
+		array_pop(self::$titlesStack);
+	}
+
+	public static function displayTitle(): void
+	{
+		if (self::$titlesStack == [])
+			throw new Exception("No title set");
 		if (!isset($displayer))
 			self::$displayer = new Displayer();
+		$text = end(self::$titlesStack);
 		UserInterface::$displayer->setColor(Color::Green)
 						->displayText("| $text |\t", false);
-		if ($newline)
-			echo "\n";
+		reset(self::$titlesStack);
 	}
 
 	public static function displayHelp(): bool

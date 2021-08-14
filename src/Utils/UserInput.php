@@ -23,13 +23,24 @@ class UserInput
 		throw new EndOfFileException();
 	}
 
-	public static function getYesNoOption(string $displayFrameTitle, string $msg, $color): string
+	/**
+	 * Get Yes/no option from command-line interface
+	 * @return bool true if user said yes, the opposite if no
+	 */
+	public static function getYesNoOption(string $msg, $color, ?string $displayFrameTitle = null): bool
 	{
-		return self::getOption(function () use ($displayFrameTitle, $msg, $color)
+		$noChoices = ['n', 'N', 'no', 'non'];
+		$yesChoices = ['y', 'Y', 'yes', 'Yes', 'oui'];
+		if ($displayFrameTitle)
+			UserInterface::setTitle($displayFrameTitle);
+		$choice = self::getOption(function () use ($msg, $color)
 		{
-			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor($color)->displayText("$msg [Y/n]: ", false);
-		}, ['Y', 'n']);
+		}, array_merge($noChoices, $yesChoices));
+		if ($displayFrameTitle)
+			UserInterface::popTitle();
+		return in_array($choice, $yesChoices);
 	}
 
 	/**

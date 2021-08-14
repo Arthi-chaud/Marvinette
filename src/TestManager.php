@@ -14,38 +14,39 @@ class TestManager {
 
 	public static function addTest(?Project $project = null)
 	{
-		$displayFrameTitle = "Add Test";
+		UserInterface::setTitle("Add Test");
 		if (!$project) {
 			$project = new Project();
 			$project->import(Project::ConfigurationFile);
 		}
 		$test = new Test();
-		ObjectHelper::promptEachObjectField($test, $displayFrameTitle, function ($displayFrameTitle, $fieldName, $field) {
+		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
 			$helpMsg = $field->getPromptHelp();
 			$help = $helpMsg ? " ($helpMsg)" : "";
 			$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
-			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Blue)->displayText("Test's $cleanedFieldName$help: ", false);
 		});
 		$test->export($project);
-		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
+		UserInterface::popTitle();
 		return true;
 	}
 
 	public static function modTest()
 	{
-		$displayFrameTitle = 'Modify Test';
+		UserInterface::setTitle('Modify Test');
 		$project = new Project();
 		$project->import(Project::ConfigurationFile);
 		$testsFolder = $project->testsFolder->get();
 		$testName = self::selectTest($project);
-		$testTmp = new Test();
 		$finalTest = new Test();
 		$finalTest->import(FileManager::getCPPath("$testsFolder/$testName"));
+		$testTmp = clone $finalTest;
 
-		ObjectHelper::promptEachObjectField($project, $displayFrameTitle, function ($displayFrameTitle, $fieldName, $field) {
-			UserInterface::displayCLIFrame($displayFrameTitle);
+		ObjectHelper::promptEachObjectField($testTmp, function ($fieldName, $field) {
+			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the test's new ". UserInterface::cleanCamelCase($fieldName), false);
 			if ($field->getPromptHelp())
 				UserInterface::$displayer->setColor(Color::Yellow)->displayText(' (' . $field->getPromptHelp() . ')', false);
@@ -70,8 +71,9 @@ class TestManager {
 			}
 		}
 		rename(FileManager::getCPPath("$testsFolder/$testName"), FileManager::getCPPath("$testsFolder/" . $testTmp->name->get()));
-		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
+		UserInterface::popTitle();
 		return true;
 	}
 	
@@ -99,28 +101,27 @@ class TestManager {
 	
 	public static function selectTest(Project $project): ?string
 	{
-		$displayFrameTitle = "Select a Test";
+		UserInterface::setTitle("Select a Test");
 		$testsFolder = $project->testsFolder->get();
 		$testsNames = glob(FileManager::getCPPath("$testsFolder/*"));
 		$testCount = count($testsNames);
 		$choices = [];
 		sort($testsNames);
 		if ($testsNames == []) {
-			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Red)->displayText("No tests available");
 			throw new InvalidTestFolderException();
 		}
 		for ($i = 0; $i < $testCount; $i++) {
-			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Blue)->displayText("$i - " . basename($testsNames[$i]));
 			$choices[] = "$i";
 		}
-		UserInterface::displayCLIFrame($displayFrameTitle, true);
-		$selected = UserInput::getOption(function () use ($displayFrameTitle, $testCount) {
-			UserInterface::displayCLIFrame($displayFrameTitle);
+		$selected = UserInput::getOption(function () use ($testCount) {
+			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Select a test (between 0 and " . ($testCount - 1) . '): ', false);
 		}, $choices);
-
+		UserInterface::popTitle();
 		return basename($testsNames[$selected]);
 	}
 }

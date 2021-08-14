@@ -20,7 +20,7 @@ class ProjectManager
 
 	public static function createProject(): bool
 	{
-		$displayFrameTitle = "Create Project";
+		UserInterface::setTitle("Create Project");
 		if (file_exists(Project::ConfigurationFile)) {
 			if (self::overWriteProject())
 				unlink(Project::ConfigurationFile);
@@ -28,50 +28,57 @@ class ProjectManager
 				return false;
 		}
 		$project = new Project();
-		ObjectHelper::promptEachObjectField($project, $displayFrameTitle, function ($displayFrameTitle, $fieldName, $field) {
+		ObjectHelper::promptEachObjectField($project, function ($fieldName, $field) {
 			$helpMsg = $field->getPromptHelp();
 			$help = $helpMsg ? " ($helpMsg)" : "";
 			$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
-			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Blue)->displayText("Enter the project's $cleanedFieldName$help: ", false);
 		});
 		$project->export(Project::ConfigurationFile);
-		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is created!");
 
-		$addNow = UserInput::getYesNoOption($displayFrameTitle, "Would You Like to add a test now", Color::Blue);
-		if ($addNow == 'Y')
+		UserInterface::popTitle();
+		if (self::promptAddTest())
 			return TestManager::addTest($project);
 		return true;
 	}
 
-	public static function displayNoConfigFileFound($displayFrameTitle): void
+	public static function promptAddTest(): bool
 	{
-		UserInterface::displayCLIFrame($displayFrameTitle);
+		return UserInput::getYesNoOption("Would You Like to add a test now", Color::Blue);
+	}
+
+	public static function displayNoConfigFileFound(): void
+	{
+		UserInterface::setTitle("Error\t", true);
 		UserInterface::$displayer->setColor(Color::Red)->displayText("No Configuration File Found!");
+		UserInterface::popTitle();
 	}
 
 	public static function modProject(): bool
 	{
-		$displayFrameTitle = "Modify Project";
+		UserInterface::setTitle("Modify Project");
 		if (!file_exists(Project::ConfigurationFile)) {
-			self::displayNoConfigFileFound($displayFrameTitle);
+			self::displayNoConfigFileFound();
 			return false;
 		}
 		$project = new Project();
 		
 		$project->import(Project::ConfigurationFile);
-		ObjectHelper::promptEachObjectField($project, $displayFrameTitle, function ($displayFrameTitle, $fieldName, $field) {
-			UserInterface::displayCLIFrame($displayFrameTitle);
+		ObjectHelper::promptEachObjectField($project,function ($fieldName, $field) {
+			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the project's new ". UserInterface::cleanCamelCase($fieldName) . " ", false);
 			UserInterface::$displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed): ", false);
 		}, true);
 		unlink(Project::ConfigurationFile);
 		$project->export(Project::ConfigurationFile);
-		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is updated!");
-		$addNow = UserInput::getYesNoOption($displayFrameTitle, "Would You Like to add a test now", Color::Blue);
-		if ($addNow == 'Y')
+		
+		UserInterface::popTitle();
+		if (self::promptAddTest())
 			return TestManager::addTest($project);
 		return true;
 	}
@@ -79,49 +86,53 @@ class ProjectManager
 	
 	public static function deleteProject(): bool
 	{
-		$displayFrameTitle = "Delete Project";
+		UserInterface::setTitle("Delete Project");
 		if (!file_exists(Project::ConfigurationFile)) {
-			self::displayNoConfigFileFound($displayFrameTitle);
+			self::displayNoConfigFileFound();
 			return false;
 		}
 		$project = new Project();
 		$project->import(Project::ConfigurationFile);
-		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Red)->displayText("Warning: You are about to delete your configuration file");
-		$delete = UserInput::getYesNoOption($displayFrameTitle, "Do you want to continue?", Color::Red);
-		if ($delete == 'Y')
+		$delete = UserInput::getYesNoOption("Do you want to continue?", Color::Red);
+		if ($delete == true)
 			unlink(Project::ConfigurationFile);
 		else {
-			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file has not been deleted!");
+			UserInterface::popTitle();
 			return false;
 		}
-		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is deleted!");
-		$delete = UserInput::getYesNoOption($displayFrameTitle, "Do you want to delete your tests?", Color::Red);
-		if ($delete == 'Y') {
+		$delete = UserInput::getYesNoOption("Do you want to delete your tests?", Color::Red);
+		if ($delete == true) {
 			FileManager::deleteFolder($project->testsFolder->get());
-			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are deleted!");
+			UserInterface::popTitle();
 			return false;
 		}
-		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are not deleted!");
+		UserInterface::popTitle();
 		return true;
 	}
 	
 	public static function overwriteProject(): bool
 	{
-		$displayFrameTitle = "Existing Project";
-		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::setTitle("Existing Project");
+		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Red)->displayText("Warning:");
-		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Blue)->displayText("A configuration file already exists");
-		UserInterface::displayCLIFrame($displayFrameTitle);
+		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Blue)->displayText("Creating a new project will overwrite this file");
-		$overwrite = UserInput::getYesNoOption($displayFrameTitle, "Do you want to continue?", Color::Red);
-		if ($overwrite == 'Y')
-		return true;
+		$overwrite = UserInput::getYesNoOption("Do you want to continue?", Color::Red);
+		UserInterface::popTitle();
+		if ($overwrite == true)
+			return true;
 		return false;
 	}
 }
