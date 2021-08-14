@@ -14,8 +14,8 @@ jobs:
       - name: Update Documentation
         run: |
           rm -rf docs/*
-          cp images/logo_small.PNG docs/
           doxygen doxy.conf
+          cp images/logo_small.PNG docs/
           cd docs
           git config --global user.email "${GITHUB_ACTOR}@github.com";
           git config --global user.name "${GITHUB_ACTOR}";
