@@ -28,21 +28,12 @@ class ProjectManager
 				return false;
 		}
 		$project = new Project();
-		ObjectHelper::forEachObjectField($project, function($fieldName, $field) use ($displayFrameTitle) {
+		ObjectHelper::promptEachObjectField($project, $displayFrameTitle, function ($displayFrameTitle, $fieldName, $field) {
 			$helpMsg = $field->getPromptHelp();
 			$help = $helpMsg ? " ($helpMsg)" : "";
 			$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Blue)->displayText("Enter the project's $cleanedFieldName$help: ", false);
-			$value = UserInput::getUserLine();
-			try {
-				$field->set($value);
-				return true;
-			} catch (Exception $e) {
-				UserInterface::displayCLIFrame($displayFrameTitle);
-				UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
-				return false;
-			}
 		});
 		$project->export(Project::ConfigurationFile);
 		UserInterface::displayCLIFrame($displayFrameTitle);
@@ -70,22 +61,11 @@ class ProjectManager
 		$project = new Project();
 		
 		$project->import(Project::ConfigurationFile);
-		ObjectHelper::forEachObjectField($project, function($fieldName, $field) use ($displayFrameTitle) {
+		ObjectHelper::promptEachObjectField($project, $displayFrameTitle, function ($displayFrameTitle, $fieldName, $field) {
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the project's new ". UserInterface::cleanCamelCase($fieldName) . " ", false);
 			UserInterface::$displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed): ", false);
-			$value = UserInput::getUserLine();
-			if ($value == "")
-				$value = $field->get();
-			try {
-				$field->set($value);
-				return true;
-			} catch (Exception $e) {
-				UserInterface::displayCLIFrame($displayFrameTitle);
-				UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
-				return false;
-			}
-		});
+		}, true);
 		unlink(Project::ConfigurationFile);
 		$project->export(Project::ConfigurationFile);
 		UserInterface::displayCLIFrame($displayFrameTitle);

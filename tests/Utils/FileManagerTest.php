@@ -1,6 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\TextUI\XmlConfiguration\File;
+
+use function PHPUnit\Framework\assertEquals;
 
 require_once 'src/Utils/FileManager.php';
 
@@ -28,5 +31,22 @@ final class FileManagerTest extends TestCase
         $path = "hello/world\\marvin";
 
         $this->assertEquals(FileManager::getCPPath($path), 'hello' . DIRECTORY_SEPARATOR . 'world' . DIRECTORY_SEPARATOR . 'marvin');
+    }
+
+    public function testRemoveLastDirSeparator(): void
+    {
+        $this->assertEquals(FileManager::removeEndDirSeparator('Hello/World/'), 'Hello/World');
+        $this->assertEquals(FileManager::removeEndDirSeparator('Hello\\World\\'), 'Hello\\World');
+    }
+    public function testRemoveLastDirSeparatorMultiple(): void
+    {
+        $this->assertEquals(FileManager::removeEndDirSeparator('Hello/World///'), 'Hello/World');
+        $this->assertEquals(FileManager::removeEndDirSeparator('Hello\\World\\\\\\'), 'Hello\\World');
+    }
+
+    public function testRemoveLastDirSeparatorFilledWith(): void
+    {
+        $this->assertEquals(FileManager::removeEndDirSeparator('///'), '');
+        $this->assertEquals(FileManager::removeEndDirSeparator('\\\\\\\\'), '');
     }
 }

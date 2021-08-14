@@ -54,7 +54,7 @@ class TestManager {
 		$finalTest = new Test();
 		$finalTest->import(FileManager::getCPPath("$testsFolder/$testName"));
 
-		$return = ObjectHelper::forEachObjectField($finalTest, function($fieldName, $field) use ($displayFrameTitle, $testTmp) {
+		ObjectHelper::forEachObjectField($finalTest, function($fieldName, $field) use ($displayFrameTitle, $testTmp) {
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the test's new ". UserInterface::cleanCamelCase($fieldName), false);
 			if ($field->getPromptHelp())
@@ -72,8 +72,6 @@ class TestManager {
 				return false;
 			}
 		});
-		if (!$return)
-			return false;
 		foreach(get_object_vars($testTmp) as $fieldName => $field) {
 			if ($fieldName == 'name')
 				continue;

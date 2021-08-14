@@ -29,4 +29,15 @@ class FileManager
         $path = str_replace('\\', DIRECTORY_SEPARATOR, $path);
         return $path;
     }
+
+    /**
+     * Remove last character if it is a directory separator
+     * @param string $ath a filepath
+     */
+    public static function removeEndDirSeparator(string $path): string
+    {
+        while ((substr($path, -1, 1) == '/' || substr($path, -1, 1) == '\\') && strlen($path))
+			$path = substr($path, 0, strlen($path) - 1);
+        return $path;
+    }
 }

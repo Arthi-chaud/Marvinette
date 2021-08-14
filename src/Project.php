@@ -28,7 +28,7 @@ class Project
 		$this->binaryPath = new Field(function($binaryPath) {}, function($binaryPath) {
 			if ($binaryPath == "")
 				$binaryPath = ".";
-			return $binaryPath;
+			return FileManager::removeEndDirSeparator($binaryPath);
 		}, "By default: Current directory");
 		$this->binaryPath->set(".");
 		
@@ -37,9 +37,7 @@ class Project
 		$this->testsFolder = new Field(function($testFolder) {}, function($testFolder) {
 			if ($testFolder == "")
 				$testFolder = "tests";
-			if (substr($testFolder, -1, 1) == '/')
-				$testFolder = substr($testFolder, 0, strlen($testFolder) - 1);
-			return $testFolder;
+			return FileManager::removeEndDirSeparator($testFolder);
 		}, "By default in 'tests' folder");
 		$this->testsFolder->set("tests");
 	}

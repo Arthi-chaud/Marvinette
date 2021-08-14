@@ -1,5 +1,12 @@
 <?php 
 
+require_once 'src/Display/Color.php';
+
+use Display\Color;
+
+/**
+ * Set of function which help iterate through object's fields
+ */
 class ObjectHelper
 {
 
@@ -9,12 +16,37 @@ class ObjectHelper
 	 * @param object $obj a refence to an object
 	 * @return bool true if everything succeeded
 	 */
-	public static function forEachObjectField(&$obj, callable $callable): bool
+	public static function forEachObjectField(&$obj, callable $callable): void
 	{
 		foreach (get_object_vars($obj) as $fieldName => $field)
 			for ($choosen = false; !$choosen; ) {
 				$choosen = $callable($fieldName, $field);
 			}
-		return true;
+	}
+
+	/**
+	 * Prompt user to enter each obbjec's field
+	 * @param object $obj the object to iterate through
+	 * @param string $displayFrameTitle the title of the prompt line
+	 * @param callable $promptFormatter a function that display prompt using field's name and field
+	 * @param bool $modPrompt if true and value entered is empty, the old value is not modified 
+	 * @param array $ignoredField an array of string containing fields' names that will be ingore at prompt
+	 */
+	public static function promptEachObjectField(&$obj, string $displayFrameTitle, callable $displayPrompt,  bool $modPrompt = false, array $ignoredFields = [])
+	{
+		self::forEachObjectField($obj, function($fieldName, $field) use ($displayPrompt, $modPrompt, $displayFrameTitle) {
+			$displayPrompt($displayFrameTitle, $fieldName, $field);
+			$value = UserInput::getUserLine();
+			if ($modPrompt && $value == "")
+				return true;
+			try {
+				$field->set($value);
+				return true;
+			} catch (Exception $e) {
+				UserInterface::displayCLIFrame($displayFrameTitle);
+				UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
+				return false;
+			}
+		});
 	}
 }
