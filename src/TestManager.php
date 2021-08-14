@@ -41,18 +41,17 @@ class TestManager {
 		$project->import(Project::ConfigurationFile);
 		$testsFolder = $project->testsFolder->get();
 		$testName = self::selectTest($project);
-		$finalTest = new Test();
-		$finalTest->import(FileManager::getCPPath("$testsFolder/$testName"));
-		$testTmp = clone $finalTest;
+		$test = new Test();
+		$test->import(FileManager::getCPPath("$testsFolder/$testName"));
 
-		ObjectHelper::promptEachObjectField($testTmp, function ($fieldName, $field) {
+		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the test's new ". UserInterface::cleanCamelCase($fieldName), false);
 			if ($field->getPromptHelp())
 				UserInterface::$displayer->setColor(Color::Yellow)->displayText(' (' . $field->getPromptHelp() . ')', false);
 			UserInterface::$displayer->setColor(Color::Yellow)->displayText( ', Leave empty if no change needed: ', false);
 		}, true);
-		foreach(get_object_vars($testTmp) as $fieldName => $field) {
+		foreach(get_object_vars($test) as $fieldName => $field) {
 			if ($fieldName == 'name')
 				continue;
 			$fieldValue = $field->get();
@@ -70,7 +69,7 @@ class TestManager {
 					unlink($fieldFileName);
 			}
 		}
-		rename(FileManager::getCPPath("$testsFolder/$testName"), FileManager::getCPPath("$testsFolder/" . $testTmp->name->get()));
+		rename(FileManager::getCPPath("$testsFolder/$testName"), FileManager::getCPPath("$testsFolder/" . $test->name->get()));
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
 		UserInterface::popTitle();
