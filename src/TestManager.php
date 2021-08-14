@@ -90,29 +90,70 @@ class TestManager {
 
 	public static function deleteTest(): void
 	{
+		UserInterface::setTitle("Delete Test");
 		$project = new Project();
 		$project->import(Project::ConfigurationFile);
 		$testName = self::selectTest($project);
 
 		FileManager::deleteFolder($project->testsFolder->get() . DIRECTORY_SEPARATOR . $testName);
+		UserInterface::displayTitle();
+		UserInterface::$displayer->setColor(Color::Yellow)->displayText("The test '$testName' has been correctly deleted!");
+		UserInterface::popTitle();
+	}
+
+	/**
+	 * Checks if a folder is a valid test folder (using Test's object fields)
+	 * @param string $path a path to what could be a test folder
+	 * @return bool 
+	 */
+	protected static function folderIsATest(string $path): bool
+	{
+		$files = [];
+		$testsFields = get_object_vars(new Test());
+		$path = FileManager::normalizePath($path);
+		$path = FileManager::removeEndDirSeparator($path);
+		if (!is_dir($path))
+			return false;
+		$files = glob("$path/*");
+		if ($files == [])
+			return false;
+		foreach ($files as $file) {
+			if (!in_array(basename($file), array_keys($testsFields)))
+				return false;
+		}
+		return true;	
+	}
+
+	/**
+	 * @return array of string of valid tests folders
+	 * @param string $testsFolder the path to a folder that can contain tests folders
+	 * @param bool $fullPath if true the array contains tests names concatened with $testsFolder
+	 */
+	public static function getTestsFolders(string $testsFolder, bool $fullPath = false): array
+	{
+		$testsName = [];
+		$files = glob(FileManager::normalizePath("$testsFolder/*"));
+		foreach ($files as $file) {
+			if (self::folderIsATest($file))
+				$testsName[] = $fullPath ? $file : basename($file);
+		}
+		return $testsName;
 	}
 	
 	public static function selectTest(Project $project): ?string
 	{
 		UserInterface::setTitle("Select a Test");
 		$testsFolder = $project->testsFolder->get();
-		$testsNames = glob(FileManager::normalizePath("$testsFolder/*"));
-		$testCount = count($testsNames);
-		$choices = [];
-		sort($testsNames);
-		if ($testsNames == []) {
+		$testsName = self::getTestsFolders($testsFolder);
+		$testCount = count($testsName);
+		if (!$testCount) {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Red)->displayText("No tests available");
 			throw new InvalidTestFolderException();
 		}
 		for ($i = 0; $i < $testCount; $i++) {
 			UserInterface::displayTitle();
-			UserInterface::$displayer->setColor(Color::Blue)->displayText("$i - " . basename($testsNames[$i]));
+			UserInterface::$displayer->setColor(Color::Blue)->displayText("$i - " . basename($testsName[$i]));
 			$choices[] = "$i";
 		}
 		$selected = UserInput::getOption(function () use ($testCount) {
@@ -120,6 +161,6 @@ class TestManager {
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Select a test (between 0 and " . ($testCount - 1) . '): ', false);
 		}, $choices);
 		UserInterface::popTitle();
-		return basename($testsNames[$selected]);
+		return basename($testsName[$selected]);
 	}
 }

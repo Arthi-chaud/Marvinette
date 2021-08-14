@@ -30,7 +30,7 @@ if ($argv && $argv[0] && realpath($argv[0]) === __FILE__) {
 	try {
 		return launch();
 	} catch (MarvinetteException $e) {
-		echo "Exiting...\n";
+		echo "\nExiting...\n";
 		return 1;
 	}
 }
