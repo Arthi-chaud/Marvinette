@@ -29,11 +29,13 @@ class ObjectHelper
 	 * @param object $obj the object to iterate through
 	 * @param callable $promptFormatter a function that display prompt using field's name and field
 	 * @param bool $modPrompt if true and value entered is empty, the old value is not modified 
-	 * @param array $ignoredField an array of string containing fields' names that will be ingore at prompt
+	 * @param array $ignoredFields an array of string containing fields' names that will be ingore at prompt
 	 */
 	public static function promptEachObjectField(&$obj, callable $displayPrompt,  bool $modPrompt = false, array $ignoredFields = [])
 	{
-		self::forEachObjectField($obj, function($fieldName, $field) use ($displayPrompt, $modPrompt) {
+		self::forEachObjectField($obj, function($fieldName, $field) use ($displayPrompt, $modPrompt, $ignoredFields) {
+			if (in_array($fieldName, $ignoredFields))
+				return true;
 			$displayPrompt($fieldName, $field);
 			$value = UserInput::getUserLine();
 			if ($modPrompt && $value == "")
