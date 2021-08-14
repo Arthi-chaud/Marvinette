@@ -14,8 +14,9 @@ class UserInput
 	public static function getOption(callable $questionPrompt, array $options): string
 	{
 		$questionPrompt();
-		while (($line = UserInput::getUserLine()) != null)
+		while (1)
 		{
+			$line = UserInput::getUserLine();
 			if (in_array($line, $options))
 				return $line;
 			$questionPrompt();

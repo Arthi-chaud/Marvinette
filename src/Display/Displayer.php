@@ -21,7 +21,7 @@ class Displayer
 	 * Array of Styles code to display the text with
 	 * @info must hold consts from Display\Style
 	 */
-	protected $styles = [];
+	protected array $styles = [];
 
 	/**
 	 * @var int

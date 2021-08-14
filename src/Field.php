@@ -90,7 +90,7 @@ class Field
 	 * @brief a string to display on prompt to help the user
 	 * @var ?string
 	 */
-	protected $promptHelp = null;
+	protected ?string $promptHelp = null;
 
 	/**
 	 * Get the value of data
