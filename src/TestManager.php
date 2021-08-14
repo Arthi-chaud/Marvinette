@@ -20,23 +20,13 @@ class TestManager {
 			$project->import(Project::ConfigurationFile);
 		}
 		$test = new Test();
-		foreach (get_object_vars($test) as $fieldName => $field) {
-			for ($choosen = false; !$choosen; ) {
-				$helpMsg = $field->getPromptHelp();
-				$help = $helpMsg ? " ($helpMsg)" : "";
-				$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
-				UserInterface::displayCLIFrame($displayFrameTitle);
-				UserInterface::$displayer->setColor(Color::Blue)->displayText("Test's $cleanedFieldName$help: ", false);
-				$value = UserInput::getUserLine();
-				try {
-					$test->$fieldName->set($value);
-					$choosen = true;
-				} catch (Exception $e) {
-					UserInterface::displayCLIFrame($displayFrameTitle);
-					UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
-				}
-			}
-		}
+		ObjectHelper::promptEachObjectField($test, $displayFrameTitle, function ($displayFrameTitle, $fieldName, $field) {
+			$helpMsg = $field->getPromptHelp();
+			$help = $helpMsg ? " ($helpMsg)" : "";
+			$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
+			UserInterface::displayCLIFrame($displayFrameTitle);
+			UserInterface::$displayer->setColor(Color::Blue)->displayText("Test's $cleanedFieldName$help: ", false);
+		});
 		$test->export($project);
 		UserInterface::displayCLIFrame($displayFrameTitle);
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
@@ -54,24 +44,13 @@ class TestManager {
 		$finalTest = new Test();
 		$finalTest->import(FileManager::getCPPath("$testsFolder/$testName"));
 
-		ObjectHelper::forEachObjectField($finalTest, function($fieldName, $field) use ($displayFrameTitle, $testTmp) {
+		ObjectHelper::promptEachObjectField($project, $displayFrameTitle, function ($displayFrameTitle, $fieldName, $field) {
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the test's new ". UserInterface::cleanCamelCase($fieldName), false);
 			if ($field->getPromptHelp())
 				UserInterface::$displayer->setColor(Color::Yellow)->displayText(' (' . $field->getPromptHelp() . ')', false);
 			UserInterface::$displayer->setColor(Color::Yellow)->displayText( ', Leave empty if no change needed: ', false);
-			$value = UserInput::getUserLine();
-			if ($value == "")
-				$value = $field->get();
-			try {
-				$testTmp->$fieldName->set($value);
-				return true;
-			} catch (Exception $e) {
-				UserInterface::displayCLIFrame($displayFrameTitle);
-				UserInterface::$displayer->setColor(Color::Red)->displayText($e->getMessage());
-				return false;
-			}
-		});
+		}, true);
 		foreach(get_object_vars($testTmp) as $fieldName => $field) {
 			if ($fieldName == 'name')
 				continue;

@@ -90,7 +90,7 @@ class ProjectManager
 		UserInterface::$displayer->setColor(Color::Red)->displayText("Warning: You are about to delete your configuration file");
 		$delete = UserInput::getYesNoOption($displayFrameTitle, "Do you want to continue?", Color::Red);
 		if ($delete == 'Y')
-		unlink(Project::ConfigurationFile);
+			unlink(Project::ConfigurationFile);
 		else {
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file has not been deleted!");
