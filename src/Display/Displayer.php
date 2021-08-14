@@ -5,7 +5,7 @@ require_once "src/Display/Color.php";
 require_once "src/Display/Style.php";
 
 /**
- *  Display utility class
+ * @briefDisplay utility class
  */
 class Displayer
 {

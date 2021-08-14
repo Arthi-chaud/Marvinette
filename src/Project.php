@@ -3,7 +3,7 @@
 require_once 'src/Field.php';
 
 /**
- *  Object representing the project's important infos
+ * @briefObject representing the project's important infos
 */
 class Project
 {
@@ -43,33 +43,33 @@ class Project
 	}
 
 	/**
-	 *  The name of the project
+	 * @briefThe name of the project
 	 * @var string
 	*/
 	public Field $name;	
 
 	/**
-	 *  Name of the binary to execute
+	 * @briefName of the binary to execute
 	 * @details not a path, just the binary name
 	 * @var string
 	*/
 	public Field $binaryName;
 
 	/**
-	 *  Path to the binary to execute, by default cwd
+	 * @briefPath to the binary to execute, by default cwd
 	 * @details Can be either realtive or absolute
 	 * @var string
 	 */
 	public Field $binaryPath;
 
 	/**
-	 *  name of the interpreter, if needed
+	 * @briefname of the interpreter, if needed
 	 * @var string
 	 */
 	public Field $interpreter;
 
 	/**
-	 *  Relative path to the folder holding tests files
+	 * @briefRelative path to the folder holding tests files
 	 * @var string
 	 */
 	public Field $testsFolder;

@@ -3,7 +3,7 @@
 require_once "src/Field.php";
 
 /**
- *  Object representing the test's instruction
+ * @briefObject representing the test's instruction
 */
 class Test
 {
@@ -94,7 +94,7 @@ class Test
 	}
 
 	/**
-	 *  import test from file in folder
+	 * @briefimport test from file in folder
 	 * @param $testsFolder the path to the test folder
 	 */
 	public function import(string $testFolder)
@@ -162,61 +162,61 @@ class Test
 	}
 
 	/**
-	 *  The name of the test
+	 * @brief The name of the test
 	 * @var string
 	 */
 	public Field $name;
 
 	/**
-	 *  The arguements to send to the programm
+	 * @briefThe arguements to send to the programm
 	 * @var ?string
 	*/
 	public Field $commandLineArguments;
 
 	/**
-	 *  The return code expected at the end of the test
+	 * @briefThe return code expected at the end of the test
 	 * @var int
 	*/
 	public Field $expectedReturnCode;
 
 	/**
-	 *  command (and args) to execute piped to the std output of the program
+	 * @briefcommand (and args) to execute piped to the std output of the program
 	 * @var array
 	 */
 	public Field $stdoutFilter;
 
 	/**
-	 *  command (and args) to execute piped to the error output of the program
+	 * @briefcommand (and args) to execute piped to the error output of the program
 	 * @var array
 	 */
 	public Field $stderrFilter;
 
 	/**
-	 *  the test should read from stdin
+	 * @briefthe test should read from stdin
 	 * @var bool
 	 */
 	public Field $stdinput;
 
 	/**
-	 *  if true, will compare program's stdout to file
+	 * @briefif true, will compare program's stdout to file
 	 * @var bool
 	 */
 	public Field $expectedStdout;
 
 	/**
-	 *  if true, will compare program's stderr to file
+	 * @briefif true, will compare program's stderr to file
 	 * @var string
 	 */
 	public Field $expectedStderr;
 
 	/**
-	 *  command to execute before test
+	 * @briefcommand to execute before test
 	 * @var string
 	 */
 	public Field $setup;
 
 	/**
-	 *  command to execute after test
+	 * @briefcommand to execute after test
 	 * @var string
 	 */
 	public Field $teardown;

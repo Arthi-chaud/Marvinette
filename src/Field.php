@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Object representing a class's variable member, but allows error handling and prompt help messages
+ * @briefObject representing a class's variable member, but allows error handling and prompt help messages
 */
 class Field
 {
@@ -31,7 +31,7 @@ class Field
 	}
 
 	/**
-	 *  A Field constructor, should be called in constructor of class
+	 * @briefA Field constructor, should be called in constructor of class
 	 * @param callable $errorHandler the function to handle error: must throw when error occurs (will be called using call_user_func)
 	 * @param callable $datacleaner the function to clean the data (can be null) (will be called using call_user_func)
 	 * @param string $promptHelp a help message, which will be displayed when the user is prompted to type the field
@@ -44,27 +44,27 @@ class Field
 	}
 
 	/**
-	 *  the data in itself, by default is null
+	 * @briefthe data in itself, by default is null
 	 * @var mixed
 	 */
 	protected $data = null;
 
 	/**
-	 *  the function to handle errrors
+	 * @briefthe function to handle errrors
 	 * @info throw on error or return void
 	 * @var callable
 	 */
 	protected $errorHandler;
 
 	/**
-	 *  the function to clean data
+	 * @briefthe function to clean data
 	 * @info return the cleaned data
 	 * @var callable
 	 */
 	protected $dataCleaner;
 
 	/**
-	 *  an array of string to display on prompt to help the user
+	 * @briefan array of string to display on prompt to help the user
 	 * @var array
 	 */
 	protected $promptHelp = [];
@@ -80,7 +80,7 @@ class Field
 	}
 
 	/**
-	 *  call setter
+	 * @briefcall setter
 	 */
 	public function set($data): void
 	{
