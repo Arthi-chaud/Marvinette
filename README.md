@@ -2,6 +2,7 @@
 
 Functional tests framework. Targeted towards Epitech IT students
 
+[![Unit Tests](https://github.com/Arthi-chaud/Marvinette/actions/workflows/unit_tests.yml/badge.svg?branch=dev)](https://github.com/Arthi-chaud/Marvinette/actions/workflows/unit_tests.yml)
 ---
 Use the framework using the following command-line instruction:
 
