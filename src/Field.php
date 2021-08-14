@@ -5,25 +5,48 @@
 */
 class Field
 {
+	/**
+	 * Converts data to string when possible
+	 * Avoid using `get` getter method
+	 * @return string
+	 */
 	public function __toString(): string
 	{
 		return $this->data;
 	}
 
-	public static function YesNoErrorHandler($choice)
+	/**
+	 * Error handler for object's field
+	 * Throws an exception if $choice is not a valid 'yes'/'no' string
+	 * @param string $choice a string entered by the user
+	 * @return void
+	 */
+	public static function YesNoErrorHandler($choice): void
 	{
-		if (!in_array($choice, ['Y', 'N', '', 'y', 'n']))
+		if (!in_array($choice, ['Y', 'N', '', 'y', 'n', 'yes', 'no', 'oui', 'non']))
 			throw new Exception("Please type 'Y', 'N' or leave empty");
 	}
 
-	public static function YesNoDataCleaner($choice)
+	/**
+	 * Data cleaner function
+	 * If $choice is a 'yes' option string, the function returns true
+	 * @param string $choice a string entered by the user
+	 * @return bool
+	 */
+	public static function YesNoDataCleaner($choice): bool
 	{
-		if (in_array($choice, ['Y', 'y']))
+		if (in_array($choice, ['Y', 'y', 'yes', 'oui']))
 			return true;
 		return false;
 	}
 
-	public static function EmptyDataCleaner($input)
+	/**
+	 * Fata cleaner function
+	 * If the user entered an empty line, the data will be set to null
+	 * @param string $input a string entered by the user
+	 * @return string|null
+	 */
+	public static function EmptyDataCleaner($input): ?string
 	{
 		if ($input == "")
 			return null;
@@ -64,10 +87,10 @@ class Field
 	protected $dataCleaner;
 
 	/**
-	 * @brief an array of string to display on prompt to help the user
-	 * @var array
+	 * @brief a string to display on prompt to help the user
+	 * @var ?string
 	 */
-	protected $promptHelp = [];
+	protected $promptHelp = null;
 
 	/**
 	 * Get the value of data
@@ -80,7 +103,11 @@ class Field
 	}
 
 	/**
-	 * @brief call setter
+	 * @brief Call the error handler, with no exception handling
+	 * If a data cleaner is set, the value retuend by this function will be set to `$data`
+	 * `$data` is set to the object's data field
+	 * @param mixed $data a value entered by the user
+	 * @return void
 	 */
 	public function set($data): void
 	{
@@ -93,9 +120,9 @@ class Field
 	/**
 	 * Get prompt helper
 	 *
-	 * @return  array
+	 * @return ?string
 	 */ 
-	public function getPromptHelp()
+	public function getPromptHelp(): ?string
 	{
 		return $this->promptHelp;
 	}
