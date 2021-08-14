@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 require_once 'tests/TestUtils.php';
-
+require_once 'src/Exception/EndOfFileException.php';
 require_once 'src/Project.php';
 require_once 'src/Utils/UserInput.php';
 
@@ -12,14 +12,20 @@ final class UserInputTest extends TestCase
 
     public function testGetUserInput(): void
     {
+        $eof = false;
         $lineCount = 0;
         $expectedLineCount = 3;
         $lines = [];
         $expectedLines = ['Hello', 'World', 'Marvin'];
         defineStdinClone($expectedLines);
-        while (($line = UserInput::getUserLine()) != null) {
-            $lineCount++;
-            $lines[] = $line;
+        while (!$eof) {
+            try {
+                $line = UserInput::getUserLine();
+                $lineCount++;
+                $lines[] = $line;
+            } catch (EndOfFileException $e) {
+                $eof = true;
+            }
         }
         $this->assertEquals($expectedLineCount, $lineCount);
         $this->assertEquals($expectedLines, $lines);
@@ -45,9 +51,9 @@ final class UserInputTest extends TestCase
         defineStdinClone($lines);
         $this->expectOutputString("Enter Option\nEnter Option\nEnter Option\nEnter Option\nEnter Option\n");
 
-        $entered = UserInput::getOption(function() {
+        $this->expectException(EndOfFileException::class);
+        UserInput::getOption(function() {
             echo "Enter Option\n";
         }, $expected);
-        $this->assertNull($entered);
     }
 }

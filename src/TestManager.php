@@ -3,6 +3,7 @@
 require_once 'src/Display/Color.php';
 require_once 'src/Display/Displayer.php';
 require_once 'src/ProjectManager.php';
+require_once 'src/Exception/InvalidTestFolderException.php';
 
 use Display\Color;
 
@@ -26,8 +27,7 @@ class TestManager {
 				$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
 				UserInterface::displayCLIFrame($displayFrameTitle);
 				UserInterface::$displayer->setColor(Color::Blue)->displayText("Test's $cleanedFieldName$help: ", false);
-				if (($value = UserInput::getUserLine()) == null)
-				return false;
+				$value = UserInput::getUserLine();
 				try {
 					$test->$fieldName->set($value);
 					$choosen = true;
@@ -54,16 +54,13 @@ class TestManager {
 		$finalTest = new Test();
 		$finalTest->import(FileManager::getCPPath("$testsFolder/$testName"));
 
-		if ($testName == null)
-			return false;
 		$return = ObjectHelper::forEachObjectField($finalTest, function($fieldName, $field) use ($displayFrameTitle, $testTmp) {
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the test's new ". UserInterface::cleanCamelCase($fieldName), false);
 			if ($field->getPromptHelp())
 				UserInterface::$displayer->setColor(Color::Yellow)->displayText(' (' . $field->getPromptHelp() . ')', false);
 			UserInterface::$displayer->setColor(Color::Yellow)->displayText( ', Leave empty if no change needed: ', false);
-			if (($value = UserInput::getUserLine()) == null)
-				return null;
+			$value = UserInput::getUserLine();
 			if ($value == "")
 				$value = $field->get();
 			try {
@@ -119,8 +116,6 @@ class TestManager {
 		$project->import(Project::ConfigurationFile);
 		$testName = self::selectTest($project);
 
-		if ($testName == null)
-			return false;
 		FileManager::deleteFolder($project->testsFolder->get() . DIRECTORY_SEPARATOR . $testName);
 		return true;
 	}
@@ -136,7 +131,7 @@ class TestManager {
 		if ($testsNames == []) {
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Red)->displayText("No tests available");
-			return null;
+			throw new InvalidTestFolderException();
 		}
 		for ($i = 0; $i < $testCount; $i++) {
 			UserInterface::displayCLIFrame($displayFrameTitle);
@@ -149,8 +144,6 @@ class TestManager {
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Select a test (between 0 and " . ($testCount - 1) . '): ', false);
 		}, $choices);
 
-		if ($selected == null)
-			return null;
 		return basename($testsNames[$selected]);
 	}
 }

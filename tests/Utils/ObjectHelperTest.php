@@ -32,19 +32,4 @@ final class ObjectHelperTest extends TestCase
         foreach (get_object_vars($project) as $name => $field)
             $this->assertEquals($name, $field->get());
     }
-
-    public function testObjectFieldIteratorWithFatalError(): void
-    {
-        $project = new Project();
-        $expected = ['name', 'binaryName'];
-        $actual = [];
-        $returned = ObjectHelper::forEachObjectField($project, function($fieldName, $value) use (&$actual) {
-            if ($fieldName == 'binaryPath')
-                return null;
-            $actual[] = $fieldName;
-            return true;
-        });
-        $this->assertFalse($returned);
-        $this->assertEquals($expected, $actual);
-    }
 }

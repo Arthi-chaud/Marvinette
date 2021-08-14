@@ -14,8 +14,6 @@ class ObjectHelper
 		foreach (get_object_vars($obj) as $fieldName => $field)
 			for ($choosen = false; !$choosen; ) {
 				$choosen = $callable($fieldName, $field);
-				if ($choosen == null)
-					return false;
 			}
 		return true;
 	}

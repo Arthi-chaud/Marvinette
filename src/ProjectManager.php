@@ -8,6 +8,7 @@ require_once 'Utils/CLIOption.php';
 require_once 'src/Test.php';
 require_once 'src/Utils/FileManager.php';
 require_once 'Utils/ObjectHelper.php';
+require_once 'src/Exception/EndOfFileException.php';
 
 use Display\Color;
 
@@ -33,8 +34,7 @@ class ProjectManager
 			$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Blue)->displayText("Enter the project's $cleanedFieldName$help: ", false);
-			if (($value = UserInput::getUserLine()) == null)
-				return null;
+			$value = UserInput::getUserLine();
 			try {
 				$field->set($value);
 				return true;
@@ -74,8 +74,7 @@ class ProjectManager
 			UserInterface::displayCLIFrame($displayFrameTitle);
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the project's new ". UserInterface::cleanCamelCase($fieldName) . " ", false);
 			UserInterface::$displayer->setColor(Color::Yellow)->displayText("(Leave empty if no change needed): ", false);
-			if (($value = UserInput::getUserLine()) == null)
-				return null;
+			$value = UserInput::getUserLine();
 			if ($value == "")
 				$value = $field->get();
 			try {

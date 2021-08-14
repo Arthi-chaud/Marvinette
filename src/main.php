@@ -1,6 +1,7 @@
 #!/bin/php
 <?php
 
+require_once 'src/Exception/MarvinetteException.php';
 require_once 'src/ProjectManager.php';
 require_once 'src/TestManager.php';
 
@@ -26,6 +27,11 @@ function launch(): bool
 }
 
 if ($argv && $argv[0] && realpath($argv[0]) === __FILE__) {
-	return launch();
+	try {
+		return launch();
+	} catch (MarvinetteException $e) {
+		echo "Exiting...\n";
+		return 1;
+	}
 }
 return 1;

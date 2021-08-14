@@ -1,5 +1,6 @@
 <?php
 
+require_once 'src/Exception/EndOfFileException.php';
 require_once 'src/Utils/UserInterface.php';
 
 class UserInput
@@ -10,7 +11,7 @@ class UserInput
 	 * @param array $options an aray of string holding what is expected from stdin
 	 * @return ?string null if stdin is closed or a string from $options read from the stream
 	 */
-	public static function getOption(callable $questionPrompt, array $options): ?string
+	public static function getOption(callable $questionPrompt, array $options): string
 	{
 		$questionPrompt();
 		while ($line = UserInput::getUserLine())
@@ -19,10 +20,10 @@ class UserInput
 				return $line;
 			$questionPrompt();
 		}
-		return null;
+		throw new EndOfFileException();
 	}
 
-	public static function getYesNoOption(string $displayFrameTitle, string $msg, $color): ?string
+	public static function getYesNoOption(string $displayFrameTitle, string $msg, $color): string
 	{
 		return self::getOption(function () use ($displayFrameTitle, $msg, $color)
 		{
@@ -45,8 +46,9 @@ class UserInput
 		} else {
 			$line = fgets($GLOBALS['testSTDIN']);
 		}
-		if ($line)
-			$line = trim($line);
+		if (!$line)
+			throw new EndOfFileException();
+		$line = trim($line);
 		return $line;
 	}
 }
