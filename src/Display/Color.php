@@ -3,96 +3,96 @@
 namespace Display;
 
 /**
- * @briefstatic class holding color int for terminal display
+ * @brief static class holding color int for terminal display
  */
 class Color {
 	/**
-	 * @briefOffsert between text color and backgorund color (used for avoid creating another class)
+	 * @brief Offsert between text color and backgorund color (used for avoid creating another class)
 	 */
 	const BACKGROUND_OFFSET = 10;
 	/**
-	 * @briefid letting the terminal know to write using the default color
+	 * @brief id letting the terminal know to write using the default color
 	 */
 	const Default = 39;
 
 	/**
-	 * @briefid letting the terminal know to write using black
+	 * @brief id letting the terminal know to write using black
 	 */
 
 	const Black = 30;
 
 	/**
-	 * @briefid letting the terminal know to write using red
+	 * @brief id letting the terminal know to write using red
 	 */
 	const Red = 31;
 
 	/**
-	 * @briefid letting the terminal know to write using green
+	 * @brief id letting the terminal know to write using green
 	 */
 	const Green = 32;
 
 	/**
-	 * @briefid letting the terminal know to write using yellow
+	 * @brief id letting the terminal know to write using yellow
 	 */
 	const Yellow = 33;
 
 	/**
-	 * @briefid letting the terminal know to write using blue
+	 * @brief id letting the terminal know to write using blue
 	 */
 	const Blue = 34;
 
 	/**
-	 * @briefid letting the terminal know to write using magenta
+	 * @brief id letting the terminal know to write using magenta
 	 */
 	const Magenta = 35;
 
 	/**
-	 * @briefid letting the terminal know to write using cyan
+	 * @brief id letting the terminal know to write using cyan
 	 */
 	const Cyan = 36;
 
 	/**
-	 * @briefid letting the terminal know to write using light gray
+	 * @brief id letting the terminal know to write using light gray
 	 */
 	const LightGray = 37;
 
 	/**
-	 * @briefid letting the terminal know to write using dark gray
+	 * @brief id letting the terminal know to write using dark gray
 	 */
 	const DarkGray = 90;
 
 	/**
-	 * @briefid letting the terminal know to write using light red
+	 * @brief id letting the terminal know to write using light red
 	 */
 	const LightRed = 91;
 
 	/**
-	 * @briefid letting the terminal know to write using light green
+	 * @brief id letting the terminal know to write using light green
 	 */
 	const LightGreen = 92;
 
 	/**
-	 * @briefid letting the terminal know to write using light yellow
+	 * @brief id letting the terminal know to write using light yellow
 	 */
 	const LightYellow = 93;
 
 	/**
-	 * @briefid letting the terminal know to write using light blue
+	 * @brief id letting the terminal know to write using light blue
 	 */
 	const LightBlue = 94;
 
 	/**
-	 * @briefid letting the terminal know to write using light magenta
+	 * @brief id letting the terminal know to write using light magenta
 	 */
 	const LightMagenta = 95;
 
 	/**
-	 * @briefid letting the terminal know to write using light cyan
+	 * @brief id letting the terminal know to write using light cyan
 	 */
 	const LightCyan = 96;
 
 	/**
-	 * @briefid letting the terminal know to write using white
+	 * @brief id letting the terminal know to write using white
 	 */
 	const White = 97;
 }

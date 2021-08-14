@@ -3,35 +3,35 @@
 namespace Display;
 
 /**
- * @briefstatic class holding style int for terminal display
+ * @brief static class holding style int for terminal display
  */
 class Style {
 	/**
-	 * @briefid letting the terminal know to write using default style
+	 * @brief id letting the terminal know to write using default style
 	 */
 	const Default = 0;
 	/**
-	 * @briefid letting the terminal know to write in bold
+	 * @brief id letting the terminal know to write in bold
 	 */
 	const Bold = 1;
 	/**
-	 * @briefid letting the terminal know to write in dim
+	 * @brief id letting the terminal know to write in dim
 	 */
 	const Dim = 2;
 	/**
-	 * @briefid letting the terminal know to write underlined
+	 * @brief id letting the terminal know to write underlined
 	 */
 	const Underlined = 4;
 	/**
-	 * @briefid letting the terminal know to write and blink
+	 * @brief id letting the terminal know to write and blink
 	 */
 	const Blink = 5;
 	/**
-	 * @briefid letting the terminal know to write and invert foreground and background
+	 * @brief id letting the terminal know to write and invert foreground and background
 	 */
 	const ReverseForeBack = 7;
 	/**
-	 * @briefid letting the terminal know to write and hide
+	 * @brief id letting the terminal know to write and hide
 	 */
 	const Hidden = 5;
 }

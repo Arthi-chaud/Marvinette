@@ -3,7 +3,7 @@
 require_once "src/Field.php";
 
 /**
- * @briefObject representing the test's instruction
+ * @brief Object representing the test's instruction
 */
 class Test
 {
@@ -94,7 +94,7 @@ class Test
 	}
 
 	/**
-	 * @briefimport test from file in folder
+	 * @brief import test from file in folder
 	 * @param $testsFolder the path to the test folder
 	 */
 	public function import(string $testFolder)
@@ -162,61 +162,61 @@ class Test
 	}
 
 	/**
-	 * @brief The name of the test
+	 * @brief  The name of the test
 	 * @var string
 	 */
 	public Field $name;
 
 	/**
-	 * @briefThe arguements to send to the programm
+	 * @brief The arguements to send to the programm
 	 * @var ?string
 	*/
 	public Field $commandLineArguments;
 
 	/**
-	 * @briefThe return code expected at the end of the test
+	 * @brief The return code expected at the end of the test
 	 * @var int
 	*/
 	public Field $expectedReturnCode;
 
 	/**
-	 * @briefcommand (and args) to execute piped to the std output of the program
+	 * @brief command (and args) to execute piped to the std output of the program
 	 * @var array
 	 */
 	public Field $stdoutFilter;
 
 	/**
-	 * @briefcommand (and args) to execute piped to the error output of the program
+	 * @brief command (and args) to execute piped to the error output of the program
 	 * @var array
 	 */
 	public Field $stderrFilter;
 
 	/**
-	 * @briefthe test should read from stdin
+	 * @brief the test should read from stdin
 	 * @var bool
 	 */
 	public Field $stdinput;
 
 	/**
-	 * @briefif true, will compare program's stdout to file
+	 * @brief if true, will compare program's stdout to file
 	 * @var bool
 	 */
 	public Field $expectedStdout;
 
 	/**
-	 * @briefif true, will compare program's stderr to file
+	 * @brief if true, will compare program's stderr to file
 	 * @var string
 	 */
 	public Field $expectedStderr;
 
 	/**
-	 * @briefcommand to execute before test
+	 * @brief command to execute before test
 	 * @var string
 	 */
 	public Field $setup;
 
 	/**
-	 * @briefcommand to execute after test
+	 * @brief command to execute after test
 	 * @var string
 	 */
 	public Field $teardown;
