@@ -30,7 +30,7 @@ final class FileManagerTest extends TestCase
 	{
 		$path = "hello/world\\marvin";
 
-		$this->assertEquals(FileManager::getCPPath($path), 'hello' . DIRECTORY_SEPARATOR . 'world' . DIRECTORY_SEPARATOR . 'marvin');
+		$this->assertEquals(FileManager::normalizePath($path), 'hello' . DIRECTORY_SEPARATOR . 'world' . DIRECTORY_SEPARATOR . 'marvin');
 	}
 
 	public function testRemoveLastDirSeparator(): void

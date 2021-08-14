@@ -79,18 +79,18 @@ class Test
 			$project->import(Project::ConfigurationFile);
 		}
 		$testsFolder = $project->testsFolder->get();
-		$testPath = FileManager::getCPPath("$testsFolder/" . $this->name->get());
+		$testPath = FileManager::normalizePath("$testsFolder/" . $this->name->get());
 		if (!is_dir($testPath))
 			mkdir($testPath, 0777, true);
 		foreach(get_object_vars($this) as $fieldName => $field) {
 			if ($fieldName == 'name')
 				continue;
 			if (is_bool($field->get()) && $field->get())
-				file_put_contents(FileManager::getCPPath("$testPath/$fieldName"), '');
+				file_put_contents(FileManager::normalizePath("$testPath/$fieldName"), '');
 			else if (is_string($field->get()) && $field->get())
-				file_put_contents(FileManager::getCPPath("$testPath/$fieldName"), $field->get());
+				file_put_contents(FileManager::normalizePath("$testPath/$fieldName"), $field->get());
 			else if (is_numeric($field->get()))
-				file_put_contents(FileManager::getCPPath("$testPath/$fieldName"), $field->get());
+				file_put_contents(FileManager::normalizePath("$testPath/$fieldName"), $field->get());
 		}
 		return true;
 	}
@@ -107,8 +107,8 @@ class Test
 			throw new Exception('Invalid test path');
 		$this->name->set($testName);
 		foreach(get_object_vars($this) as $fieldName => $field)
-			if (file_exists(FileManager::getCPPath("$testFolder/$fieldName"))) {
-				$fileContent = file_get_contents(FileManager::getCPPath("$testFolder/$fieldName"));
+			if (file_exists(FileManager::normalizePath("$testFolder/$fieldName"))) {
+				$fileContent = file_get_contents(FileManager::normalizePath("$testFolder/$fieldName"));
 				if (is_numeric($fileContent))
 					$fileContent = intval($fileContent);
 				if ($fileContent == '' && is_string($fileContent))
@@ -152,8 +152,8 @@ class Test
 				system("cat tmp/MarvinetteFiltered$ustream > tmp/Marvinette$ustream");
 			}
 			if ($this->$expected->get()) {
-				$expectedStdoutFile = FileManager::getCPPath("$testPath/expectedStdout");
-				system(FileManager::getCPPath("diff $expectedStdoutFile tmp/Marvinette$ustream"), $actualReturnCode);
+				$expectedStdoutFile = FileManager::normalizePath("$testPath/expectedStdout");
+				system(FileManager::normalizePath("diff $expectedStdoutFile tmp/Marvinette$ustream"), $actualReturnCode);
 				if ($actualReturnCode != 0)
 					return false;
 			}

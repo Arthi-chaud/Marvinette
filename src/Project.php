@@ -103,7 +103,7 @@ class Project
 		if (!$this->interpreter->get())
 			throw new Exception("No Interpreter set");
 		foreach (explode(':', getenv('PATH')) as $path) {
-			if (file_exists(FileManager::getCPPath("$path/". $this->interpreter->get())))
+			if (file_exists(FileManager::normalizePath("$path/". $this->interpreter->get())))
 				return true;
 		}
 		return false;

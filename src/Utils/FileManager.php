@@ -19,11 +19,11 @@ class FileManager
 	}
 
 	/**
-	 * replace every backslashes and forwardslashes with DIRECTORY_SEPARATOR
+	 * replace every backslashes and forwardslashes with DIRECTORY_SEPARATOR t oobtain cross-platform path
 	 * @param string $path a file path containing directory separators
 	 * @return string
 	 */
-	public static function getCPPath(string $path): string
+	public static function normalizePath(string $path): string
 	{
 		$path = str_replace('/', DIRECTORY_SEPARATOR, $path);
 		$path = str_replace('\\', DIRECTORY_SEPARATOR, $path);

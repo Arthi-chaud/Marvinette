@@ -42,7 +42,7 @@ class TestManager {
 		$testsFolder = $project->testsFolder->get();
 		$testName = self::selectTest($project);
 		$test = new Test();
-		$test->import(FileManager::getCPPath("$testsFolder/$testName"));
+		$test->import(FileManager::normalizePath("$testsFolder/$testName"));
 
 		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
 			UserInterface::displayTitle();
@@ -55,8 +55,8 @@ class TestManager {
 			if ($fieldName == 'name')
 				continue;
 			$fieldValue = $field->get();
-			$fieldFileName = FileManager::getCPPath("$testsFolder/$testName/$fieldName");
-			$fileExists = file_exists(FileManager::getCPPath($fieldFileName));
+			$fieldFileName = FileManager::normalizePath("$testsFolder/$testName/$fieldName");
+			$fileExists = file_exists(FileManager::normalizePath($fieldFileName));
 			if (is_bool($fieldValue)) {
 				if ($fieldValue && !$fileExists)
 					file_put_contents($fieldFileName, '');
@@ -69,7 +69,7 @@ class TestManager {
 					unlink($fieldFileName);
 			}
 		}
-		rename(FileManager::getCPPath("$testsFolder/$testName"), FileManager::getCPPath("$testsFolder/" . $test->name->get()));
+		rename(FileManager::normalizePath("$testsFolder/$testName"), FileManager::normalizePath("$testsFolder/" . $test->name->get()));
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
 		UserInterface::popTitle();
@@ -83,7 +83,7 @@ class TestManager {
 			$project->import(Project::ConfigurationFile);
 		}
 		$test = new Test();
-		$testPath = FileManager::getCPPath($project->testsFolder->get() . "/$testName");
+		$testPath = FileManager::normalizePath($project->testsFolder->get() . "/$testName");
 		$test->import($testPath);
 		return $test->execute($project);
 	}
@@ -101,7 +101,7 @@ class TestManager {
 	{
 		UserInterface::setTitle("Select a Test");
 		$testsFolder = $project->testsFolder->get();
-		$testsNames = glob(FileManager::getCPPath("$testsFolder/*"));
+		$testsNames = glob(FileManager::normalizePath("$testsFolder/*"));
 		$testCount = count($testsNames);
 		$choices = [];
 		sort($testsNames);
