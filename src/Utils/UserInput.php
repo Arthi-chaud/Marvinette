@@ -9,7 +9,7 @@ class UserInput
 	 * Reads a line from `stdin`. While what's entered is not in `$options`, `$questionPromts` is called and stdin is read
 	 * @param callable $questionPrompt a function taking no parameter, called before each line read
 	 * @param array $options an aray of string holding what is expected from stdin
-	 * @return ?string null if stdin is closed or a string from $options read from the stream
+	 * @return string a string from $options read from the stream, or throw if stream has nothing else to read
 	 */
 	public static function getOption(callable $questionPrompt, array $options): string
 	{

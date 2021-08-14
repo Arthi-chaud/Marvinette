@@ -50,10 +50,22 @@ final class UserInputTest extends TestCase
         $expected = ['TROLOLOL'];
         defineStdinClone($lines);
         $this->expectOutputString("Enter Option\nEnter Option\nEnter Option\nEnter Option\nEnter Option\n");
+        $catched = false;
+        try {
+            UserInput::getOption(function() {
+                echo "Enter Option\n";
+            }, $expected);
+        } catch (EndOfFileException $e) {
+            $catched = true;
+        }
+        $this->assertTrue($catched);
+    }
 
-        $this->expectException(EndOfFileException::class);
-        UserInput::getOption(function() {
-            echo "Enter Option\n";
-        }, $expected);
+    public function testGetYesNoOption(): void
+    {
+        $fileLines = ['Hello', 'Trololol', 'Y', "END"];
+        defineStdinClone($fileLines);
+        $answer = UserInput::getYesNoOption("", "", Display\Color::Black);
+        $this->assertEquals($answer, 'Y');
     }
 }

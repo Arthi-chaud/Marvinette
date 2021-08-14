@@ -15,7 +15,7 @@ function launch(): bool
 		'del-test' => ['TestManager', 'deleteTest'],
 		'mod-test' => ['TestManager', 'modTest']
 	];
-	$options = CLIOption::get(array_keys($optionsCalls));
+	$options = CommandLine::getArguments(array_keys($optionsCalls));
 	foreach ($optionsCalls as $option => $call) {
 		if (array_key_exists($option, $options)) {
 			UserInterface::displayCLIFrame("Marvinette\t", true);

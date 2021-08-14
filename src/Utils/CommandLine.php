@@ -1,8 +1,12 @@
 <?php
 
-Class CLIOption
+Class CommandLine
 {
-	public static function get($options): array
+	/**
+	 * Get command-line arguments 
+	 * @param array $options array of valid options
+	 */
+	public static function getArguments($options): array
 	{
 		$shortopt = "";
 		$longopts = [];
