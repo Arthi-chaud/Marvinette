@@ -21,7 +21,7 @@ final class UserInterfaceTest extends TestCase
 
 	public function testSetTitleAndDisplayNow(): void
 	{
-		$this->expectOutputString("\e[0m\e[32m\e[49m| Bye World |\t\e[0m\e[39m\e[49m\n");
+		$this->expectOutputString("| Bye World |\t\n");
 		$title1 = "Hello World";
 		$title2 = "Bye World";
 		UserInterface::setTitle($title1);
@@ -52,7 +52,7 @@ final class UserInterfaceTest extends TestCase
 		$title1 = "Hello World1";
 		$title2 = "Hello World2";
 		$title3 = "Hello World3";
-		$this->expectOutputString("\e[0m\e[32m\e[49m| $title3 |\t\e[0m\e[39m\e[49m");
+		$this->expectOutputString("| $title3 |\t");
 		UserInterface::setTitle($title1);
 		UserInterface::setTitle($title2);
 		UserInterface::setTitle($title3);

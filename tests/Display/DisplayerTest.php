@@ -64,7 +64,7 @@ final class DisplayerTest extends TestCase
 	{
 		$displayer = new Displayer();
 		
-		$this->expectOutputString("\e[0m\e[31m\e[49m\e[5mHello World\e[0m\e[39m\e[49m\n\e[0m\e[39m\e[49mHello World\e[0m\e[39m\e[49m");
+		$this->expectOutputString("Hello World\nHello World");
 		$displayer->setStyle(Style::Blink)
 				  ->setColor(Color::Red)
 				  ->displayText("Hello World");
