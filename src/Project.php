@@ -81,7 +81,7 @@ class Project
 	 */
 	public function readyToExport(): bool
 	{
-		return $this->name && $this->binaryPath && $this->binaryName && $this->testsFolder;
+		return $this->name->get() && $this->binaryPath->get() && $this->binaryName->get() && $this->testsFolder->get();
 	}
 
 	/**
@@ -89,9 +89,9 @@ class Project
 	 */
 	protected function buildBinaryAccessPath(): string
 	{
-		if (substr($this->binaryPath, strlen($this->binaryPath) - 1, 1) != DIRECTORY_SEPARATOR)
-			$this->binaryPath .= DIRECTORY_SEPARATOR;
-		return $this->binaryPath . $this->binaryName;
+		if (substr($this->binaryPath->get(), strlen($this->binaryPathv) - 1, 1) != DIRECTORY_SEPARATOR)
+			$this->binaryPath->set($this->binaryPath->get() . DIRECTORY_SEPARATOR);
+		return $this->binaryPath->get() . $this->binaryName->get();
 	}
 
 	/**
@@ -100,7 +100,7 @@ class Project
 	 */
 	protected function interpreterExists(): bool
 	{
-		if (!$this->interpreter)
+		if (!$this->interpreter->get())
 			throw new Exception("No Interpreter set");
 		foreach (explode(':', getenv('PATH')) as $path) {
 			if (file_exists(FileManager::getCPPath("$path/". $this->interpreter->get())))
@@ -118,7 +118,7 @@ class Project
 			return false;
 		if (!file_exists($this->buildBinaryAccessPath()))
 			return false;
-		if ($this->interpreter && !$this->interpreterExists())
+		if ($this->interpreter->get() && !$this->interpreterExists())
 			return false;
 		return true;
 	}
@@ -127,7 +127,7 @@ class Project
 	 * Export Project to JSON formatted file
 	 * @param $outfile name of file with JSON-ed Project class
 	 */
-	public function export(string $outfile): bool
+	public function export(string $outfile): void
 	{
 		$project['name'] = $this->name->get();
 		$project['binary name'] = $this->binaryName->get();
@@ -138,7 +138,7 @@ class Project
 		if (!$this->readyToExport())
 			throw new Exception("Project is not ready to be exported, missing mandatory field");
 		$jsoned = json_encode($project, JSON_PRETTY_PRINT);
-		return file_put_contents($outfile, $jsoned);
+		file_put_contents($outfile, $jsoned);
 	}
 
 	public function import(string $infile): void

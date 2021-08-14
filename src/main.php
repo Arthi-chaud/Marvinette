@@ -5,7 +5,7 @@ require_once 'src/Exception/MarvinetteException.php';
 require_once 'src/ProjectManager.php';
 require_once 'src/TestManager.php';
 
-function launch(): bool
+function launch(): void
 {
 	$optionsCalls = [
 		'create-project' => ['ProjectManager','createProject'],
@@ -19,11 +19,11 @@ function launch(): bool
 	foreach ($optionsCalls as $option => $call) {
 		if (array_key_exists($option, $options)) {
 			UserInterface::setTitle("Marvinette\t", true);
-			return call_user_func($call);
+			call_user_func($call);
+			return;
 		}
 	}
 	UserInterface::displayHelp();
-	return false;
 }
 
 if ($argv && $argv[0] && realpath($argv[0]) === __FILE__) {

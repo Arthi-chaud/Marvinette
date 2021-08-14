@@ -51,7 +51,7 @@ class UserInterface
 		reset(self::$titlesStack);
 	}
 
-	public static function displayHelp(): bool
+	public static function displayHelp(): void
 	{
 		echo "marvinette [option]\n";
 		echo "\toption:
@@ -62,7 +62,6 @@ class UserInterface
 		--mod-test: Modify/Change an existing functionnal test\n
 		--del-test: Delete a functionnal test
 		-h, --help: display this usage\n";
-		return true;
 	}
 
 	public static function cleanCamelCase(string $str): string

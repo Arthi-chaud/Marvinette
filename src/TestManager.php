@@ -88,14 +88,13 @@ class TestManager {
 		return $test->execute($project);
 	}
 
-	public static function deleteTest(): bool
+	public static function deleteTest(): void
 	{
 		$project = new Project();
 		$project->import(Project::ConfigurationFile);
 		$testName = self::selectTest($project);
 
 		FileManager::deleteFolder($project->testsFolder->get() . DIRECTORY_SEPARATOR . $testName);
-		return true;
 	}
 	
 	public static function selectTest(Project $project): ?string

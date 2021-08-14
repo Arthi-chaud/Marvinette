@@ -18,14 +18,14 @@ use Display\Color;
 class ProjectManager
 {
 
-	public static function createProject(): bool
+	public static function createProject(): void
 	{
 		UserInterface::setTitle("Create Project");
 		if (file_exists(Project::ConfigurationFile)) {
-			if (self::overWriteProject())
+			if (self::promptOverWriteProject())
 				unlink(Project::ConfigurationFile);
 			else
-				return false;
+				return;
 		}
 		$project = new Project();
 		ObjectHelper::promptEachObjectField($project, function ($fieldName, $field) {
@@ -38,11 +38,9 @@ class ProjectManager
 		$project->export(Project::ConfigurationFile);
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is created!");
-
-		UserInterface::popTitle();
 		if (self::promptAddTest())
-			return TestManager::addTest($project);
-		return true;
+			TestManager::addTest($project);
+		UserInterface::popTitle();
 	}
 
 	public static function promptAddTest(): bool
@@ -57,12 +55,12 @@ class ProjectManager
 		UserInterface::popTitle();
 	}
 
-	public static function modProject(): bool
+	public static function modProject(): void
 	{
 		UserInterface::setTitle("Modify Project");
 		if (!file_exists(Project::ConfigurationFile)) {
 			self::displayNoConfigFileFound();
-			return false;
+			return;
 		}
 		$project = new Project();
 		
@@ -77,19 +75,18 @@ class ProjectManager
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is updated!");
 		
-		UserInterface::popTitle();
 		if (self::promptAddTest())
-			return TestManager::addTest($project);
-		return true;
+			TestManager::addTest($project);
+		UserInterface::popTitle();
 	}
 
 	
-	public static function deleteProject(): bool
+	public static function deleteProject(): void
 	{
 		UserInterface::setTitle("Delete Project");
 		if (!file_exists(Project::ConfigurationFile)) {
 			self::displayNoConfigFileFound();
-			return false;
+			return;
 		}
 		$project = new Project();
 		$project->import(Project::ConfigurationFile);
@@ -102,7 +99,7 @@ class ProjectManager
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file has not been deleted!");
 			UserInterface::popTitle();
-			return false;
+			return;
 		}
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is deleted!");
@@ -112,15 +109,14 @@ class ProjectManager
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are deleted!");
 			UserInterface::popTitle();
-			return false;
+			return;
 		}
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are not deleted!");
 		UserInterface::popTitle();
-		return true;
 	}
 	
-	public static function overwriteProject(): bool
+	public static function promptOverwriteProject(): bool
 	{
 		UserInterface::setTitle("Existing Project");
 		UserInterface::displayTitle();
@@ -131,8 +127,6 @@ class ProjectManager
 		UserInterface::$displayer->setColor(Color::Blue)->displayText("Creating a new project will overwrite this file");
 		$overwrite = UserInput::getYesNoOption("Do you want to continue?", Color::Red);
 		UserInterface::popTitle();
-		if ($overwrite == true)
-			return true;
-		return false;
+		return $overwrite;
 	}
 }

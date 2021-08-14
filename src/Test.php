@@ -118,6 +118,9 @@ class Test
 			}
 	}
 
+	/**
+	 * @return bool true on success
+	 */
 	public function execute(Project $project): bool
 	{
 		$testPath = $project->testsFolder->get() . DIRECTORY_SEPARATOR . $this->name->get();
