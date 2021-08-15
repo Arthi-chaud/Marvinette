@@ -21,7 +21,7 @@ class Project
 		$this->binaryName = new Field(function($binaryName) {
 			if (!$binaryName)
 				throw new Exception("The Project's binary name shouldn't be empty");
-			if (strchr($binaryName, DIRECTORY_SEPARATOR))
+			if (strchr($binaryName, '/') || strchr($binaryName, '\\'))
 				throw new Exception("The binary name should not contain a '". DIRECTORY_SEPARATOR. "'");
 		});
 
@@ -76,7 +76,7 @@ class Project
 
 
 	/**
-	 * Returns true if all necessary fields are set
+	 * @return bool true if all necessary fields are set
 	 * interpreter can be null
 	 */
 	public function readyToExport(): bool
@@ -85,20 +85,18 @@ class Project
 	}
 
 	/**
-	 * build binary access path
+	 * @return string binary access path
 	 */
-	protected function buildBinaryAccessPath(): string
+	public function buildBinaryAccessPath(): string
 	{
-		if (substr($this->binaryPath->get(), strlen($this->binaryPathv) - 1, 1) != DIRECTORY_SEPARATOR)
-			$this->binaryPath->set($this->binaryPath->get() . DIRECTORY_SEPARATOR);
-		return $this->binaryPath->get() . $this->binaryName->get();
+		return $this->binaryPath->get() . DIRECTORY_SEPARATOR . $this->binaryName->get();
 	}
 
 	/**
 	 * Using PATh Env var, checks if interpreter exists
 	 * throw if no interpreter is set
 	 */
-	protected function interpreterExists(): bool
+	public function interpreterExists(): bool
 	{
 		if (!$this->interpreter->get())
 			throw new Exception("No Interpreter set");
@@ -141,6 +139,10 @@ class Project
 		file_put_contents($outfile, $jsoned);
 	}
 
+	/**
+	 * Fills the object's field using json file
+	 * @param string $infile the path to a valid JSON Project file
+	 */
 	public function import(string $infile): void
 	{
 		if (!file_exists($infile))

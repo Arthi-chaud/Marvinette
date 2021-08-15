@@ -8,12 +8,12 @@ require_once 'src/TestManager.php';
 function launch(): void
 {
 	$optionsCalls = [
-		'create-project' => ['ProjectManager','createProject'],
-		'del-project' => ['ProjectManager','deleteProject'],
-		'mod-project' => ['ProjectManager','modProject'],
-		'add-test' => ['TestManager', 'addTest'],
-		'del-test' => ['TestManager', 'deleteTest'],
-		'mod-test' => ['TestManager', 'modTest']
+		'create-project' => [ProjectManager::class,'createProject'],
+		'del-project' => [ProjectManager::class,'deleteProject'],
+		'mod-project' => [ProjectManager::class,'modProject'],
+		'add-test' => [TestManager::class, 'addTest'],
+		'del-test' => [TestManager::class, 'deleteTest'],
+		'mod-test' => [TestManager::class, 'modTest']
 	];
 	$options = CommandLine::getArguments(array_keys($optionsCalls));
 	foreach ($optionsCalls as $option => $call) {
