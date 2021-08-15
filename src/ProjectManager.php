@@ -62,9 +62,8 @@ class ProjectManager
 			self::displayNoConfigFileFound();
 			return;
 		}
-		$project = new Project();
-		
-		$project->import(Project::ConfigurationFile);
+		$project = new Project(Project::ConfigurationFile);
+
 		ObjectHelper::promptEachObjectField($project,function ($fieldName, $field) {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the project's new ". UserInterface::cleanCamelCase($fieldName) . " ", false);
@@ -88,8 +87,7 @@ class ProjectManager
 			self::displayNoConfigFileFound();
 			return;
 		}
-		$project = new Project();
-		$project->import(Project::ConfigurationFile);
+		$project = new Project(Project::ConfigurationFile);
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Red)->displayText("Warning: You are about to delete your configuration file");
 		$delete = UserInput::getYesNoOption("Do you want to continue?", Color::Red);

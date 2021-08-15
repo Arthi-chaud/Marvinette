@@ -265,9 +265,8 @@ final class ProjectTest extends TestCase
 
 	public function testImport(): void
 	{
-		$project = new Project();
+		$project = new Project('/tmp/out.json');
 
-		$project->import('/tmp/out.json');
 		$this->assertEquals($project->name->get(), 'name');
 		$this->assertEquals($project->binaryPath->get(), '.');
 		$this->assertEquals($project->binaryName->get(), 'README.md');
@@ -278,17 +277,15 @@ final class ProjectTest extends TestCase
 
 	public function testImportNoFile(): void
 	{
-		$project = new Project();
 		$this->expectException(Exception::class);
 		$this->expectExceptionMessage("/tmp/trololol does not exists.");
-		$project->import('/tmp/trololol');
+		$project = new Project('/tmp/trololol');
 	}
 
 	public function testImportInvalidFile(): void
 	{
-		$project = new Project();
 		$this->expectException(Exception::class);
 		$this->expectExceptionMessage("File README.md: Invalid JSON File.");
-		$project->import('README.md');
+		$project = new Project('README.md');
 	}
 }

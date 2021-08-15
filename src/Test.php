@@ -27,7 +27,7 @@ class Test
 
 	const commandFile = 'command';
 
-	public function __construct()
+	public function __construct(?string $testPath = null)
 	{
 		$this->name = new Field(function($name) {
 			if (!$name)
@@ -70,14 +70,14 @@ class Test
 		$this->setup = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner'], "Command to execute before executing program");
 
 		$this->teardown = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner'], "Command to execute after program's execution");
+		if ($testPath)
+			$this->import($testPath);
 	}
 
 	public function export(?Project $project)
 	{
-		if (!$project) {
-			$project = new Project();
-			$project->import(Project::ConfigurationFile);
-		}
+		if (!$project)
+			$project = new Project(Project::ConfigurationFile);
 		$testsFolder = $project->testsFolder->get();
 		$testPath = FileManager::normalizePath("$testsFolder/" . $this->name->get());
 		if (!is_dir($testPath))

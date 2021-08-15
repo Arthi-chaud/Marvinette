@@ -15,10 +15,8 @@ class TestManager {
 	public static function addTest(?Project $project = null)
 	{
 		UserInterface::setTitle("Add Test");
-		if (!$project) {
-			$project = new Project();
-			$project->import(Project::ConfigurationFile);
-		}
+		if (!$project)
+			$project = new Project(Project::ConfigurationFile);
 		$test = new Test();
 		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
 			$helpMsg = $field->getPromptHelp();
@@ -37,12 +35,10 @@ class TestManager {
 	public static function modTest()
 	{
 		UserInterface::setTitle('Modify Test');
-		$project = new Project();
-		$project->import(Project::ConfigurationFile);
+		$project = new Project(Project::ConfigurationFile);
 		$testsFolder = $project->testsFolder->get();
 		$testName = self::selectTest($project);
-		$test = new Test();
-		$test->import(FileManager::normalizePath("$testsFolder/$testName"));
+		$test = new Test(FileManager::normalizePath("$testsFolder/$testName"));
 
 		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
 			UserInterface::displayTitle();
@@ -78,21 +74,17 @@ class TestManager {
 	
 	public static function executeTest(string $testName, ?Project $project = null): bool
 	{
-		if (!$project) {
-			$project = new Project();
-			$project->import(Project::ConfigurationFile);
-		}
-		$test = new Test();
+		if (!$project)
+			$project = new Project(Project::ConfigurationFile);
 		$testPath = FileManager::normalizePath($project->testsFolder->get() . "/$testName");
-		$test->import($testPath);
+		$test = new Test($testPath);
 		return $test->execute($project);
 	}
 
 	public static function deleteTest(): void
 	{
 		UserInterface::setTitle("Delete Test");
-		$project = new Project();
-		$project->import(Project::ConfigurationFile);
+		$project = new Project(Project::ConfigurationFile);
 		$testName = self::selectTest($project);
 
 		FileManager::deleteFolder($project->testsFolder->get() . DIRECTORY_SEPARATOR . $testName);

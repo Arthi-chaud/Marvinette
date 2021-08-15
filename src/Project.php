@@ -10,7 +10,10 @@ class Project
 
 	const ConfigurationFile = "Marvinette.json";
 
-	public function __construct()
+	/**
+	 * @param ?string $filePath a path to a JSON Project file
+	 */
+	public function __construct(?string $filePath = null)
 	{
 		$this->name = new Field(function($name) {
 			if (!$name)
@@ -40,6 +43,9 @@ class Project
 			return FileManager::removeEndDirSeparator($testFolder);
 		}, "By default in 'tests' folder");
 		$this->testsFolder->set("tests");
+
+		if ($filePath)
+			$this->import($filePath);
 	}
 
 	/**
