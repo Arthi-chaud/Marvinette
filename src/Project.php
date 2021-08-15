@@ -127,14 +127,11 @@ class Project
 	 */
 	public function export(string $outfile): void
 	{
-		$project['name'] = $this->name->get();
-		$project['binary name'] = $this->binaryName->get();
-		$project['binary path'] = $this->binaryPath->get();
-		$project['interpreter'] = $this->interpreter->get();
-		$project['tests folder'] = $this->testsFolder->get();
-
+		$project = [];
 		if (!$this->readyToExport())
-			throw new Exception("Project is not ready to be exported, missing mandatory field");
+		throw new Exception("Project is not ready to be exported, missing mandatory field");
+		foreach(get_object_vars($this) as $fieldName => $field)
+			$project[UserInterface::cleanCamelCase($fieldName)] = $field->get();
 		$jsoned = json_encode($project, JSON_PRETTY_PRINT);
 		file_put_contents($outfile, $jsoned);
 	}

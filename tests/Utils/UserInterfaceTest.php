@@ -91,6 +91,7 @@ final class UserInterfaceTest extends TestCase
 		$result = UserInterface::toCamelCase($str);
 
 		$this->assertEquals($result, "iAmCamelCase");
+		$this->assertEquals('binaryName', UserInterface::toCamelCase("binary name"));
 	}
 
 	public function testToCamelCaseWithPascalCaseTrick(): void
