@@ -428,6 +428,14 @@ final class TestTest extends TestCase
 		return $TestTo;
 	}
 
+	public function testImportInvalidDir(): void
+	{
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage('Invalid test path');
+
+		$test = new Test('ta mere en slip');
+	}
+
 	/**
 	 * @depends TestTest::testImport
 	 */
