@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\TextUI\XmlConfiguration\File;
 
 require_once 'src/Test.php';
 require_once 'src/Project.php';
@@ -403,6 +404,65 @@ final class TestTest extends TestCase
 		$Test->export('tests/');
 
 		$this->assertFalse(file_exists('tests/101/teardown'));
+		FileManager::deleteFolder('tests/101');
+	}
+
+	public function testImport(): Test
+	{
+		$TestFrom = $this->getDummyTest();
+		$TestFrom->stdinput->set('N');
+		$TestFrom->export('tests/');
+
+		$TestTo = new Test('tests/101');
+		$this->assertEquals($TestTo->name->get(), '101');
+		$this->assertEquals($TestTo->commandLineArguments->get(), '--argc 1 --argv 2');
+		$this->assertEquals($TestTo->expectedReturnCode->get(), '10');
+		$this->assertEquals($TestTo->stdoutFilter->get(), 'grep \'hello\'');
+		$this->assertEquals($TestTo->stderrFilter->get(), 'grep \'world\'');
+		$this->assertEquals($TestTo->expectedStdout->get(), true);
+		$this->assertEquals($TestTo->expectedStderr->get(), true);
+		$this->assertEquals($TestTo->stdinput->get(), false);
+		$this->assertEquals($TestTo->setup->get(), 'set me up');
+		$this->assertEquals($TestTo->teardown->get(), 'tear me down');
+		FileManager::deleteFolder('tests/101');
+		return $TestTo;
+	}
+
+	/**
+	 * @depends TestTest::testImport
+	 */
+	public function testReExportRemovingExistingFile($testTo): Test
+	{
+		$testTo->expectedReturnCode->set('');
+		$testTo->export('tests/');
+		$this->assertEquals(file_get_contents('tests/101/commandLineArguments'), '--argc 1 --argv 2');
+		$this->assertFalse(file_exists('tests/101/expectedReturnCode'));
+		$this->assertEquals(file_get_contents('tests/101/stdoutFilter'), "grep 'hello'");
+		$this->assertEquals(file_get_contents('tests/101/stderrFilter'),  "grep 'world'");
+		$this->assertEquals(file_get_contents('tests/101/expectedStdout'), '');
+		$this->assertEquals(file_get_contents('tests/101/expectedStderr'), '');
+		$this->assertFalse(file_exists('tests/101/stdinput'));
+		$this->assertEquals(file_get_contents('tests/101/teardown'), 'tear me down');
+		$this->assertEquals(file_get_contents('tests/101/setup'), 'set me up');
+		return $testTo;
+	}
+
+	/**
+	 * @depends TestTest::testReExportRemovingExistingFile
+	 */
+	public function testReExportAddingFile($testTo): void
+	{
+		$testTo->expectedReturnCode->set('99');
+		$testTo->export('tests/');
+		$this->assertEquals(file_get_contents('tests/101/commandLineArguments'), '--argc 1 --argv 2');
+		$this->assertEquals(file_get_contents('tests/101/expectedReturnCode'), '99');
+		$this->assertEquals(file_get_contents('tests/101/stdoutFilter'), "grep 'hello'");
+		$this->assertEquals(file_get_contents('tests/101/stderrFilter'),  "grep 'world'");
+		$this->assertEquals(file_get_contents('tests/101/expectedStdout'), '');
+		$this->assertEquals(file_get_contents('tests/101/expectedStderr'), '');
+		$this->assertFalse(file_exists('tests/101/stdinput'));
+		$this->assertEquals(file_get_contents('tests/101/teardown'), 'tear me down');
+		$this->assertEquals(file_get_contents('tests/101/setup'), 'set me up');
 		FileManager::deleteFolder('tests/101');
 	}
 }

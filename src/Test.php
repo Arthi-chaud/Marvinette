@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\TextUI\XmlConfiguration\File;
+
 require_once "src/Field.php";
 
 /**
@@ -61,8 +63,9 @@ class Test
 	public function export(string $testsFolder): void
 	{
 		$testPath = FileManager::normalizePath("$testsFolder/" . $this->name->get());
-		if (!is_dir($testPath))
-			mkdir($testPath, 0777, true);
+		if (is_dir($testPath))
+			FileManager::deleteFolder($testPath);
+		mkdir($testPath, 0777, true);
 		foreach(get_object_vars($this) as $fieldName => $field) {
 			if ($fieldName == 'name')
 				continue;
