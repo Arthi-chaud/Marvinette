@@ -54,7 +54,11 @@ class Test
 			$this->import($testPath);
 	}
 
-	public function export(string $testsFolder)
+	/**
+	 * Will export the test in a folder placed in $testsFolder`
+	 * @param string $testsFolder the path to the folder where the test's folder will be placed
+	 */
+	public function export(string $testsFolder): void
 	{
 		$testPath = FileManager::normalizePath("$testsFolder/" . $this->name->get());
 		if (!is_dir($testPath))
@@ -69,7 +73,6 @@ class Test
 			else if (is_numeric($field->get()))
 				file_put_contents(FileManager::normalizePath("$testPath/$fieldName"), $field->get());
 		}
-		return true;
 	}
 
 	/**
@@ -144,7 +147,7 @@ class Test
 	}
 
 	/**
-	 * @brief  The name of the test
+	 * @brief The name of the test, will be the name of the folder holding the test's files
 	 * @var string
 	 */
 	public Field $name;
@@ -156,7 +159,7 @@ class Test
 	public Field $commandLineArguments;
 
 	/**
-	 * @brief The return code expected at the end of the test
+	 * @brief The return code expected at the end of the test, beteen 0 and 255
 	 * @var int
 	*/
 	public Field $expectedReturnCode;
@@ -174,19 +177,19 @@ class Test
 	public Field $stderrFilter;
 
 	/**
-	 * @brief the test should read from stdin
+	 * @brief if true, the test should have to read from stdin, an empty file to fill will be created
 	 * @var bool
 	 */
 	public Field $stdinput;
 
 	/**
-	 * @brief if true, will compare program's stdout to file
+	 * @brief if true, will compare program's stdout to file filled by the user
 	 * @var bool
 	 */
 	public Field $expectedStdout;
 
 	/**
-	 * @brief if true, will compare program's stderr to file
+	 * @brief if true, will compare program's stderr to file filled by the user
 	 * @var string
 	 */
 	public Field $expectedStderr;
