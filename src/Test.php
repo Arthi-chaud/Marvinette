@@ -7,26 +7,6 @@ require_once "src/Field.php";
 */
 class Test
 {
-	const TMPFOLDER = 'tmp';
-
-	const setupFileName = 'setup';
-
-	const teardownFileName = 'teardown';
-
-	const stdoutFilterFileName = 'stdoutFilter';
-
-	const stderrFilterFileName = 'stderrFilter';
-
-	const expectedReturnCodeFile = 'expectedReturnCode';
-
-	const stdinputFile = 'stdinput';
-
-	const expectedStderrFile = 'expectedStderr';
-
-	const expectedStdoutFile = 'expectedStdout';
-
-	const commandFile = 'command';
-
 	public function __construct(?string $testPath = null)
 	{
 		$this->name = new Field(function($name) {
@@ -42,7 +22,7 @@ class Test
 		function($r) {
 			if ($r == "")
 				return;
-			if (!is_numeric($r) || (intval($r) < 0))
+			if (!is_numeric($r) || (intval($r) < 0) || (intval($r) >= 255))
 				throw new Exception("Please enter a number superior/equal to 0 (or nothing to ignore)");
 		}, function($r) {
 			if ($r == "")
