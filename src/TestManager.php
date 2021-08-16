@@ -25,7 +25,7 @@ class TestManager {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Blue)->displayText("Test's $cleanedFieldName$help: ", false);
 		});
-		$test->export($project);
+		$test->export($project->testsFolder->get());
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
 		UserInterface::popTitle();

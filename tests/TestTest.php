@@ -3,9 +3,24 @@
 use PHPUnit\Framework\TestCase;
 
 require_once 'src/Test.php';
+require_once 'src/Project.php';
 
 final class TestTest extends TestCase
 {
+
+	public function setUp(): void
+	{
+		$project = new Project();
+
+		$project->name->set('Name');
+		$project->binaryName->set('README.md');
+		$project->export('/tmp/out.json');
+	}
+
+	public function tearDown(): void
+	{
+		unlink('/tmp/out.json');
+	}
 
 	public function testSetName(): void
 	{
@@ -264,5 +279,130 @@ final class TestTest extends TestCase
 		$Test = new Test();
 		$Test->teardown->set("");
 		$this->assertEquals($Test->teardown->get(), null);
+	}
+
+	private function getDummyTest(): Test
+	{
+		$Test = new Test();
+		$Test->name->set('101');
+		$Test->commandLineArguments->set('--argc 1 --argv 2');
+		$Test->expectedReturnCode->set('10');
+		$Test->stdoutFilter->set('grep \'hello\'');
+		$Test->stderrFilter->set('grep \'world\'');
+		$Test->expectedStdout->set('Y');
+		$Test->expectedStderr->set('Y');
+		$Test->stdinput->set('Y');
+		$Test->setup->set('set me up');
+		$Test->teardown->set('tear me down');
+		return $Test;
+	}
+
+	public function testExport(): void
+	{
+		$Test = $this->getDummyTest();
+		$Test->export('tests/');
+
+		$this->assertTrue(is_dir('tests/101'));
+		$this->assertTrue(file_exists('tests/101/commandLineArguments'));
+		$this->assertTrue(file_exists('tests/101/expectedReturnCode'));
+		$this->assertTrue(file_exists('tests/101/stdoutFilter'));
+		$this->assertTrue(file_exists('tests/101/stderrFilter'));
+		$this->assertTrue(file_exists('tests/101/expectedStdout'));
+		$this->assertTrue(file_exists('tests/101/expectedStderr'));
+		$this->assertTrue(file_exists('tests/101/setup'));
+		$this->assertTrue(file_exists('tests/101/stdinput'));
+		$this->assertTrue(file_exists('tests/101/teardown'));
+
+		$this->assertEquals(file_get_contents('tests/101/commandLineArguments'), '--argc 1 --argv 2');
+		$this->assertEquals(file_get_contents('tests/101/expectedReturnCode'), '10');
+		$this->assertEquals(file_get_contents('tests/101/stdoutFilter'), "grep 'hello'");
+		$this->assertEquals(file_get_contents('tests/101/stderrFilter'),  "grep 'world'");
+		$this->assertEquals(file_get_contents('tests/101/expectedStdout'), '');
+		$this->assertEquals(file_get_contents('tests/101/expectedStderr'), '');
+		$this->assertEquals(file_get_contents('tests/101/setup'), 'set me up');
+		$this->assertEquals(file_get_contents('tests/101/teardown'), 'tear me down');
+		$this->assertEquals(file_get_contents('tests/101/stdinput'), '');
+		FileManager::deleteFolder('tests/101');
+	}
+
+	public function testExportReturnCodeZero(): void
+	{
+		$Test = $this->getDummyTest();
+		$Test->expectedReturnCode->set('0');
+		$Test->export('tests/');
+
+		$this->assertTrue(file_exists('tests/101/expectedReturnCode'));
+		$this->assertEquals(file_get_contents('tests/101/expectedReturnCode'), '0');
+		FileManager::deleteFolder('tests/101');
+	}
+
+	public function testExportNoCommandLineArguments(): void
+	{
+		$Test = $this->getDummyTest();
+		$Test->commandLineArguments->set('');
+		$Test->export('tests/');
+
+		$this->assertFalse(file_exists('tests/101/commandLineArguments'));
+		FileManager::deleteFolder('tests/101');
+	}
+
+	public function testExportNoExpectedReturnCode(): void
+	{
+		$Test = $this->getDummyTest();
+		$Test->expectedReturnCode->set('');
+		$Test->export('tests/');
+
+		$this->assertFalse(file_exists('tests/101/expectedReturnCode'));
+		FileManager::deleteFolder('tests/101');
+	}
+
+	public function testExportNoStdinput(): void
+	{
+		$Test = $this->getDummyTest();
+		$Test->stdinput->set('N');
+		$Test->export('tests/');
+
+		$this->assertFalse(file_exists('tests/101/stdinput'));
+		FileManager::deleteFolder('tests/101');
+	}
+
+	public function testExportNoExpectedStderr(): void
+	{
+		$Test = $this->getDummyTest();
+		$Test->expectedStderr->set('N');
+		$Test->export('tests/');
+
+		$this->assertFalse(file_exists('tests/101/expectedStderr'));
+		FileManager::deleteFolder('tests/101');
+	}
+
+	public function testExportNoExpectedStdout(): void
+	{
+		$Test = $this->getDummyTest();
+		$Test->expectedStdout->set('N');
+		$Test->export('tests/');
+
+		$this->assertFalse(file_exists('tests/101/expectedStdout'));
+		FileManager::deleteFolder('tests/101');
+	}
+
+	public function testExportNoSetup(): void
+	{
+		$Test = $this->getDummyTest();
+		$Test->setup->set('');
+		$Test->export('tests/');
+
+		$this->assertFalse(file_exists('tests/101/setup'));
+		FileManager::deleteFolder('tests/101');
+	}
+
+	public function testExportNoTearDown(): void
+	{
+		$Test = $this->getDummyTest();
+		$Test->teardown->set('');
+		$Test->export('tests/');
+
+		$this->assertFalse(file_exists('tests/101/teardown'));
+		FileManager::deleteFolder('tests/101');
 	}
 }

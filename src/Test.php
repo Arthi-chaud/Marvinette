@@ -54,11 +54,8 @@ class Test
 			$this->import($testPath);
 	}
 
-	public function export(?Project $project)
+	public function export(string $testsFolder)
 	{
-		if (!$project)
-			$project = new Project(Project::ConfigurationFile);
-		$testsFolder = $project->testsFolder->get();
 		$testPath = FileManager::normalizePath("$testsFolder/" . $this->name->get());
 		if (!is_dir($testPath))
 			mkdir($testPath, 0777, true);
