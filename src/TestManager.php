@@ -66,8 +66,7 @@ class TestManager {
 		//	}
 		//}
 		//rename(FileManager::normalizePath("$testsFolder/$testName"), FileManager::normalizePath("$testsFolder/" . $test->name->get()));
-		if ($testName != $test->name->get())
-			FileManager::deleteFolder(FileManager::normalizePath("$testsFolder/$testName"));
+		FileManager::deleteFolder(FileManager::normalizePath("$testsFolder/$testName"));
 		$test->export($project->testsFolder->get());
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
