@@ -49,7 +49,7 @@ class UserInterface
 			self::$displayer = new Displayer();
 		$text = end(self::$titlesStack);
 		UserInterface::$displayer->setColor(Color::Green)
-						->displayText("| $text |\t", false);
+						->displayText("| $text\t|\t", false);
 		reset(self::$titlesStack);
 	}
 

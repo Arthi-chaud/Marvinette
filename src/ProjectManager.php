@@ -50,7 +50,7 @@ class ProjectManager
 
 	public static function displayNoConfigFileFound(): void
 	{
-		UserInterface::setTitle("Error\t", true);
+		UserInterface::setTitle("Error", true);
 		UserInterface::$displayer->setColor(Color::Red)->displayText("No Configuration File Found!");
 		UserInterface::popTitle();
 	}

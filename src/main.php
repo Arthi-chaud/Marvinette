@@ -13,12 +13,13 @@ function launch(): void
 		'mod-project' => [ProjectManager::class,'modProject'],
 		'add-test' => [TestManager::class, 'addTest'],
 		'del-test' => [TestManager::class, 'deleteTest'],
-		'mod-test' => [TestManager::class, 'modTest']
+		'mod-test' => [TestManager::class, 'modTest'],
+		'execute-test' => [TestManager::class, 'executeTest'],
+		'execute-tests' => [TestManager::class, 'executesAllTests'],
 	];
 	$options = CommandLine::getArguments(array_keys($optionsCalls));
 	foreach ($optionsCalls as $option => $call) {
 		if (array_key_exists($option, $options)) {
-			UserInterface::setTitle("Marvinette\t", true);
 			call_user_func($call);
 			return;
 		}
@@ -28,9 +29,11 @@ function launch(): void
 
 if ($argv && $argv[0] && realpath($argv[0]) === __FILE__) {
 	try {
+		UserInterface::setTitle("Marvinette", true);
 		return launch();
 	} catch (MarvinetteException $e) {
-		echo "\nExiting...\n";
+		UserInterface::displayTitle();
+		UserInterface::$displayer->setColor(Display\Color::Red)->displayText("Exiting...");
 		return 1;
 	}
 }

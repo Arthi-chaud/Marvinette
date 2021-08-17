@@ -18,5 +18,8 @@ marvinette [option]
         --mod-test: Modify a functionnal test
         --del-test: Delete a functionnal test
 
+        --execute-test: Execute a test
+        --execute-tests  : Execute all tests
+
         -h, --help: display this usage
 ```

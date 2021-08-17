@@ -72,12 +72,14 @@ class TestManager {
 		return true;
 	}
 	
-	public static function executeTest(string $testName, ?Project $project = null): bool
+	public static function executeTest(?string $testName = null, ?Project $project = null): bool
 	{
 		UserInterface::setTitle("Test $testName");
 		$testStatus = true;
 		if (!$project)
 			$project = new Project(Project::ConfigurationFile);
+		if (!$testName)
+			$testName = self::selectTest($project);
 		$testPath = FileManager::normalizePath($project->testsFolder->get() . "/$testName");
 		$test = new Test($testPath);
 		try {
@@ -102,6 +104,11 @@ class TestManager {
 			$project = new Project(Project::ConfigurationFile);
 		$failedTestCount = 0;
 		$tests = self::getTestsFolders($project->binaryPath->get());
+		if ($tests == []) {
+			UserInterface::displayTitle();
+			UserInterface::$displayer->setColor(Color::Red)->displayText("No tests available");
+			throw new InvalidTestFolderException();
+		}
 		foreach ($tests as $testName) {
 			$testStatus = self::executeTest($testName, $project);
 			if ($testStatus == false)
