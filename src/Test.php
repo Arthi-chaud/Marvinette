@@ -1,5 +1,6 @@
 <?php
 
+use PhpParser\Node\Expr\Exit_;
 use PHPUnit\TextUI\XmlConfiguration\File;
 
 require_once "src/Field.php";
@@ -9,6 +10,16 @@ require_once "src/Field.php";
 */
 class Test
 {
+	const TmpFileFolder = '/tmp';
+
+	const TmpFilePrefix = 'Marvinette';
+
+	const TmpFileStdoutPrefix = 'Stdout';
+
+	const TmpFileStderrPrefix = 'Stderr';
+
+	const TmpFileFilteredPrefix = 'Filtered';
+
 	public function __construct(?string $testPath = null)
 	{
 		$this->name = new Field(function($name) {
@@ -107,46 +118,112 @@ class Test
 	public function execute(Project $project): bool
 	{
 		$testPath = $project->testsFolder->get() . DIRECTORY_SEPARATOR . $this->name->get();
-		$expectedReturnCode = $this->expectedReturnCode->get();
-		$interpreter = $project->interpreter->get();
-		$actualReturnCode = 0;
-		if ($this->setup->get()) {
-			system($this->setup->get(), $actualReturnCode);
-			if ($actualReturnCode != 0)
-				throw new Exception("Test's setup failed. Return code: $actualReturnCode");
-		}
-		$command = $project->binaryPath->get() . DIRECTORY_SEPARATOR . $project->binaryName->get();
-		if ($this->commandLineArguments->get())
-			$command .= ' ' . $this->commandLineArguments->get();
-		if ($interpreter != null)
-			$command = "$interpreter $command";
-		system($command . "> tmp/MarvinetteStdout 2> tmp/MarvinetteStderr", $actualReturnCode);
-		if ($expectedReturnCode != null && $expectedReturnCode != $actualReturnCode)
-			throw new Exception("The program didn't return the expected code. Expected: $actualReturnCode, actual: $expectedReturnCode");
+		if ($this->setup->get())
+			$this->executeSystemCommand($this->setup->get(), 'Setup failed');
+		$command = $this->buildCommand($project, $testPath);
+		$this->executeTestCommand($command);
 		foreach(['stdout', 'stderr'] as $output) {
 			$filter = $output . 'Filter';
 			$ustream = ucwords($output);
 			$expected = "expected$ustream";
-			if ($this->$filter->get()) {
-				$filterCommand = $this->$filter->get();
-				system("cat tmp/Marvinette$ustream | $filterCommand > tmp/MarvinetteFiltered$ustream", $actualReturnCode);
-				if ($actualReturnCode != 0)
-					throw new Exception("Test's $output filtering failed. Return code: $actualReturnCode");
-				system("cat tmp/MarvinetteFiltered$ustream > tmp/Marvinette$ustream");
-			}
-			if ($this->$expected->get()) {
-				$expectedStdoutFile = FileManager::normalizePath("$testPath/expectedStdout");
-				system(FileManager::normalizePath("diff $expectedStdoutFile tmp/Marvinette$ustream"), $actualReturnCode);
-				if ($actualReturnCode != 0)
-					return false;
-			}
+			if ($this->$filter->get())
+				$this->filterOutput($output, $testPath);
+			if ($this->$expected->get())
+				$this->compareOutput($output, $testPath);
 		}
-		if ($this->teardown->get()) {
-			system($this->teardown->get(), $actualReturnCode);
-			if ($actualReturnCode != 0)
-				throw new Exception("Test's teardown failed. Return code: $actualReturnCode");
-		}
+		if ($this->teardown->get())
+			$this->executeSystemCommand($this->teardown->get(), 'Setup teardown');
 		return true;
+	}
+
+	/**
+	 * Execute $command using `system`
+	 * If the return code differs from what is expected (field expectedReturnCode), the function throws
+	 * @param string $command the shell command to execute project's binary
+	 */
+	protected function executeTestCommand(string $command): void
+	{
+		$expectedReturnCode = $this->expectedReturnCode->get();
+		try {
+			$this->executeSystemCommand($command, $this->expectedReturnCode->get());
+		} catch (Exception $e) {
+			$returnCode = end(explode(' ', $e->getMessage()));
+			throw new Exception("Test failed, Returned $returnCode instead of $expectedReturnCode");
+		}
+	}
+
+	/**
+	 * Calls `system` function passing $command as parameter
+	 * If the return code differs from $expectedReturnCode, throws
+	 * @param string $command shell command
+	 * @param int $expectedReturnCode If the return code differs from it, the function hrows
+	 * @param string $message what the exception message should contain. The return code will be inserted after
+	 */
+	protected function executeSystemCommand(string $command, ?string $message = null, int $expectedReturnCode = 0): void
+	{;
+		system($command, $actualReturnCode);
+		if ($actualReturnCode != $expectedReturnCode) {
+			$exceptionMsg = "Return code: $actualReturnCode";
+			if ($message)
+				$exceptionMsg = "$message $exceptionMsg";
+			throw new Exception($exceptionMsg);
+		}
+	}
+
+	/**
+	 * @return string the full command to execute command as a string
+	 */
+	private function buildCommand(Project $project, string $testPath): string
+	{
+		$interpreter = $project->interpreter->get();
+		$command = $project->binaryPath->get() . DIRECTORY_SEPARATOR . $project->binaryName->get();
+		$stdinputPath = FileManager::normalizePath("$testPath/stdinput");
+		if ($this->commandLineArguments->get())
+			$command .= ' ' . $this->commandLineArguments->get();
+		if ($interpreter != null)
+			$command = "$interpreter $command";
+		if ($this->stdinput->get() && file_exists($stdinputPath))
+			$command = "cat $stdinputPath | $command";
+		$command .= '> ' . self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpFileStdoutPrefix;
+		$command .= '2> ' . self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpFileStderrPrefix;
+		return FileManager::normalizePath($command);
+	}
+
+	/**
+	 * Compare the actual output with what is expected
+	 * @param string $streamName tells waht stream to compare (can be either `TmpFileStderrPrefix` or `TmpFileStdoutPrefix`)
+	 * @param string $testPath where the test's files are located
+	 */
+	private function compareOutput(string $streamName, string $testPath): void
+	{
+		if (in_array($streamName, [self::TmpFileStderrPrefix, [self::TmpFileStdoutPrefix]]))
+			throw new Exception('compareOutput: Invalid stream name');
+		$expectedFieldName = 'expected$streamName';
+		if (!$this->$expectedFieldName->get())
+			return;
+		$expectedOutputFile = FileManager::normalizePath("$testPath/expected$streamName");
+		$actualOutputFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . $streamName);
+		$this->executeSystemCommand("diff $expectedOutputFile $actualOutputFile");
+	}
+
+	/**
+	 * Filter the output if a filter is specified
+	 * @param string $streamName tells waht stream to compare (can be either `TmpFileStderrPrefix` or `TmpFileStdoutPrefix`)
+	 * @param string $testPath where the test's files are located
+	 */
+	private function filterOutput(string $streamName, string $testPath): void
+	{
+		if (in_array($streamName, [self::TmpFileStderrPrefix, [self::TmpFileStdoutPrefix]]))
+			throw new Exception('compareOutput: Invalid stream name');
+		$FilterFieldName = 'expected$streamName';
+		if (!$this->$FilterFieldName->get())
+			return;
+		$actualOutputFilePath = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . $streamName);
+		$filterCommand = $this->$FilterFieldName->get();
+		$tmpFilterFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . 'Filtered' . $streamName);
+		$command = "cat $actualOutputFilePath | $filterCommand > $tmpFilterFile";
+		$this->executeSystemCommand($command, "$streamName Filtering failed");
+		$this->executeSystemCommand("mv $tmpFilterFile $actualOutputFilePath", "$streamName Filtering failed");
 	}
 
 	/**
