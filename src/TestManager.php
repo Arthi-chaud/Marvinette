@@ -74,11 +74,48 @@ class TestManager {
 	
 	public static function executeTest(string $testName, ?Project $project = null): bool
 	{
+		UserInterface::setTitle("Test $testName");
+		$testStatus = true;
 		if (!$project)
 			$project = new Project(Project::ConfigurationFile);
 		$testPath = FileManager::normalizePath($project->testsFolder->get() . "/$testName");
 		$test = new Test($testPath);
-		return $test->execute($project);
+		try {
+			UserInterface::displayTitle();
+			UserInterface::$displayer->setColor(Color::Cyan)->displayText("Executing $testName...");
+			UserInterface::displayTitle();
+			UserInterface::$displayer->setColor(Color::Green)->displayText("$testName: Test passed!");
+			$test->execute($project);
+		} catch (Exception $e) {
+			UserInterface::displayTitle();
+			UserInterface::$displayer->setColor(Color::Red)->displayText("$testName: Test Failed! $e");
+			$testStatus = false;
+		}
+		UserInterface::popTitle();
+		return $testStatus;
+	}
+
+	public static function executesAllTests(?Project $project = null): bool
+	{
+		UserInterface::setTitle("Executing Tests");
+		if (!$project)
+			$project = new Project(Project::ConfigurationFile);
+		$failedTestCount = 0;
+		$tests = self::getTestsFolders($project->binaryPath->get());
+		foreach ($tests as $testName) {
+			$testStatus = self::executeTest($testName, $project);
+			if ($testStatus == false)
+				$failedTestCount++;
+		}
+		UserInterface::displayTitle();
+		UserInterface::$displayer->setColor(Color::Default)->displayText("Test Count: ", false);
+		UserInterface::$displayer->setColor(Color::Blue)->displayText(strval(count($tests) - $failedTestCount), false);
+		UserInterface::$displayer->setColor(Color::Default)->displayText(" | Success: ", false);
+		UserInterface::$displayer->setColor(Color::Green)->displayText(strval(count($tests) - $failedTestCount), false);
+		UserInterface::$displayer->setColor(Color::Default)->displayText(" | Failed: ", false);
+		UserInterface::$displayer->setColor(Color::Red)->displayText(strval($failedTestCount));
+		UserInterface::popTitle();
+		return $failedTestCount == 0;
 	}
 
 	public static function deleteTest(): void

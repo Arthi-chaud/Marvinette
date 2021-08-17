@@ -113,9 +113,10 @@ class Test
 	}
 
 	/**
+	 * Executes A Test, Throws when ann error occurs or on fail
 	 * @return bool true on success
 	 */
-	public function execute(Project $project): bool
+	public function execute(Project $project): void
 	{
 		$testPath = $project->testsFolder->get() . DIRECTORY_SEPARATOR . $this->name->get();
 		if ($this->setup->get())
@@ -132,8 +133,7 @@ class Test
 				$this->compareOutput($output, $testPath);
 		}
 		if ($this->teardown->get())
-			$this->executeSystemCommand($this->teardown->get(), 'Setup teardown');
-		return true;
+			$this->executeSystemCommand($this->teardown->get(), 'Teardown failed');
 	}
 
 	/**
@@ -148,7 +148,7 @@ class Test
 			$this->executeSystemCommand($command, $this->expectedReturnCode->get());
 		} catch (Exception $e) {
 			$returnCode = end(explode(' ', $e->getMessage()));
-			throw new Exception("Test failed, Returned $returnCode instead of $expectedReturnCode");
+			throw new Exception("Returned $returnCode instead of $expectedReturnCode");
 		}
 	}
 
@@ -203,7 +203,7 @@ class Test
 			return;
 		$expectedOutputFile = FileManager::normalizePath("$testPath/expected$streamName");
 		$actualOutputFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . $streamName);
-		$this->executeSystemCommand("diff $expectedOutputFile $actualOutputFile");
+		$this->executeSystemCommand("diff $expectedOutputFile $actualOutputFile", "Expected Output differs.");
 	}
 
 	/**
