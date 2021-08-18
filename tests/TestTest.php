@@ -477,5 +477,79 @@ final class TestTest extends MarvinetteTestCase
 
 	public function testExecuteSystemCommand(): void
 	{
+		$test = new Test();
+
+		$this->expectOutputString("Hello World\n");
+		$this->callMethod($test, 'executeSystemCommand', ['echo Hello World', null, 0]);
+	}
+
+	public function testExecuteSystemCommandThrowingError(): void
+	{
+		$test = new Test();
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage("Return code: 1");
+		$this->expectOutputString("cat: Hello.jpg: No such file or directory\n");
+	
+		$this->callMethod($test, 'executeSystemCommand', ['cat Hello.jpg 2>&1']);
+	}
+
+	public function testExecuteSystemCommandThrowingErrorCustomMessage(): void
+	{
+		$test = new Test();
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage("Oh shoot... Return code: 1");
+		$this->expectOutputString("cat: Hello.jpg: No such file or directory\n");
+	
+		$this->callMethod($test, 'executeSystemCommand', ['cat Hello.jpg 2>&1', "Oh shoot..."]);
+	}
+
+	public function testExecuteSystemCommandExpectingNotNullReturnCode(): void
+	{
+		$test = new Test();
+		$this->expectOutputString("cat: Hello.jpg: No such file or directory\n");
+	
+		$this->callMethod($test, 'executeSystemCommand', ['cat Hello.jpg 2>&1', null, 1]);
+	}
+
+	public function testBuildCommand(): void
+	{
+		$project = new Project();
+		$project->name->set('101');
+		$project->binaryName->set('MYFAKEPROJECT.py');
+		$project->binaryPath->set('tests/');
+		$project->interpreter->set('python3');
+		$project->testsFolder->set('tmp/');
+		$project->export('tmp/Marvinette.json');
+
+		$test = new Test();
+		$test->name->set("First Example");
+		$test->commandLineArguments->set("100 15");
+		$test->expectedReturnCode->set("0");
+		$test->stdoutFilter->set("head -n 2");
+		$test->expectedStdout->set("Y");
+
+		$command = $this->callMethod($test, 'buildCommand', [$project, 'tmp/First Example']);
+		$this->assertEquals($command, "python3 tests/MYFAKEPROJECT.py 100 15 > /tmp/MarvinetteStdout 2> /tmp/MarvinetteStderr");
+	}
+
+	public function testExecute(): void
+	{
+		$project = new Project();
+		$project->name->set('101');
+		$project->binaryName->set('MYFAKEPROJECT.py');
+		$project->binaryPath->set('tests/');
+		$project->interpreter->set('python3');
+		$project->testsFolder->set('tmp/');
+		$project->export('tmp/Marvinette.json');
+
+		$test = new Test();
+		$test->name->set("First Example");
+		$test->commandLineArguments->set("100 15");
+		$test->expectedReturnCode->set("0");
+		$test->stdoutFilter->set("head -n 2");
+		$test->expectedStdout->set("Y");
+		$test->export($project->testsFolder->get());
+		file_put_contents('tmp/First Example/expectedStdout', "0 0.00000\n1 0.00000\n");
+		$test->execute($project);
 	}
 }

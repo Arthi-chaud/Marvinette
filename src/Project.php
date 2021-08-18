@@ -135,7 +135,7 @@ class Project
 	{
 		$project = [];
 		if (!$this->readyToExport())
-		throw new Exception("Project is not ready to be exported, missing mandatory field");
+			throw new Exception("Project is not ready to be exported, missing mandatory field");
 		foreach(get_object_vars($this) as $fieldName => $field)
 			$project[UserInterface::cleanCamelCase($fieldName)] = $field->get();
 		$jsoned = json_encode($project, JSON_PRETTY_PRINT);

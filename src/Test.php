@@ -123,14 +123,14 @@ class Test
 			$this->executeSystemCommand($this->setup->get(), 'Setup failed');
 		$command = $this->buildCommand($project, $testPath);
 		$this->executeTestCommand($command);
-		foreach(['stdout', 'stderr'] as $output) {
-			$filter = $output . 'Filter';
-			$ustream = ucwords($output);
+		foreach(['stdout', 'stderr'] as $stream) {
+			$filter = $stream . 'Filter';
+			$ustream = ucwords($stream);
 			$expected = "expected$ustream";
 			if ($this->$filter->get())
-				$this->filterOutput($output, $testPath);
+				$this->filterOutput($ustream, $testPath);
 			if ($this->$expected->get())
-				$this->compareOutput($output, $testPath);
+				$this->compareOutput($ustream, $testPath);
 		}
 		if ($this->teardown->get())
 			$this->executeSystemCommand($this->teardown->get(), 'Teardown failed');
@@ -147,7 +147,8 @@ class Test
 		try {
 			$this->executeSystemCommand($command, $this->expectedReturnCode->get());
 		} catch (Exception $e) {
-			$returnCode = end(explode(' ', $e->getMessage()));
+			$exceptionMsgSplit = explode(' ', $e->getMessage());
+			$returnCode = end($exceptionMsgSplit);
 			throw new Exception("Returned $returnCode instead of $expectedReturnCode");
 		}
 	}
@@ -183,9 +184,9 @@ class Test
 		if ($interpreter != null)
 			$command = "$interpreter $command";
 		if ($this->stdinput->get() && file_exists($stdinputPath))
-			$command = "cat $stdinputPath | $command";
-		$command .= '> ' . self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpFileStdoutPrefix;
-		$command .= '2> ' . self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpFileStderrPrefix;
+			$command = "cat $stdinputPath | ($command)";
+		$command .= ' > ' . self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpFileStdoutPrefix;
+		$command .= ' 2> ' . self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpFileStderrPrefix;
 		return FileManager::normalizePath($command);
 	}
 
@@ -213,15 +214,15 @@ class Test
 	 */
 	private function filterOutput(string $streamName, string $testPath): void
 	{
-		if (in_array($streamName, [self::TmpFileStderrPrefix, [self::TmpFileStdoutPrefix]]))
-			throw new Exception('compareOutput: Invalid stream name');
-		$FilterFieldName = 'expected$streamName';
+		if (!in_array($streamName, [self::TmpFileStderrPrefix, self::TmpFileStdoutPrefix]))
+			throw new Exception("compareOutput: '$streamName' is an invalid stream name");
+		$FilterFieldName = "expected$streamName";
 		if (!$this->$FilterFieldName->get())
 			return;
 		$actualOutputFilePath = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . $streamName);
 		$filterCommand = $this->$FilterFieldName->get();
 		$tmpFilterFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . 'Filtered' . $streamName);
-		$command = "cat $actualOutputFilePath | $filterCommand > $tmpFilterFile";
+		$command = "cat $actualOutputFilePath | ($filterCommand > $tmpFilterFile)";
 		$this->executeSystemCommand($command, "$streamName Filtering failed");
 		$this->executeSystemCommand("mv $tmpFilterFile $actualOutputFilePath", "$streamName Filtering failed");
 	}
