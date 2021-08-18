@@ -4,3 +4,4 @@ composer.lock
 tests/coverage
 launchTests.sh
 Marvinette.json
+tmp/

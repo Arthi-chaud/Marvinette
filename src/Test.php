@@ -2,6 +2,7 @@
 
 use PhpParser\Node\Expr\Exit_;
 use PHPUnit\TextUI\XmlConfiguration\File;
+use Display\Color;
 
 require_once "src/Field.php";
 
@@ -19,6 +20,8 @@ class Test
 	const TmpFileStderrPrefix = 'Stderr';
 
 	const TmpFileFilteredPrefix = 'Filtered';
+
+	const TmpDiffFilePrefix = 'Diff';
 
 	public function __construct(?string $testPath = null)
 	{
@@ -108,7 +111,11 @@ class Test
 				if ($fileContent == '' && is_string($fileContent))
 					$this->$fieldName->set(true);
 				else
-					$this->$fieldName->set($fileContent);
+					try {
+						$this->$fieldName->set($fileContent);
+					} catch (Exception $_) {
+						$this->$fieldName->set(true);
+					}
 			}
 	}
 
@@ -198,13 +205,14 @@ class Test
 	private function compareOutput(string $streamName, string $testPath): void
 	{
 		if (in_array($streamName, [self::TmpFileStderrPrefix, [self::TmpFileStdoutPrefix]]))
-			throw new Exception('compareOutput: Invalid stream name');
-		$expectedFieldName = 'expected$streamName';
+			throw new Exception("compareOutput: '$streamName' is an invalid stream name");
+		$expectedFieldName = "expected$streamName";
 		if (!$this->$expectedFieldName->get())
 			return;
 		$expectedOutputFile = FileManager::normalizePath("$testPath/expected$streamName");
 		$actualOutputFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . $streamName);
-		$this->executeSystemCommand("diff $expectedOutputFile $actualOutputFile", "Expected Output differs.");
+		$diffOutputFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpDiffFilePrefix);
+		$this->executeSystemCommand("diff '$expectedOutputFile' '$actualOutputFile' > $diffOutputFile", "Expected Output differs.");
 	}
 
 	/**
@@ -215,16 +223,16 @@ class Test
 	private function filterOutput(string $streamName, string $testPath): void
 	{
 		if (!in_array($streamName, [self::TmpFileStderrPrefix, self::TmpFileStdoutPrefix]))
-			throw new Exception("compareOutput: '$streamName' is an invalid stream name");
-		$FilterFieldName = "expected$streamName";
+			throw new Exception("filterOutput: '$streamName' is an invalid stream name");
+		$FilterFieldName = strtolower($streamName) . 'Filter';
 		if (!$this->$FilterFieldName->get())
 			return;
 		$actualOutputFilePath = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . $streamName);
-		$filterCommand = $this->$FilterFieldName->get();
+		$filterCommand = file_get_contents(FileManager::normalizePath("$testPath/$FilterFieldName"));
 		$tmpFilterFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . 'Filtered' . $streamName);
-		$command = "cat $actualOutputFilePath | ($filterCommand > $tmpFilterFile)";
+		$command = "(cat '$actualOutputFilePath' | $filterCommand) > $tmpFilterFile";
 		$this->executeSystemCommand($command, "$streamName Filtering failed");
-		$this->executeSystemCommand("mv $tmpFilterFile $actualOutputFilePath", "$streamName Filtering failed");
+		$this->executeSystemCommand("mv '$tmpFilterFile' '$actualOutputFilePath'", "$streamName Filtering failed");
 	}
 
 	/**

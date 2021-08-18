@@ -534,6 +534,7 @@ final class TestTest extends MarvinetteTestCase
 
 	public function testExecute(): void
 	{
+		$this->expectOutputString("Setup\nTeardown\n");
 		$project = new Project();
 		$project->name->set('101');
 		$project->binaryName->set('MYFAKEPROJECT.py');
@@ -548,8 +549,68 @@ final class TestTest extends MarvinetteTestCase
 		$test->expectedReturnCode->set("0");
 		$test->stdoutFilter->set("head -n 2");
 		$test->expectedStdout->set("Y");
+		$test->setup->set("echo Setup");
+		$test->teardown->set("echo Teardown");
 		$test->export($project->testsFolder->get());
 		file_put_contents('tmp/First Example/expectedStdout', "0 0.00000\n1 0.00000\n");
+		$test->import('tmp/First Example');
 		$test->execute($project);
+		$this->assertTrue(true);
+	}
+
+	public function testExecuteAnotherTest(): void
+	{
+		$this->expectOutputString("Setup\nTeardown\n");
+		$project = new Project();
+		$project->name->set('101');
+		$project->binaryName->set('MYFAKEPROJECT.py');
+		$project->binaryPath->set('tests/');
+		$project->interpreter->set('python3');
+		$project->testsFolder->set('tmp/');
+		$project->export('tmp/Marvinette.json');
+
+		$test = new Test();
+		$test->name->set("Second Example");
+		$test->commandLineArguments->set("100 15");
+		$test->expectedReturnCode->set("0");
+		$test->stdoutFilter->set("tail -n 2");
+		$test->expectedStdout->set("Y");
+		$test->setup->set("echo Setup");
+		$test->teardown->set("echo Teardown");
+		$test->export($project->testsFolder->get());
+		file_put_contents('tmp/Second Example/expectedStdout', "199 0.00000\n200 0.00000\n");
+		$test->import('tmp/First Example');
+		$test->execute($project);
+		$this->assertTrue(true);
+	}
+
+	public function testExecuteBadOutput(): void
+	{
+		UserInterface::setTitle("Test Bad Output");
+		$catched = false;
+		$project = new Project();
+		$project->name->set('101');
+		$project->binaryName->set('MYFAKEPROJECT.py');
+		$project->binaryPath->set('tests/');
+		$project->interpreter->set('python3');
+		$project->testsFolder->set('tmp/');
+		$project->export('tmp/Marvinette.json');
+
+		$test = new Test();
+		$test->name->set("Second Example");
+		$test->commandLineArguments->set("100 15");
+		$test->expectedReturnCode->set("0");
+		$test->stdoutFilter->set("head -n 2");
+		$test->expectedStdout->set("Y");
+		$test->export($project->testsFolder->get());
+		file_put_contents('tmp/First Example/expectedStdout', "199 0.00000\n200 0.00000\n");
+		$test->import('tmp/First Example');
+		try {
+			$test->execute($project);
+		} catch (Exception $e) {
+			$catched = true;
+			$this->assertEquals($e->getMessage(), "Expected Output differs. Return code: 1");
+		}
+		$this->assertTrue($catched);
 	}
 }

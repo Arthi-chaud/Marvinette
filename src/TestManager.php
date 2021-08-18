@@ -91,6 +91,15 @@ class TestManager {
 		} catch (Exception $e) {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Red)->displayText("$testName: Test Failed! $e");
+			$diffOutputFile = FileManager::normalizePath(Test::TmpFileFolder . '/' . Test::TmpFilePrefix . Test::TmpDiffFilePrefix);
+			if (file_exists($diffOutputFile)) {
+				$diffContent = file_get_contents($diffOutputFile);
+				foreach (explode("\n", $diffContent) as $diffLine) {
+					UserInterface::displayTitle();
+					UserInterface::$displayer->setColor(Color::Red)->displayText($diffLine);
+				}
+				unlink($diffOutputFile);
+			}
 			$testStatus = false;
 		}
 		UserInterface::popTitle();
