@@ -51,7 +51,7 @@ final class UserInputTest extends MarvinetteTestCase
 		$lines = ['Hello', 'World', 'Marvin', 'BYE'];
 		$expected = ['TROLOLOL'];
 		$this->defineStdinClone($lines);
-		$this->expectOutputString("Enter Option\nEnter Option\nEnter Option\nEnter Option\nEnter Option\n");
+		$this->expectOutputString("Enter Option\nEnter Option\nEnter Option\nEnter Option\nEnter Option\n\n");
 		$catched = false;
 		try {
 			UserInput::getOption(function() {
