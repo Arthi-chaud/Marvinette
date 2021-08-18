@@ -74,23 +74,23 @@ class TestManager {
 	
 	public static function executeTest(?string $testName = null, ?Project $project = null): bool
 	{
-		UserInterface::setTitle("Test $testName");
 		$testStatus = true;
 		if (!$project)
-			$project = new Project(Project::ConfigurationFile);
+		$project = new Project(Project::ConfigurationFile);
 		if (!$testName)
 			$testName = self::selectTest($project);
+		UserInterface::setTitle("Test '$testName'");
 		$testPath = FileManager::normalizePath($project->testsFolder->get() . "/$testName");
 		$test = new Test($testPath);
 		try {
 			UserInterface::displayTitle();
-			UserInterface::$displayer->setColor(Color::Cyan)->displayText("Executing $testName...");
+			UserInterface::$displayer->setColor(Color::Cyan)->displayText("Executing Test '$testName'...");
+			$test->execute($project);
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Green)->displayText("$testName: Test passed!");
-			$test->execute($project);
 		} catch (Exception $e) {
 			UserInterface::displayTitle();
-			UserInterface::$displayer->setColor(Color::Red)->displayText("$testName: Test Failed! $e");
+			UserInterface::$displayer->setColor(Color::Red)->displayText("$testName: Test Failed! " . $e->getMessage());
 			$diffOutputFile = FileManager::normalizePath(Test::TmpFileFolder . '/' . Test::TmpFilePrefix . Test::TmpDiffFilePrefix);
 			if (file_exists($diffOutputFile)) {
 				$diffContent = file_get_contents($diffOutputFile);
@@ -108,11 +108,11 @@ class TestManager {
 
 	public static function executesAllTests(?Project $project = null): bool
 	{
-		UserInterface::setTitle("Executing Tests");
+		UserInterface::setTitle("Executing");
 		if (!$project)
 			$project = new Project(Project::ConfigurationFile);
 		$failedTestCount = 0;
-		$tests = self::getTestsFolders($project->binaryPath->get());
+		$tests = self::getTestsFolders($project->testsFolder->get());
 		if ($tests == []) {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Red)->displayText("No tests available");
@@ -125,7 +125,7 @@ class TestManager {
 		}
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Default)->displayText("Test Count: ", false);
-		UserInterface::$displayer->setColor(Color::Blue)->displayText(strval(count($tests) - $failedTestCount), false);
+		UserInterface::$displayer->setColor(Color::Blue)->displayText(strval(count($tests)), false);
 		UserInterface::$displayer->setColor(Color::Default)->displayText(" | Success: ", false);
 		UserInterface::$displayer->setColor(Color::Green)->displayText(strval(count($tests) - $failedTestCount), false);
 		UserInterface::$displayer->setColor(Color::Default)->displayText(" | Failed: ", false);
@@ -203,7 +203,7 @@ class TestManager {
 		}
 		$selected = UserInput::getOption(function () use ($testCount) {
 			UserInterface::displayTitle();
-			UserInterface::$displayer->setColor(Color::Green)->displayText("Select a test (between 0 and " . ($testCount - 1) . '): ', false);
+			UserInterface::$displayer->setColor(Color::Yellow)->displayText("Select a test (between 0 and " . ($testCount - 1) . '): ', false);
 		}, $choices);
 		UserInterface::popTitle();
 		return basename($testsName[$selected]);

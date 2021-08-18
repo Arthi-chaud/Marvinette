@@ -18,14 +18,14 @@ use Display\Color;
 class ProjectManager
 {
 
-	public static function createProject(): void
+	public static function createProject(): bool
 	{
 		UserInterface::setTitle("Create Project");
 		if (file_exists(Project::ConfigurationFile)) {
 			if (self::promptOverWriteProject())
 				unlink(Project::ConfigurationFile);
 			else
-				return;
+				return false;
 		}
 		$project = new Project();
 		ObjectHelper::promptEachObjectField($project, function ($fieldName, $field) {
@@ -41,6 +41,7 @@ class ProjectManager
 		if (self::promptAddTest())
 			TestManager::addTest($project);
 		UserInterface::popTitle();
+		return true;
 	}
 
 	public static function promptAddTest(): bool
@@ -55,12 +56,12 @@ class ProjectManager
 		UserInterface::popTitle();
 	}
 
-	public static function modProject(): void
+	public static function modProject(): bool
 	{
 		UserInterface::setTitle("Modify Project");
 		if (!file_exists(Project::ConfigurationFile)) {
 			self::displayNoConfigFileFound();
-			return;
+			return false;
 		}
 		$project = new Project(Project::ConfigurationFile);
 
@@ -77,15 +78,16 @@ class ProjectManager
 		if (self::promptAddTest())
 			TestManager::addTest($project);
 		UserInterface::popTitle();
+		return true;
 	}
 
 	
-	public static function deleteProject(): void
+	public static function deleteProject(): bool
 	{
 		UserInterface::setTitle("Delete Project");
 		if (!file_exists(Project::ConfigurationFile)) {
 			self::displayNoConfigFileFound();
-			return;
+			return false;
 		}
 		$project = new Project(Project::ConfigurationFile);
 		UserInterface::displayTitle();
@@ -97,7 +99,7 @@ class ProjectManager
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file has not been deleted!");
 			UserInterface::popTitle();
-			return;
+			return true;
 		}
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is deleted!");
@@ -107,11 +109,12 @@ class ProjectManager
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are deleted!");
 			UserInterface::popTitle();
-			return;
+			return true;
 		}
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are not deleted!");
 		UserInterface::popTitle();
+		return true;
 	}
 	
 	public static function promptOverwriteProject(): bool

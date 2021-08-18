@@ -57,8 +57,10 @@ class UserInput
 		} else {
 			$line = fgets($GLOBALS['testSTDIN']);
 		}
-		if (!$line)
+		if (!$line) {
+			echo "\n";
 			throw new EndOfFileException();
+		}
 		$line = trim($line);
 		return $line;
 	}

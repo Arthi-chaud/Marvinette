@@ -103,20 +103,22 @@ class Test
 		if (!is_dir($testFolder))
 			throw new Exception('Invalid test path');
 		$this->name->set($testName);
-		foreach(get_object_vars($this) as $fieldName => $field)
+		foreach(get_object_vars($this) as $fieldName => $field) {
 			if (file_exists(FileManager::normalizePath("$testFolder/$fieldName"))) {
 				$fileContent = file_get_contents(FileManager::normalizePath("$testFolder/$fieldName"));
 				if (is_numeric($fileContent))
 					$fileContent = intval($fileContent);
 				if ($fileContent == '' && is_string($fileContent))
 					$this->$fieldName->set(true);
-				else
+				else {
 					try {
 						$this->$fieldName->set($fileContent);
 					} catch (Exception $_) {
 						$this->$fieldName->set(true);
 					}
+				}
 			}
+		}
 	}
 
 	/**
@@ -210,11 +212,7 @@ class Test
 		$expectedOutputFile = FileManager::normalizePath("$testPath/expected$streamName");
 		$actualOutputFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . $streamName);
 		$diffOutputFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpDiffFilePrefix);
-		try {
-			$this->executeSystemCommand("diff '$expectedOutputFile' '$actualOutputFile' > $diffOutputFile");
-		} catch (Exception $e) {
-			throw new Exception("Expected Output differs.");
-		}
+		$this->executeSystemCommand("diff '$expectedOutputFile' '$actualOutputFile' > $diffOutputFile", "Expected Output differs.");
 	}
 
 	/**

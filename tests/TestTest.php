@@ -610,7 +610,7 @@ final class TestTest extends MarvinetteTestCase
 			$test->execute($project);
 		} catch (Exception $e) {
 			$catched = true;
-			$this->assertEquals($e->getMessage(), "Expected Output differs.");
+			$this->assertEquals($e->getMessage(), "Expected Output differs. Return code: 1");
 		}
 		$this->assertTrue($catched);
 		FileManager::deleteFolder('tmp/Third Example');
