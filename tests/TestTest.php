@@ -610,7 +610,7 @@ final class TestTest extends MarvinetteTestCase
 			$test->execute($project);
 		} catch (Exception $e) {
 			$catched = true;
-			$this->assertEquals($e->getMessage(), "Expected Output differs. Return code: 1");
+			$this->assertEquals($e->getMessage(), "Expected Output differs.");
 		}
 		$this->assertTrue($catched);
 		FileManager::deleteFolder('tmp/Third Example');
@@ -644,5 +644,46 @@ final class TestTest extends MarvinetteTestCase
 		}
 		$this->assertTrue($catched);
 		FileManager::deleteFolder('tmp/Fourth Example');
+	}
+
+	public function testExecuteWithStdinput(): void
+	{
+		$project = new Project();
+		$project->name->set('101');
+		$project->binaryName->set('python3');
+		$project->binaryPath->set('/usr/bin/');
+		$project->testsFolder->set('tmp/');
+		$project->export('tmp/Marvinette.json');
+
+		$test = new Test();
+		$test->name->set("Fifth Example");
+		$test->expectedReturnCode->set("0");
+		$test->stdinput->set("Y");
+		$test->expectedStdout->set("Y");
+		$test->export($project->testsFolder->get());
+		file_put_contents('tmp/Fifth Example/expectedStdout', "Hello\nwell ...\nbye\n");
+		file_put_contents('tmp/Fifth Example/stdinput', "print('Hello')\nprint('well ...')\nprint('bye')\n");
+		$test->import('tmp/Fifth Example');
+		$test->execute($project);
+		$this->assertTrue(true);
+		FileManager::deleteFolder('tmp/Fifth Example');
+	}
+
+	public function testCompareOutputInvalidStream(): void
+	{
+		$test = new Test();
+
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage("compareOutput: 'badName' is an invalid stream name");
+		$this->callMethod($test, 'compareOutput', ['badName', 'tests/bad']);
+	}
+
+	public function testFilterOutputInvalidStream(): void
+	{
+		$test = new Test();
+
+		$this->expectException(Exception::class);
+		$this->expectExceptionMessage("filterOutput: 'badName' is an invalid stream name");
+		$this->callMethod($test, 'filterOutput', ['badName', 'tests/bad']);
 	}
 }

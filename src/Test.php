@@ -194,7 +194,7 @@ class Test
 		if ($interpreter != null)
 			$command = "$interpreter $command";
 		if ($this->stdinput->get() && file_exists($stdinputPath))
-			$command = "cat $stdinputPath | ($command)";
+			$command = "cat '$stdinputPath' | ($command)";
 		$command .= ' > ' . self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpFileStdoutPrefix;
 		$command .= ' 2> ' . self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpFileStderrPrefix;
 		return FileManager::normalizePath($command);
@@ -207,7 +207,7 @@ class Test
 	 */
 	private function compareOutput(string $streamName, string $testPath): void
 	{
-		if (in_array($streamName, [self::TmpFileStderrPrefix, [self::TmpFileStdoutPrefix]]))
+		if (!in_array($streamName, [self::TmpFileStderrPrefix, self::TmpFileStdoutPrefix]))
 			throw new Exception("compareOutput: '$streamName' is an invalid stream name");
 		$expectedFieldName = "expected$streamName";
 		if (!$this->$expectedFieldName->get())
@@ -215,7 +215,11 @@ class Test
 		$expectedOutputFile = FileManager::normalizePath("$testPath/expected$streamName");
 		$actualOutputFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . $streamName);
 		$diffOutputFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpDiffFilePrefix);
-		$this->executeSystemCommand("diff '$expectedOutputFile' '$actualOutputFile' > $diffOutputFile", "Expected Output differs.");
+		try {
+			$this->executeSystemCommand("diff '$expectedOutputFile' '$actualOutputFile' > $diffOutputFile");
+		} catch (Exception $e) {
+			throw new Exception("Expected Output differs.");
+		}
 	}
 
 	/**
