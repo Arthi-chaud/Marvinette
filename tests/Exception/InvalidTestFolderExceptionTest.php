@@ -1,9 +1,11 @@
 <?php
 
+require_once 'tests/MarvinetteTestCase.php';
+
 require_once 'src/Exception/InvalidTestFolderException.php';
 use PHPUnit\Framework\TestCase;
 
-class InvalidTestFolderExceptionTest extends TestCase
+class InvalidTestFolderExceptionTest extends MarvinetteTestCase
 {
 	public function testCatchEofException(): void
 	{

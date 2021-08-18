@@ -4,10 +4,10 @@ use PHPUnit\Framework\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\throwException;
-
+require_once 'tests/MarvinetteTestCase.php';
 require_once 'src/Field.php';
 
-final class FieldTest extends TestCase
+final class FieldTest extends MarvinetteTestCase
 {
 	public function testYesNoErrorHandler(): void
 	{
@@ -83,7 +83,7 @@ final class FieldTest extends TestCase
 	 */
 	public function testToString(Field $field): void
 	{
-		$this->setOutputCallback(function() {});
+		$this->hideStdout();
 		$field->set("Hello World");
 		$this->assertTrue($field == "Hello World");
 		$field->set(123);

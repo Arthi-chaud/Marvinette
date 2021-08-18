@@ -1,13 +1,13 @@
 <?php
 
+require_once 'tests/MarvinetteTestCase.php';
 require_once "src/Display/Displayer.php";
-require_once 'tests/TestUtils.php';
 use PHPUnit\Framework\TestCase;
 use Display\Displayer;
 use Display\Color;
 use Display\Style;
 
-final class DisplayerTest extends TestCase
+final class DisplayerTest extends MarvinetteTestCase
 {
 	public function testColorSettersGettersAndReset(): void
 	{
@@ -86,7 +86,7 @@ final class DisplayerTest extends TestCase
 
 	public function testResetAfterOption(): void
 	{
-		$this->setOutputCallback(function() {});
+		$this->hideStdout();
 		$displayer = new Displayer();
 
 		$displayer->setStyle(Style::Blink)
@@ -104,6 +104,6 @@ final class DisplayerTest extends TestCase
 	public function testGetSequence(): void
 	{
 		$displayer = new Displayer();
-		$this->assertEquals("\e[1m", callMethod($displayer, 'getSequence', [1]));
+		$this->assertEquals("\e[1m", $this->callMethod($displayer, 'getSequence', [1]));
 	}
 }

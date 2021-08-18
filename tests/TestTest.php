@@ -5,8 +5,9 @@ use PHPUnit\TextUI\XmlConfiguration\File;
 
 require_once 'src/Test.php';
 require_once 'src/Project.php';
+require_once 'tests/MarvinetteTestCase.php';
 
-final class TestTest extends TestCase
+final class TestTest extends MarvinetteTestCase
 {
 
 	public function setUp(): void
@@ -472,5 +473,9 @@ final class TestTest extends TestCase
 		$this->assertEquals(file_get_contents('tests/101/teardown'), 'tear me down');
 		$this->assertEquals(file_get_contents('tests/101/setup'), 'set me up');
 		FileManager::deleteFolder('tests/101');
+	}
+
+	public function testExecuteSystemCommand(): void
+	{
 	}
 }

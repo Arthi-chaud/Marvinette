@@ -1,10 +1,12 @@
 <?php
 
+require_once 'tests/MarvinetteTestCase.php';
+
 use PHPUnit\Framework\TestCase;
-require_once 'tests/TestUtils.php';
+require_once 'tests/MarvinetteTestCase.php';
 require_once 'src/Utils/UserInterface.php';
 
-final class UserInterfaceTest extends TestCase
+final class UserInterfaceTest extends MarvinetteTestCase
 {
 	public function setUp(): void
 	{

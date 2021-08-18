@@ -1,12 +1,14 @@
 <?php
 
+require_once 'tests/MarvinetteTestCase.php';
+
 use PHPUnit\Framework\TestCase;
-require_once 'tests/TestUtils.php';
+require_once 'tests/MarvinetteTestCase.php';
 require_once 'src/Exception/EndOfFileException.php';
 require_once 'src/Project.php';
 require_once 'src/Utils/UserInput.php';
 
-final class UserInputTest extends TestCase
+final class UserInputTest extends MarvinetteTestCase
 {
 	const stdinClone = '/tmp/marvinetteTest';
 
@@ -17,7 +19,7 @@ final class UserInputTest extends TestCase
 		$expectedLineCount = 3;
 		$lines = [];
 		$expectedLines = ['Hello', 'World', 'Marvin'];
-		defineStdinClone($expectedLines);
+		$this->defineStdinClone($expectedLines);
 		while (!$eof) {
 			try {
 				$line = UserInput::getUserLine();
@@ -35,7 +37,7 @@ final class UserInputTest extends TestCase
 	{
 		$lines = ['Hello', 'World', 'Marvin'];
 		$expected = ['Marvin'];
-		defineStdinClone($lines);
+		$this->defineStdinClone($lines);
 		$this->expectOutputString("Enter Option\nEnter Option\nEnter Option\n");
 
 		$entered = UserInput::getOption(function() {
@@ -48,7 +50,7 @@ final class UserInputTest extends TestCase
 	{
 		$lines = ['Hello', 'World', 'Marvin', 'BYE'];
 		$expected = ['TROLOLOL'];
-		defineStdinClone($lines);
+		$this->defineStdinClone($lines);
 		$this->expectOutputString("Enter Option\nEnter Option\nEnter Option\nEnter Option\nEnter Option\n");
 		$catched = false;
 		try {
@@ -63,9 +65,9 @@ final class UserInputTest extends TestCase
 
 	public function testGetYesNoOption(): void
 	{
-		$this->setOutputCallback(function() {});
+		$this->hideStdout();
 		$fileLines = ['Hello', 'Trololol', 'Y', "END"];
-		defineStdinClone($fileLines);
+		$this->defineStdinClone($fileLines);
 		$answer = UserInput::getYesNoOption("", "", Display\Color::Black);
 		$this->assertEquals($answer, true);
 	}

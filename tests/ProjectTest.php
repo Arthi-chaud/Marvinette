@@ -6,8 +6,9 @@ use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\throwException;
 
 require_once 'src/Project.php';
+require_once 'tests/MarvinetteTestCase.php';
 
-final class ProjectTest extends TestCase
+final class ProjectTest extends MarvinetteTestCase
 {
 
 	public function testSetName(): void

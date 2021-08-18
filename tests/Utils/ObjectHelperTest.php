@@ -1,11 +1,13 @@
 <?php
 
+require_once 'tests/MarvinetteTestCase.php';
+
 use PHPUnit\Framework\TestCase;
 
 require_once 'src/Project.php';
 require_once 'src/Utils/ObjectHelper.php';
 
-final class ObjectHelperTest extends TestCase
+final class ObjectHelperTest extends MarvinetteTestCase
 {
 	public function testObjectFieldIterator(): void
 	{
@@ -35,7 +37,7 @@ final class ObjectHelperTest extends TestCase
 
 	public function testPromptObjectFieldWithProjectObject(): Project
 	{
-		defineStdinClone(['PROJECTNAME', 'BINARYNAME', 'PATH', 'python', 'tests']);
+		$this->defineStdinClone(['PROJECTNAME', 'BINARYNAME', 'PATH', 'python', 'tests']);
 		$project = new Project();
 		UserInterface::setTitle('');
 		ObjectHelper::promptEachObjectField($project, function() {});
@@ -49,7 +51,7 @@ final class ObjectHelperTest extends TestCase
 
 	public function testPromptObjectFieldWithIgnoreField(): void
 	{
-		defineStdinClone(['PROJECTNAME', 'BINARYNAME', 'tests']);
+		$this->defineStdinClone(['PROJECTNAME', 'BINARYNAME', 'tests']);
 		$project = new Project();
 		UserInterface::setTitle('');
 		ObjectHelper::promptEachObjectField($project, function() {}, false, ['interpreter', 'binaryPath']);
@@ -62,8 +64,8 @@ final class ObjectHelperTest extends TestCase
 
 	public function testPromptObjectFieldWithMultipleAttemps(): void
 	{
-		$this->setOutputCallback(function() {});
-		defineStdinClone(['', 'PROJECTNAME', 'tmp/end', '', 'BINARYNAME', 'PATH', 'python', 'tests']);
+		$this->hideStdout();
+		$this->defineStdinClone(['', 'PROJECTNAME', 'tmp/end', '', 'BINARYNAME', 'PATH', 'python', 'tests']);
 		$project = new Project();
 		UserInterface::setTitle('');
 		ObjectHelper::promptEachObjectField($project, function() {});
@@ -79,7 +81,7 @@ final class ObjectHelperTest extends TestCase
 	 */
 	public function testPromptObjectFieldToModify(Project $project): void
 	{
-		defineStdinClone(['', 'BINARYNAME2', 'PATH4', '', 'testers']);
+		$this->defineStdinClone(['', 'BINARYNAME2', 'PATH4', '', 'testers']);
 		UserInterface::setTitle('');
 		ObjectHelper::promptEachObjectField($project, function() {}, true);
 		$this->assertEquals($project->name->get(), 'PROJECTNAME');

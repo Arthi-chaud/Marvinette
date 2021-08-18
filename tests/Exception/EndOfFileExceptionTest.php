@@ -1,9 +1,11 @@
 <?php
 
+require_once 'tests/MarvinetteTestCase.php';
+
 require_once 'src/Exception/EndOfFileException.php';
 use PHPUnit\Framework\TestCase;
 
-class EndOfFileExceptionTest extends TestCase
+class EndOfFileExceptionTest extends MarvinetteTestCase
 {
 	public function testCatchEofException(): void
 	{

@@ -1,5 +1,7 @@
 <?php
 
+require_once 'tests/MarvinetteTestCase.php';
+
 use PHPUnit\Framework\TestCase;
 use PHPUnit\TextUI\XmlConfiguration\File;
 
@@ -7,7 +9,7 @@ use function PHPUnit\Framework\assertEquals;
 
 require_once 'src/Utils/CommandLine.php';
 
-final class CommandLineTest extends TestCase
+final class CommandLineTest extends MarvinetteTestCase
 {
 	public function testGetOptions(): void
 	{
