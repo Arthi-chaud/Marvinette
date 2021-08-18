@@ -130,14 +130,9 @@ class Test
 			$this->executeSystemCommand($this->setup->get(), 'Setup failed');
 		$command = $this->buildCommand($project, $testPath);
 		$this->executeTestCommand($command);
-		foreach(['stdout', 'stderr'] as $stream) {
-			$filter = $stream . 'Filter';
-			$ustream = ucwords($stream);
-			$expected = "expected$ustream";
-			if ($this->$filter->get())
-				$this->filterOutput($ustream, $testPath);
-			if ($this->$expected->get())
-				$this->compareOutput($ustream, $testPath);
+		foreach([self::TmpFileStderrPrefix, self::TmpFileStdoutPrefix] as $stream) {
+			$this->filterOutput($stream, $testPath);
+			$this->compareOutput($stream, $testPath);
 		}
 		if ($this->teardown->get())
 			$this->executeSystemCommand($this->teardown->get(), 'Teardown failed');
