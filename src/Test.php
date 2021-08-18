@@ -152,7 +152,7 @@ class Test
 	{
 		$expectedReturnCode = $this->expectedReturnCode->get();
 		try {
-			$this->executeSystemCommand($command, $this->expectedReturnCode->get());
+			$this->executeSystemCommand($command, null, $expectedReturnCode);
 		} catch (Exception $e) {
 			$exceptionMsgSplit = explode(' ', $e->getMessage());
 			$returnCode = end($exceptionMsgSplit);
@@ -167,9 +167,12 @@ class Test
 	 * @param int $expectedReturnCode If the return code differs from it, the function hrows
 	 * @param string $message what the exception message should contain. The return code will be inserted after
 	 */
-	protected function executeSystemCommand(string $command, ?string $message = null, int $expectedReturnCode = 0): void
-	{;
+	protected function executeSystemCommand(string $command, ?string $message = null, ?int $expectedReturnCode = 0): void
+	{
+		$actualReturnCode = 0;
 		system($command, $actualReturnCode);
+		if (is_null($expectedReturnCode))
+			return;
 		if ($actualReturnCode != $expectedReturnCode) {
 			$exceptionMsg = "Return code: $actualReturnCode";
 			if ($message)

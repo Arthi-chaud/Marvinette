@@ -556,9 +556,10 @@ final class TestTest extends MarvinetteTestCase
 		$test->import('tmp/First Example');
 		$test->execute($project);
 		$this->assertTrue(true);
+		FileManager::deleteFolder('tmp/First Example');
 	}
 
-	public function testExecuteAnotherTest(): void
+	public function testExecuteAnotherTestIgnoringReturnCode(): void
 	{
 		$this->expectOutputString("Setup\nTeardown\n");
 		$project = new Project();
@@ -572,16 +573,16 @@ final class TestTest extends MarvinetteTestCase
 		$test = new Test();
 		$test->name->set("Second Example");
 		$test->commandLineArguments->set("100 15");
-		$test->expectedReturnCode->set("0");
 		$test->stdoutFilter->set("tail -n 2");
 		$test->expectedStdout->set("Y");
 		$test->setup->set("echo Setup");
 		$test->teardown->set("echo Teardown");
 		$test->export($project->testsFolder->get());
 		file_put_contents('tmp/Second Example/expectedStdout', "199 0.00000\n200 0.00000\n");
-		$test->import('tmp/First Example');
+		$test->import('tmp/Second Example');
 		$test->execute($project);
 		$this->assertTrue(true);
+		FileManager::deleteFolder('tmp/Second Example');
 	}
 
 	public function testExecuteBadOutput(): void
@@ -597,14 +598,14 @@ final class TestTest extends MarvinetteTestCase
 		$project->export('tmp/Marvinette.json');
 
 		$test = new Test();
-		$test->name->set("Second Example");
+		$test->name->set("Third Example");
 		$test->commandLineArguments->set("100 15");
 		$test->expectedReturnCode->set("0");
 		$test->stdoutFilter->set("head -n 2");
 		$test->expectedStdout->set("Y");
 		$test->export($project->testsFolder->get());
-		file_put_contents('tmp/First Example/expectedStdout', "199 0.00000\n200 0.00000\n");
-		$test->import('tmp/First Example');
+		file_put_contents('tmp/Third Example/expectedStdout', "199 0.00000\n200 0.00000\n");
+		$test->import('tmp/Third Example');
 		try {
 			$test->execute($project);
 		} catch (Exception $e) {
@@ -612,5 +613,36 @@ final class TestTest extends MarvinetteTestCase
 			$this->assertEquals($e->getMessage(), "Expected Output differs. Return code: 1");
 		}
 		$this->assertTrue($catched);
+		FileManager::deleteFolder('tmp/Third Example');
+	}
+
+	public function testExecuteWrongReturnCode(): void
+	{
+		$catched = false;
+		$project = new Project();
+		$project->name->set('101');
+		$project->binaryName->set('MYFAKEPROJECT.py');
+		$project->binaryPath->set('tests/');
+		$project->interpreter->set('python3');
+		$project->testsFolder->set('tmp/');
+		$project->export('tmp/Marvinette.json');
+
+		$test = new Test();
+		$test->name->set("Fourth Example");
+		$test->commandLineArguments->set("100 15");
+		$test->expectedReturnCode->set("1");
+		$test->stdoutFilter->set("tail -n 2");
+		$test->expectedStdout->set("Y");
+		$test->export($project->testsFolder->get());
+		file_put_contents('tmp/Fourth Example/expectedStdout', "199 0.00000\n200 0.00000\n");
+		$test->import('tmp/Fourth Example');
+		try {
+			$test->execute($project);
+		} catch (Exception $e) {
+			$catched = true;
+			$this->assertEquals($e->getMessage(), "Returned 0 instead of 1");
+		}
+		$this->assertTrue($catched);
+		FileManager::deleteFolder('tmp/Fourth Example');
 	}
 }
