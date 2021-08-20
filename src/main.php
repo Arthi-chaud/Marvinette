@@ -23,7 +23,7 @@ function launch(): bool
 			return boolval(call_user_func($call));
 	}
 	UserInterface::displayHelp();
-	return 1;
+	return false;
 }
 
 if ($argv && $argv[0] && realpath($argv[0]) === __FILE__) {
