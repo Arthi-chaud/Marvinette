@@ -13,4 +13,4 @@ jobs:
       - name: Check marvinette is launch-able
         run: |
           sudo php install.php
-          where marvinette
+          which marvinette
