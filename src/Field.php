@@ -1,5 +1,7 @@
 <?php
 
+require_once 'src/Exception/MarvinetteException.php';
+
 /**
  * @brief Object representing a class's variable member, but allows error handling and prompt help messages
 */
@@ -24,7 +26,7 @@ class Field
 	public static function YesNoErrorHandler($choice): void
 	{
 		if (!in_array($choice, ['Y', 'N', '', 'y', 'n', 'yes', 'no', 'oui', 'non']))
-			throw new Exception("Please type 'Y', 'N' or leave empty");
+			throw new MarvinetteException("Please type 'Y', 'N' or leave empty");
 	}
 
 	/**

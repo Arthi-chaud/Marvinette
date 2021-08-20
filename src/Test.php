@@ -3,7 +3,7 @@
 use PhpParser\Node\Expr\Exit_;
 use PHPUnit\TextUI\XmlConfiguration\File;
 use Display\Color;
-
+require_once 'src/Exception/MarvinetteException.php';
 require_once "src/Field.php";
 
 /**
@@ -27,9 +27,9 @@ class Test
 	{
 		$this->name = new Field(function($name) {
 			if (!$name)
-				throw new Exception("The test's name shouldn't be empty");
+				throw new MarvinetteException("The test's name shouldn't be empty");
 			if (strchr($name, DIRECTORY_SEPARATOR))
-				throw new Exception("The test's name should not contain a '". DIRECTORY_SEPARATOR. "'");
+				throw new MarvinetteException("The test's name should not contain a '". DIRECTORY_SEPARATOR. "'");
 		});
 
 		$this->commandLineArguments = new Field(function($args) {}, null, "The arguments to pass to the program");
@@ -39,7 +39,7 @@ class Test
 			if ($r == "")
 				return;
 			if (!is_numeric($r) || (intval($r) < 0) || (intval($r) >= 255))
-				throw new Exception("Please enter a number superior/equal to 0 (or nothing to ignore)");
+				throw new MarvinetteException("Please enter a number superior/equal to 0 (or nothing to ignore)");
 		}, function($r) {
 			if ($r == "")
 				return null;
@@ -101,7 +101,7 @@ class Test
 		$testName = basename($testFolder);
 
 		if (!is_dir($testFolder))
-			throw new Exception('Invalid test path');
+			throw new MarvinetteException('Invalid test path');
 		$this->name->set($testName);
 		foreach(get_object_vars($this) as $fieldName => $field) {
 			if (file_exists(FileManager::normalizePath("$testFolder/$fieldName"))) {
@@ -153,7 +153,7 @@ class Test
 		} catch (Exception $e) {
 			$exceptionMsgSplit = explode(' ', $e->getMessage());
 			$returnCode = end($exceptionMsgSplit);
-			throw new Exception("Returned $returnCode instead of $expectedReturnCode");
+			throw new MarvinetteException("Returned $returnCode instead of $expectedReturnCode");
 		}
 	}
 
@@ -174,7 +174,7 @@ class Test
 			$exceptionMsg = "Return code: $actualReturnCode";
 			if ($message)
 				$exceptionMsg = "$message $exceptionMsg";
-			throw new Exception($exceptionMsg);
+			throw new MarvinetteException($exceptionMsg);
 		}
 	}
 
@@ -205,7 +205,7 @@ class Test
 	private function compareOutput(string $streamName, string $testPath): void
 	{
 		if (!in_array($streamName, [self::TmpFileStderrPrefix, self::TmpFileStdoutPrefix]))
-			throw new Exception("compareOutput: '$streamName' is an invalid stream name");
+			throw new MarvinetteException("compareOutput: '$streamName' is an invalid stream name");
 		$expectedFieldName = "expected$streamName";
 		if (!$this->$expectedFieldName->get())
 			return;
@@ -223,7 +223,7 @@ class Test
 	private function filterOutput(string $streamName, string $testPath): void
 	{
 		if (!in_array($streamName, [self::TmpFileStderrPrefix, self::TmpFileStdoutPrefix]))
-			throw new Exception("filterOutput: '$streamName' is an invalid stream name");
+			throw new MarvinetteException("filterOutput: '$streamName' is an invalid stream name");
 		$FilterFieldName = strtolower($streamName) . 'Filter';
 		if (!$this->$FilterFieldName->get())
 			return;

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'src/Field.php';
+require_once 'src/Exception/MarvinetteException.php';
 
 /**
  * @brief Object representing the project's important infos
@@ -17,15 +18,15 @@ class Project
 	{
 		$this->name = new Field(function($name) {
 			if (!$name)
-				throw new Exception("The Project's name shouldn't be empty");
+				throw new MarvinetteException("The Project's name shouldn't be empty");
 			return $name;
 		});
 
 		$this->binaryName = new Field(function($binaryName) {
 			if (!$binaryName)
-				throw new Exception("The Project's binary name shouldn't be empty");
+				throw new MarvinetteException("The Project's binary name shouldn't be empty");
 			if (strchr($binaryName, '/') || strchr($binaryName, '\\'))
-				throw new Exception("The binary name should not contain a '". DIRECTORY_SEPARATOR. "'");
+				throw new MarvinetteException("The binary name should not contain a '". DIRECTORY_SEPARATOR. "'");
 		});
 
 		$this->binaryPath = new Field(function($binaryPath) {}, function($binaryPath) {
@@ -105,7 +106,7 @@ class Project
 	public function interpreterExists(): bool
 	{
 		if (!$this->interpreter->get())
-			throw new Exception("No Interpreter set");
+			throw new MarvinetteException("No Interpreter set");
 		foreach (explode(':', getenv('PATH')) as $path) {
 			if (file_exists(FileManager::normalizePath("$path/". $this->interpreter->get())))
 				return true;
@@ -135,7 +136,7 @@ class Project
 	{
 		$project = [];
 		if (!$this->readyToExport())
-			throw new Exception("Project is not ready to be exported, missing mandatory field");
+			throw new MarvinetteException("Project is not ready to be exported, missing mandatory field");
 		foreach(get_object_vars($this) as $fieldName => $field)
 			$project[UserInterface::cleanCamelCase($fieldName)] = $field->get();
 		$jsoned = json_encode($project, JSON_PRETTY_PRINT);
@@ -149,10 +150,10 @@ class Project
 	public function import(string $infile): void
 	{
 		if (!file_exists($infile))
-			throw new Exception("$infile does not exists.");
+			throw new MarvinetteException("$infile does not exists.");
 		$object = json_decode(file_get_contents($infile), true);
 		if (!$object)
-			throw new Exception("File $infile: Invalid JSON File.");
+			throw new MarvinetteException("File $infile: Invalid JSON File.");
 		foreach($object as $fieldName => $field) {
 			$cameCalseName = UserInterface::toCamelCase($fieldName);
 			$this->$cameCalseName->set($field);

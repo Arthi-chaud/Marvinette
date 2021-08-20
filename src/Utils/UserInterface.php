@@ -2,6 +2,7 @@
 
 require_once 'src/Display/Color.php';
 require_once 'src/Utils/UserInterface.php';
+require_once 'src/Exception/MarvinetteException.php';
 
 use Display\Displayer;
 use Display\Color;
@@ -44,7 +45,7 @@ class UserInterface
 	public static function displayTitle(): void
 	{
 		if (self::$titlesStack == [])
-			throw new Exception("No title set");
+			throw new MarvinetteException("No title set");
 		if (!isset($displayer))
 			self::$displayer = new Displayer();
 		$text = end(self::$titlesStack);
