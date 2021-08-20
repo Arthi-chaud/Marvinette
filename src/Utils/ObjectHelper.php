@@ -18,10 +18,11 @@ class ObjectHelper
 	 */
 	public static function forEachObjectField(&$obj, callable $callable): void
 	{
-		foreach (get_object_vars($obj) as $fieldName => $field)
-			for ($choosen = false; !$choosen; ) {
+		foreach (get_object_vars($obj) as $fieldName => $field) {
+			$choosen = false;
+			while (!$choosen)
 				$choosen = $callable($fieldName, $field);
-			}
+		}
 	}
 
 	/**
