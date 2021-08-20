@@ -147,13 +147,13 @@ class Test
 	 */
 	protected function executeTestCommand(string $command): void
 	{
-		$expectedReturnCode = $this->expectedReturnCode->get();
+		$expected = $this->expectedReturnCode->get();
 		try {
-			$this->executeSystemCommand($command, null, $expectedReturnCode);
+			$this->executeSystemCommand($command, null, $expected);
 		} catch (Exception $e) {
 			$exceptionMsgSplit = explode(' ', $e->getMessage());
-			$returnCode = end($exceptionMsgSplit);
-			throw new MarvinetteException("Returned $returnCode instead of $expectedReturnCode");
+			$actualReturnCode = end($exceptionMsgSplit);
+			throw new MarvinetteException("Returned $actualReturnCode instead of $expected");
 		}
 	}
 
