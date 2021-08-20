@@ -10,6 +10,7 @@ function launch(): bool
 	$optionsCalls = [
 		'create-project' => [ProjectManager::class,'createProject'],
 		'del-project' => [ProjectManager::class,'deleteProject'],
+		'delete-project' => [ProjectManager::class,'deleteProject'],
 		'mod-project' => [ProjectManager::class,'modProject'],
 		'add-test' => [TestManager::class, 'addTest'],
 		'del-test' => [TestManager::class, 'deleteTest'],
