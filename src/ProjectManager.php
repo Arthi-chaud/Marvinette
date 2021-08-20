@@ -93,7 +93,7 @@ class ProjectManager
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Red)->displayText("Warning: You are about to delete your configuration file");
 		$delete = UserInput::getYesNoOption("Do you want to continue?", Color::Red);
-		if ($delete == true)
+		if ($delete)
 			unlink(Project::ConfigurationFile);
 		else {
 			UserInterface::displayTitle();
@@ -104,7 +104,7 @@ class ProjectManager
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is deleted!");
 		$delete = UserInput::getYesNoOption("Do you want to delete your tests?", Color::Red);
-		if ($delete == true) {
+		if ($delete) {
 			FileManager::deleteFolder($project->testsFolder->get());
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are deleted!");
