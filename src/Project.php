@@ -119,11 +119,9 @@ class Project
 	 */
 	public function isReadyToBeTested(): bool
 	{
-		if (!$this->readyToExport())
-			return false;
-		if (!file_exists($this->buildBinaryAccessPath()))
-			return false;
-		if ($this->interpreter->get() && !$this->interpreterExists())
+		if (!$this->readyToExport() ||
+		!file_exists($this->buildBinaryAccessPath()) || 
+		($this->interpreter->get() && !$this->interpreterExists()))
 			return false;
 		return true;
 	}
