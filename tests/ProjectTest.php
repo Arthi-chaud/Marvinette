@@ -280,13 +280,13 @@ final class ProjectTest extends MarvinetteTestCase
 	{
 		$this->expectException(Exception::class);
 		$this->expectExceptionMessage("/tmp/trololol does not exists.");
-		$project = new Project('/tmp/trololol');
+		new Project('/tmp/trololol');
 	}
 
 	public function testImportInvalidFile(): void
 	{
 		$this->expectException(Exception::class);
 		$this->expectExceptionMessage("File README.md: Invalid JSON File.");
-		$project = new Project('README.md');
+		new Project('README.md');
 	}
 }

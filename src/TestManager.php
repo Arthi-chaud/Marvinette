@@ -120,7 +120,7 @@ class TestManager {
 		}
 		foreach ($tests as $testName) {
 			$testStatus = self::executeTest($testName, $project);
-			if ($testStatus == false)
+			if ($testStatus)
 				$failedTestCount++;
 		}
 		UserInterface::displayTitle();
