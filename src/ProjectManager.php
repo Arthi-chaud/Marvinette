@@ -109,11 +109,11 @@ class ProjectManager
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are deleted!");
 			UserInterface::popTitle();
-			return true;
+		} else {
+			UserInterface::displayTitle();
+			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are not deleted!");
+			UserInterface::popTitle();
 		}
-		UserInterface::displayTitle();
-		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are not deleted!");
-		UserInterface::popTitle();
 		return true;
 	}
 	

@@ -77,7 +77,7 @@ class TestManager {
 		$testStatus = true;
 		if (!$project)
 		$project = new Project(Project::ConfigurationFile);
-		if (!$testName)
+		if ($testName == null)
 			$testName = self::selectTest($project);
 		UserInterface::setTitle("Test '$testName'");
 		$testPath = FileManager::normalizePath($project->testsFolder->get() . "/$testName");
