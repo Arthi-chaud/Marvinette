@@ -15,7 +15,7 @@ function install()
 	if (substr($scriptPath, -1, 1) != DIRECTORY_SEPARATOR)
 		$scriptPath .= DIRECTORY_SEPARATOR;
 	file_put_contents($scriptPath . 'marvinette', getScriptContent($CWD));
-	chmod($scriptPath . 'marvinette', 0777);
+	chmod($scriptPath . 'marvinette', 0750);
 }
 
 function getScriptContent(string $projectPath): string
