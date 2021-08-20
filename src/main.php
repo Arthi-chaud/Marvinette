@@ -27,13 +27,15 @@ function launch(): bool
 }
 
 if ($argv && $argv[0] && realpath($argv[0]) === __FILE__) {
+	$returnCode = 0;
 	try {
 		UserInterface::setTitle("Marvinette", true);
-		return launch() == false;
+		$returnCode = launch() ? 0 : 1;
 	} catch (MarvinetteException $e) {
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Display\Color::Red)->displayText("Exiting...");
-		return 1;
+		$returnCode = 1;
 	}
+	exit($returnCode);
 }
-return 1;
+exit($returnCode);

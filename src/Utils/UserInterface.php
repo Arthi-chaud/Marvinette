@@ -55,15 +55,22 @@ class UserInterface
 
 	public static function displayHelp(): void
 	{
-		echo "marvinette [option]\n";
-		echo "\toption:
-		--create-project: Create a main configuration file, required to make tests
-		--del-project: Delete configuration file and existing tests
-		--mod-project: Modify the project's info.\n
-		--add-test: Create a functionnal test
-		--mod-test: Modify/Change an existing functionnal test\n
-		--del-test: Delete a functionnal test
-		-h, --help: display this usage\n";
+		$usage = [
+			"marvinette [option]",
+			"",
+			"option:",
+			"\t--create-project: Create a main configuration file, required to make tests",
+			"\t--del-project: Delete configuration file and existing tests",
+			"\t--mod-project: Modify the project's info.",
+			"\t--add-test: Create a functionnal test",
+			"\t--mod-test: Modify/Change an existing functionnal test",
+			"\t--del-test: Delete a functionnal test",
+			"\t-h, --help: display this usage"
+		];
+		foreach ($usage as $line) {
+			UserInterface::displayTitle();
+			UserInterface::$displayer->setColor(Display\Color::White)->displayText($line);
+		}
 	}
 
 	/**
