@@ -25,8 +25,9 @@ class Field
 	 */
 	public static function YesNoErrorHandler($choice): void
 	{
-		if (!in_array($choice, ['Y', 'N', '', 'y', 'n', 'yes', 'no', 'oui', 'non']))
+		if (!in_array($choice, ['Y', 'N', '', 'y', 'n', 'yes', 'no', 'oui', 'non'])) {
 			throw new MarvinetteException("Please type 'Y', 'N' or leave empty");
+		}
 	}
 
 	/**
@@ -37,8 +38,9 @@ class Field
 	 */
 	public static function YesNoDataCleaner($choice): bool
 	{
-		if (in_array($choice, ['Y', 'y', 'yes', 'oui']))
+		if (in_array($choice, ['Y', 'y', 'yes', 'oui'])) {
 			return true;
+		}
 		return false;
 	}
 
@@ -50,8 +52,9 @@ class Field
 	 */
 	public static function EmptyDataCleaner($input): ?string
 	{
-		if ($input == "")
+		if ($input == "") {
 			return null;
+		}
 		return $input;
 	}
 
@@ -114,8 +117,9 @@ class Field
 	public function set($data): void
 	{
 		call_user_func($this->errorHandler, $data);
-		if ($this->dataCleaner)
+		if ($this->dataCleaner) {
 			$data = call_user_func($this->dataCleaner, $data);
+		}
 		$this->data = $data;
 	}
 
