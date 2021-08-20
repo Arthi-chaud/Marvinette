@@ -1,6 +1,6 @@
 [![Marvinette](images/logo.PNG)](images/logo.PNG)
 
-Functional tests framework. Targeted towards Epitech IT students
+## Functional tests framework. Targeted towards Epitech IT students
 
 [![Unit Tests](https://github.com/Arthi-chaud/Marvinette/actions/workflows/unit_tests.yml/badge.svg?branch=dev)](https://github.com/Arthi-chaud/Marvinette/actions/workflows/unit_tests.yml)
 ---
@@ -22,4 +22,16 @@ marvinette [option]
         --execute-tests  : Execute all tests
 
         -h, --help: display this usage
+```
+
+### Installation / Update
+
+1 - Clone the repository
+
+2 - Move it to your `$HOME` folder
+
+3 - Execute the following command:
+
+``` bash
+sudo php MarvinetteInstall.php
 ```
