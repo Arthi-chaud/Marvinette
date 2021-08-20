@@ -25,7 +25,7 @@ class ProjectManager
 			if (self::promptOverWriteProject())
 				unlink(Project::ConfigurationFile);
 			else
-				return false;
+				return true;
 		}
 		$project = new Project();
 		ObjectHelper::promptEachObjectField($project, function ($fieldName, $field) {
@@ -39,7 +39,7 @@ class ProjectManager
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is created!");
 		if (self::promptAddTest())
-			TestManager::addTest($project);
+			return TestManager::addTest($project);
 		UserInterface::popTitle();
 		return true;
 	}
@@ -76,7 +76,7 @@ class ProjectManager
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is updated!");
 		
 		if (self::promptAddTest())
-			TestManager::addTest($project);
+			return TestManager::addTest($project);
 		UserInterface::popTitle();
 		return true;
 	}
