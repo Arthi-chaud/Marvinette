@@ -35,3 +35,6 @@ marvinette [option]
 ``` bash
 sudo php MarvinetteInstall.php
 ```
+
+
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette)
