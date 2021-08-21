@@ -11,10 +11,11 @@ Class CommandLine
 		$shortopt = "";
 		$longopts = [];
 		foreach ($options as $option) {
-			if (strlen($option) == 1)
+			if (strlen($option) == 1) {
 				$shortopt .= $option;
-			else
+			} else {
 				$longopts[] = $option;
+			}
 		}
 		return getopt($shortopt, $longopts);
 	}

@@ -15,8 +15,9 @@ class TestManager {
 	public static function addTest(?Project $project = null)
 	{
 		UserInterface::setTitle("Add Test");
-		if (!$project)
+		if (!$project) {
 			$project = new Project(Project::ConfigurationFile);
+		}
 		$test = new Test();
 		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
 			$helpMsg = $field->getPromptHelp();
@@ -43,26 +44,32 @@ class TestManager {
 		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the test's new ". UserInterface::cleanCamelCase($fieldName), false);
-			if ($field->getPromptHelp())
+			if ($field->getPromptHelp()) {
 				UserInterface::$displayer->setColor(Color::Yellow)->displayText(' (' . $field->getPromptHelp() . ')', false);
+			}
 			UserInterface::$displayer->setColor(Color::Yellow)->displayText( ', Leave empty if no change needed: ', false);
 		}, true);
 		foreach(get_object_vars($test) as $fieldName => $field) {
-			if ($fieldName == 'name')
+			if ($fieldName == 'name') {
 				continue;
+			}
 			$fieldValue = $field->get();
 			$fieldFileName = FileManager::normalizePath("$testsFolder/$testName/$fieldName");
 			$fileExists = file_exists(FileManager::normalizePath($fieldFileName));
 			if (is_bool($fieldValue)) {
-				if ($fieldValue && !$fileExists)
+				if ($fieldValue && !$fileExists) {
 					file_put_contents($fieldFileName, '');
-				if (!$fieldValue && $fileExists)
+				}
+				if (!$fieldValue && $fileExists) {
 					unlink($fieldFileName);
+				}
 			} else {
-				if (!is_null($fieldValue))
+				if (!is_null($fieldValue)) {
 					file_put_contents($fieldFileName, $fieldValue);
-				if (is_string($fieldValue) && !$fieldValue && $fileExists)
+				}
+				if (is_string($fieldValue) && !$fieldValue && $fileExists) {
 					unlink($fieldFileName);
+				}
 			}
 		}
 		rename(FileManager::normalizePath("$testsFolder/$testName"), FileManager::normalizePath("$testsFolder/" . $test->name->get()));
@@ -111,8 +118,9 @@ class TestManager {
 	public static function executesAllTests(?Project $project = null): bool
 	{
 		UserInterface::setTitle("Executing");
-		if (!$project)
+		if (!$project) {
 			$project = new Project(Project::ConfigurationFile);
+		}
 		$failedTestCount = 0;
 		$tests = self::getTestsFolders($project->testsFolder->get());
 		if ($tests == []) {
@@ -122,8 +130,9 @@ class TestManager {
 		}
 		foreach ($tests as $testName) {
 			$testStatus = self::executeTest($testName, $project);
-			if ($testStatus)
+			if ($testStatus) {
 				$failedTestCount++;
+			}
 		}
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Default)->displayText("Test Count: ", false);
@@ -159,14 +168,17 @@ class TestManager {
 		$testsFields = get_object_vars(new Test());
 		$path = FileManager::normalizePath($path);
 		$path = FileManager::removeEndDirSeparator($path);
-		if (!is_dir($path))
+		if (!is_dir($path)) {
 			return false;
+		}
 		$files = glob("$path/*");
-		if ($files == [])
+		if ($files == []) {
 			return false;
+		}
 		foreach ($files as $file) {
-			if (!in_array(basename($file), array_keys($testsFields)))
+			if (!in_array(basename($file), array_keys($testsFields))) {
 				return false;
+			}
 		}
 		return true;	
 	}
@@ -181,8 +193,9 @@ class TestManager {
 		$testsName = [];
 		$files = glob(FileManager::normalizePath("$testsFolder/*"));
 		foreach ($files as $file) {
-			if (self::folderIsATest($file))
+			if (self::folderIsATest($file)) {
 				$testsName[] = $fullPath ? $file : basename($file);
+			}
 		}
 		return $testsName;
 	}

@@ -44,10 +44,12 @@ class UserInterface
 
 	public static function displayTitle(): void
 	{
-		if (self::$titlesStack == [])
+		if (self::$titlesStack == []) {
 			throw new MarvinetteException("No title set");
-		if (!isset($displayer))
+		}
+		if (!isset($displayer)) {
 			self::$displayer = new Displayer();
+		}
 		$text = end(self::$titlesStack);
 		UserInterface::$displayer->setColor(Color::Green)
 						->displayText("| $text\t|\t", false);
@@ -84,8 +86,9 @@ class UserInterface
 		$cleaned = "";
 		for ($i = 0; $i < strlen($str); $i++) {
 			$c = $str[$i];
-			if ($i && ctype_upper($c))
+			if ($i && ctype_upper($c)) {
 				$cleaned .= " ";
+			}
 			$cleaned .= strtolower($c);
 		}
 		return $cleaned;
@@ -101,12 +104,14 @@ class UserInterface
 		$cleaned = "";
 		for ($i = 0; $i < strlen($str); $i++) {
 			$c = $str[$i];
-			if ($c == ' ')
+			if ($c == ' ') {
 				continue;
-			if ($i && $str[$i - 1]  == ' ')
+			}
+			if ($i && $str[$i - 1]  == ' ') {
 				$cleaned .= strtoupper($c);
-			else
+			} else {
 				$cleaned .= strtolower($c);
+			}
 		}
 		return $cleaned;
 	}

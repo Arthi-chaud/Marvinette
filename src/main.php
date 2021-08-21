@@ -20,8 +20,9 @@ function launch(): bool
 	];
 	$options = CommandLine::getArguments(array_keys($optionsCalls));
 	foreach ($optionsCalls as $option => $call) {
-		if (array_key_exists($option, $options))
+		if (array_key_exists($option, $options)) {
 			return boolval(call_user_func($call));
+		}
 	}
 	UserInterface::displayHelp();
 	return false;

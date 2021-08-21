@@ -22,10 +22,11 @@ class ProjectManager
 	{
 		UserInterface::setTitle("Create Project");
 		if (file_exists(Project::ConfigurationFile)) {
-			if (self::promptOverWriteProject())
+			if (self::promptOverWriteProject()) {
 				unlink(Project::ConfigurationFile);
-			else
+			} else {
 				return true;
+			}
 		}
 		$project = new Project();
 		ObjectHelper::promptEachObjectField($project, function ($fieldName, $field) {
@@ -38,8 +39,9 @@ class ProjectManager
 		$project->export(Project::ConfigurationFile);
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is created!");
-		if (self::promptAddTest())
+		if (self::promptAddTest()) {
 			return TestManager::addTest($project);
+		}
 		UserInterface::popTitle();
 		return true;
 	}
@@ -75,8 +77,9 @@ class ProjectManager
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is updated!");
 		
-		if (self::promptAddTest())
+		if (self::promptAddTest()) {
 			return TestManager::addTest($project);
+		}
 		UserInterface::popTitle();
 		return true;
 	}
@@ -93,9 +96,9 @@ class ProjectManager
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Red)->displayText("Warning: You are about to delete your configuration file");
 		$delete = UserInput::getYesNoOption("Do you want to continue?", Color::Red);
-		if ($delete)
+		if ($delete) {
 			unlink(Project::ConfigurationFile);
-		else {
+		} else {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file has not been deleted!");
 			UserInterface::popTitle();

@@ -17,8 +17,9 @@ class UserInput
 		while (1)
 		{
 			$line = UserInput::getUserLine();
-			if (in_array($line, $options))
+			if (in_array($line, $options)) {
 				return $line;
+			}
 			$questionPrompt();
 		}
 	}
@@ -31,15 +32,17 @@ class UserInput
 	{
 		$noChoices = ['n', 'N', 'no', 'non'];
 		$yesChoices = ['y', 'Y', 'yes', 'Yes', 'oui'];
-		if ($displayFrameTitle)
+		if ($displayFrameTitle) {
 			UserInterface::setTitle($displayFrameTitle);
+		}
 		$choice = self::getOption(function () use ($msg, $color)
 		{
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor($color)->displayText("$msg [Y/n]: ", false);
 		}, array_merge($noChoices, $yesChoices));
-		if ($displayFrameTitle)
+		if ($displayFrameTitle) {
 			UserInterface::popTitle();
+		}
 		return in_array($choice, $yesChoices);
 	}
 
