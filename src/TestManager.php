@@ -75,10 +75,12 @@ class TestManager {
 	public static function executeTest(?string $testName = null, ?Project $project = null): bool
 	{
 		$testStatus = true;
-		if (!$project)
-		$project = new Project(Project::ConfigurationFile);
-		if ($testName == null)
+		if (!$project) {
+			$project = new Project(Project::ConfigurationFile);
+		}
+		if ($testName == null) {
 			$testName = self::selectTest($project);
+		}
 		UserInterface::setTitle("Test '$testName'");
 		$testPath = FileManager::normalizePath($project->testsFolder->get() . "/$testName");
 		$test = new Test($testPath);
