@@ -1,6 +1,8 @@
 #!/bin/php
 <?php
 
+set_include_path(dirname(realpath(__DIR__)));
+
 require_once 'src/Exception/MarvinetteException.php';
 require_once 'src/ProjectManager.php';
 require_once 'src/TestManager.php';

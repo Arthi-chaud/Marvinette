@@ -24,7 +24,7 @@ function getScriptContent(string $projectPath): string
 		$projectPath .= DIRECTORY_SEPARATOR;
 	$content = [
 		"#!/bin/sh",
-		'php -d include_path=' . $projectPath . ' ' . $projectPath . 'src/main.php $@',
+		'php  ' . $projectPath . 'src/main.php $@',
 		'exit $?'
 	];
 	return implode("\n", $content);

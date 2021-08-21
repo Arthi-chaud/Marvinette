@@ -4,7 +4,7 @@ use PhpParser\Node\Expr\Exit_;
 use PHPUnit\TextUI\XmlConfiguration\File;
 use Display\Color;
 require_once 'src/Exception/MarvinetteException.php';
-require_once "src/Field.php";
+require_once 'src/Field.php';
 
 /**
  * @brief Object representing the test's instruction

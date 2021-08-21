@@ -4,10 +4,10 @@ require_once 'src/Project.php';
 require_once 'src/Display/Displayer.php';
 require_once 'src/Utils/UserInput.php';
 require_once 'src/Utils/UserInterface.php';
-require_once 'Utils/CommandLine.php';
+require_once 'src/Utils/CommandLine.php';
 require_once 'src/Test.php';
 require_once 'src/Utils/FileManager.php';
-require_once 'Utils/ObjectHelper.php';
+require_once 'src/Utils/ObjectHelper.php';
 require_once 'src/Exception/EndOfFileException.php';
 
 use Display\Color;

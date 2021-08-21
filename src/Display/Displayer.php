@@ -1,8 +1,8 @@
 <?php
 
 namespace Display;
-require_once "src/Display/Color.php";
-require_once "src/Display/Style.php";
+require_once 'src/Display/Color.php';
+require_once 'src/Display/Style.php';
 
 /**
  * @brief Display utility class
