@@ -29,6 +29,7 @@ jobs:
           coverage: xdebug
       - name: Execute unit tests
         run: |
+          php -v
           mkdir tmp
           ./vendor/bin/phpunit tests --testdox --coverage-html tests/coverage --coverage-filter src
           ./vendor/bin/phpunit tests --testdox --coverage-clover=coverage-report.clover --log-junit=test-report.xml --coverage-filter src
