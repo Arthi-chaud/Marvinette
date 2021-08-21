@@ -31,8 +31,9 @@ final class ObjectHelperTest extends MarvinetteTestCase
 			$value->set($fieldName);
 			return true;
 		});
-		foreach (get_object_vars($project) as $name => $field)
+		foreach (get_object_vars($project) as $name => $field) {
 			$this->assertEquals($name, $field->get());
+		}
 	}
 
 	public function testPromptObjectFieldWithProjectObject(): Project

@@ -1,6 +1,8 @@
 #!/bin/php
 <?php
 
+set_include_path(dirname(realpath(__DIR__)));
+
 require_once 'src/Exception/MarvinetteException.php';
 require_once 'src/ProjectManager.php';
 require_once 'src/TestManager.php';
@@ -10,6 +12,7 @@ function launch(): bool
 	$optionsCalls = [
 		'create-project' => [ProjectManager::class,'createProject'],
 		'del-project' => [ProjectManager::class,'deleteProject'],
+		'delete-project' => [ProjectManager::class,'deleteProject'],
 		'mod-project' => [ProjectManager::class,'modProject'],
 		'add-test' => [TestManager::class, 'addTest'],
 		'del-test' => [TestManager::class, 'deleteTest'],
@@ -19,8 +22,9 @@ function launch(): bool
 	];
 	$options = CommandLine::getArguments(array_keys($optionsCalls));
 	foreach ($optionsCalls as $option => $call) {
-		if (array_key_exists($option, $options))
+		if (array_key_exists($option, $options)) {
 			return boolval(call_user_func($call));
+		}
 	}
 	UserInterface::displayHelp();
 	return false;

@@ -10,10 +10,11 @@ class FileManager
 	public static function deleteFolder(string $folderPath): void
 	{
 		foreach(glob("$folderPath/*") as $filePath) {
-			if (is_dir($filePath))
+			if (is_dir($filePath)) {
 				FileManager::deleteFolder($filePath);
-			else
+			} else {
 				unlink($filePath);
+			}
 		}
 		rmdir($folderPath);
 	}
@@ -36,8 +37,9 @@ class FileManager
 	 */
 	public static function removeEndDirSeparator(string $path): string
 	{
-		while ((substr($path, -1, 1) == '/' || substr($path, -1, 1) == '\\') && strlen($path))
+		while ((substr($path, -1, 1) == '/' || substr($path, -1, 1) == '\\') && strlen($path)) {
 			$path = substr($path, 0, strlen($path) - 1);
+		}
 		return $path;
 	}
 }

@@ -434,7 +434,7 @@ final class TestTest extends MarvinetteTestCase
 		$this->expectException(Exception::class);
 		$this->expectExceptionMessage('Invalid test path');
 
-		$test = new Test('ta mere en slip');
+		new Test('ta mere en slip');
 	}
 
 	/**

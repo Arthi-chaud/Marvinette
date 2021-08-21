@@ -1,8 +1,8 @@
 <?php
 
 namespace Display;
-require_once "src/Display/Color.php";
-require_once "src/Display/Style.php";
+require_once 'src/Display/Color.php';
+require_once 'src/Display/Style.php';
 
 /**
  * @brief Display utility class
@@ -46,8 +46,9 @@ class Displayer
 			echo $this->getSequence($this->color);
 			echo $this->getSequence($this->background + Color::BACKGROUND_OFFSET);
 			foreach ($this->styles as $style) {
-				if ($style != Style::Default)
+				if ($style != Style::Default) {
 					echo $this->getSequence($style);
+				}
 			}
 		}
 		echo $text;
@@ -56,10 +57,12 @@ class Displayer
 			echo $this->getSequence(Color::Default);
 			echo $this->getSequence(Color::Default + Color::BACKGROUND_OFFSET);
 		}
-		if ($resetAfter)
+		if ($resetAfter) {
 			$this->resetAll();
-		if ($newline)
+		}
+		if ($newline) {
 			echo "\n";
+		}
 		return $this;
 	}
 	

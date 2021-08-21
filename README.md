@@ -11,7 +11,7 @@ marvinette [option]
 
     option:
         --create-project: Create a main configuration file, required to make tests
-        --del-project: Delete configuration file and existing tests
+        --del-project, --delete-project: Delete configuration file and existing tests
         --mod-project: Modify the projec\'s info.
         
         --add-test: Create a functionnal test
@@ -35,3 +35,6 @@ marvinette [option]
 ``` bash
 sudo php MarvinetteInstall.php
 ```
+
+
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette)

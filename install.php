@@ -24,7 +24,7 @@ function getScriptContent(string $projectPath): string
 		$projectPath .= DIRECTORY_SEPARATOR;
 	$content = [
 		"#!/bin/sh",
-		'php ' . $projectPath . 'src/main.php $@',
+		'php  ' . $projectPath . 'src/main.php $@',
 		'exit $?'
 	];
 	return implode("\n", $content);
@@ -33,9 +33,10 @@ function getScriptContent(string $projectPath): string
 
 try {
 	install();
+	echo "Marvinette is installed!\n";
 } catch (Exception $e) {
 	echo "An error occured: " . $e->getMessage() . "\n";
-	echo "Exiting...";
+	echo "Exiting...\n";
 	exit(1);
 }
 exit(0);

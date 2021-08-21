@@ -1,6 +1,7 @@
 <?php
 
 require_once 'src/Field.php';
+require_once 'src/Exception/MarvinetteException.php';
 
 /**
  * @brief Object representing the project's important infos
@@ -16,21 +17,25 @@ class Project
 	public function __construct(?string $filePath = null)
 	{
 		$this->name = new Field(function($name) {
-			if (!$name)
-				throw new Exception("The Project's name shouldn't be empty");
+			if (!$name) {
+				throw new MarvinetteException("The Project's name shouldn't be empty");
+			}
 			return $name;
 		});
 
 		$this->binaryName = new Field(function($binaryName) {
-			if (!$binaryName)
-				throw new Exception("The Project's binary name shouldn't be empty");
-			if (strchr($binaryName, '/') || strchr($binaryName, '\\'))
-				throw new Exception("The binary name should not contain a '". DIRECTORY_SEPARATOR. "'");
+			if (!$binaryName) {
+				throw new MarvinetteException("The Project's binary name shouldn't be empty");
+			}
+			if (strchr($binaryName, '/') || strchr($binaryName, '\\')) {
+				throw new MarvinetteException("The binary name should not contain a '". DIRECTORY_SEPARATOR. "'");
+			}
 		});
 
 		$this->binaryPath = new Field(function($binaryPath) {}, function($binaryPath) {
-			if ($binaryPath == "")
+			if ($binaryPath == "") {
 				$binaryPath = ".";
+			}
 			return FileManager::removeEndDirSeparator($binaryPath);
 		}, "By default: Current directory");
 		$this->binaryPath->set(".");
@@ -38,14 +43,16 @@ class Project
 		$this->interpreter = new Field(function($interpreter) {}, [Field::class, 'EmptyDataCleaner'], "By default: none (when it is an ELF file or a script using a shebang)");
 
 		$this->testsFolder = new Field(function($testFolder) {}, function($testFolder) {
-			if ($testFolder == "")
+			if ($testFolder == "") {
 				$testFolder = "tests";
+			}
 			return FileManager::removeEndDirSeparator($testFolder);
 		}, "By default in 'tests' folder");
 		$this->testsFolder->set("tests");
 
-		if ($filePath)
+		if ($filePath) {
 			$this->import($filePath);
+		}
 	}
 
 	/**
@@ -104,11 +111,13 @@ class Project
 	 */
 	public function interpreterExists(): bool
 	{
-		if (!$this->interpreter->get())
-			throw new Exception("No Interpreter set");
+		if (!$this->interpreter->get()) {
+			throw new MarvinetteException("No Interpreter set");
+		}
 		foreach (explode(':', getenv('PATH')) as $path) {
-			if (file_exists(FileManager::normalizePath("$path/". $this->interpreter->get())))
+			if (file_exists(FileManager::normalizePath("$path/". $this->interpreter->get()))) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -118,12 +127,11 @@ class Project
 	 */
 	public function isReadyToBeTested(): bool
 	{
-		if (!$this->readyToExport())
+		if (!$this->readyToExport() ||
+		!file_exists($this->buildBinaryAccessPath()) || 
+		($this->interpreter->get() && !$this->interpreterExists())) {
 			return false;
-		if (!file_exists($this->buildBinaryAccessPath()))
-			return false;
-		if ($this->interpreter->get() && !$this->interpreterExists())
-			return false;
+		}
 		return true;
 	}
 
@@ -134,10 +142,12 @@ class Project
 	public function export(string $outfile): void
 	{
 		$project = [];
-		if (!$this->readyToExport())
-			throw new Exception("Project is not ready to be exported, missing mandatory field");
-		foreach(get_object_vars($this) as $fieldName => $field)
+		if (!$this->readyToExport()) {
+			throw new MarvinetteException("Project is not ready to be exported, missing mandatory field");
+		}
+		foreach(get_object_vars($this) as $fieldName => $field) {
 			$project[UserInterface::cleanCamelCase($fieldName)] = $field->get();
+		}
 		$jsoned = json_encode($project, JSON_PRETTY_PRINT);
 		file_put_contents($outfile, $jsoned);
 	}
@@ -148,11 +158,13 @@ class Project
 	 */
 	public function import(string $infile): void
 	{
-		if (!file_exists($infile))
-			throw new Exception("$infile does not exists.");
+		if (!file_exists($infile)) {
+			throw new MarvinetteException("$infile does not exists.");
+		}
 		$object = json_decode(file_get_contents($infile), true);
-		if (!$object)
-			throw new Exception("File $infile: Invalid JSON File.");
+		if (!$object) {
+			throw new MarvinetteException("File $infile: Invalid JSON File.");
+		}
 		foreach($object as $fieldName => $field) {
 			$cameCalseName = UserInterface::toCamelCase($fieldName);
 			$this->$cameCalseName->set($field);

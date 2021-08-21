@@ -4,10 +4,10 @@ require_once 'src/Project.php';
 require_once 'src/Display/Displayer.php';
 require_once 'src/Utils/UserInput.php';
 require_once 'src/Utils/UserInterface.php';
-require_once 'Utils/CommandLine.php';
+require_once 'src/Utils/CommandLine.php';
 require_once 'src/Test.php';
 require_once 'src/Utils/FileManager.php';
-require_once 'Utils/ObjectHelper.php';
+require_once 'src/Utils/ObjectHelper.php';
 require_once 'src/Exception/EndOfFileException.php';
 
 use Display\Color;
@@ -22,10 +22,11 @@ class ProjectManager
 	{
 		UserInterface::setTitle("Create Project");
 		if (file_exists(Project::ConfigurationFile)) {
-			if (self::promptOverWriteProject())
+			if (self::promptOverWriteProject()) {
 				unlink(Project::ConfigurationFile);
-			else
+			} else {
 				return true;
+			}
 		}
 		$project = new Project();
 		ObjectHelper::promptEachObjectField($project, function ($fieldName, $field) {
@@ -38,8 +39,9 @@ class ProjectManager
 		$project->export(Project::ConfigurationFile);
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is created!");
-		if (self::promptAddTest())
+		if (self::promptAddTest()) {
 			return TestManager::addTest($project);
+		}
 		UserInterface::popTitle();
 		return true;
 	}
@@ -75,8 +77,9 @@ class ProjectManager
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is updated!");
 		
-		if (self::promptAddTest())
+		if (self::promptAddTest()) {
 			return TestManager::addTest($project);
+		}
 		UserInterface::popTitle();
 		return true;
 	}
@@ -93,9 +96,9 @@ class ProjectManager
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Red)->displayText("Warning: You are about to delete your configuration file");
 		$delete = UserInput::getYesNoOption("Do you want to continue?", Color::Red);
-		if ($delete == true)
+		if ($delete) {
 			unlink(Project::ConfigurationFile);
-		else {
+		} else {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file has not been deleted!");
 			UserInterface::popTitle();
@@ -104,16 +107,16 @@ class ProjectManager
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is deleted!");
 		$delete = UserInput::getYesNoOption("Do you want to delete your tests?", Color::Red);
-		if ($delete == true) {
+		if ($delete) {
 			FileManager::deleteFolder($project->testsFolder->get());
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are deleted!");
 			UserInterface::popTitle();
-			return true;
+		} else {
+			UserInterface::displayTitle();
+			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are not deleted!");
+			UserInterface::popTitle();
 		}
-		UserInterface::displayTitle();
-		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are not deleted!");
-		UserInterface::popTitle();
 		return true;
 	}
 	

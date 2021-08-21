@@ -18,10 +18,12 @@ class ObjectHelper
 	 */
 	public static function forEachObjectField(&$obj, callable $callable): void
 	{
-		foreach (get_object_vars($obj) as $fieldName => $field)
-			for ($choosen = false; !$choosen; ) {
+		foreach (get_object_vars($obj) as $fieldName => $field) {
+			$choosen = false;
+			while (!$choosen) {
 				$choosen = $callable($fieldName, $field);
 			}
+		}
 	}
 
 	/**
@@ -34,12 +36,14 @@ class ObjectHelper
 	public static function promptEachObjectField(&$obj, callable $displayPrompt,  bool $modPrompt = false, array $ignoredFields = [])
 	{
 		self::forEachObjectField($obj, function($fieldName, $field) use ($displayPrompt, $modPrompt, $ignoredFields) {
-			if (in_array($fieldName, $ignoredFields))
+			if (in_array($fieldName, $ignoredFields)) {
 				return true;
+			}
 			$displayPrompt($fieldName, $field);
 			$value = UserInput::getUserLine();
-			if ($modPrompt && $value == "")
+			if ($modPrompt && $value == "") {
 				return true;
+			}
 			try {
 				$field->set($value);
 				return true;
