@@ -21,7 +21,7 @@ jobs:
       - name: Get dependencies
         uses: php-actions/composer@v6
         with:
-          command: composer require --dev phpunit/phpunit ^9
+          args: require --dev phpunit/phpunit ^9
       - name: Execute unit tests
         run: |
           php -v
