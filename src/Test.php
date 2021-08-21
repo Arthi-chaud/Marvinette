@@ -114,20 +114,21 @@ class Test
 		}
 		$this->name->set($testName);
 		foreach(get_object_vars($this) as $fieldName => $field) {
-			if (file_exists(FileManager::normalizePath("$testFolder/$fieldName"))) {
-				$fileContent = file_get_contents(FileManager::normalizePath("$testFolder/$fieldName"));
-				if (is_numeric($fileContent)) {
-					$fileContent = intval($fileContent);
-				}
-				if ($fileContent == '' && is_string($fileContent)) {
-					$this->$fieldName->set(true);
-				} else {
-					try {
-						$this->$fieldName->set($fileContent);
-					} catch (Exception $_) {
-						$this->$fieldName->set(true);
-					}
-				}
+			if (!file_exists(FileManager::normalizePath("$testFolder/$fieldName"))) {
+				continue;
+			}
+			$fileContent = file_get_contents(FileManager::normalizePath("$testFolder/$fieldName"));
+			if (is_numeric($fileContent)) {
+				$fileContent = intval($fileContent);
+			}
+			if ($fileContent == '' && is_string($fileContent)) {
+				$this->$fieldName->set(true);
+				continue;
+			}
+			try {
+				$this->$fieldName->set($fileContent);
+			} catch (Exception $_) {
+				$this->$fieldName->set(true);
 			}
 		}
 	}
