@@ -15,7 +15,7 @@ function install()
 	if (substr($scriptPath, -1, 1) != DIRECTORY_SEPARATOR)
 		$scriptPath .= DIRECTORY_SEPARATOR;
 	file_put_contents($scriptPath . 'marvinette', getScriptContent($CWD));
-	chmod($scriptPath . 'marvinette', 0750);
+	chmod($scriptPath . 'marvinette', 0777);
 }
 
 function getScriptContent(string $projectPath): string
@@ -24,7 +24,7 @@ function getScriptContent(string $projectPath): string
 		$projectPath .= DIRECTORY_SEPARATOR;
 	$content = [
 		"#!/bin/sh",
-		'php ' . $projectPath . 'src/main.php $@',
+		'php -d include_path=' . $projectPath . ' ' . $projectPath . 'src/main.php $@',
 		'exit $?'
 	];
 	return implode("\n", $content);
@@ -33,9 +33,10 @@ function getScriptContent(string $projectPath): string
 
 try {
 	install();
+	echo "Marvinette is installed!\n";
 } catch (Exception $e) {
 	echo "An error occured: " . $e->getMessage() . "\n";
-	echo "Exiting...";
+	echo "Exiting...\n";
 	exit(1);
 }
 exit(0);
