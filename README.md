@@ -37,6 +37,6 @@ marvinette [option]
 ``` bash
 sudo php MarvinetteInstall.php
 ```
-#### Warning: Once you executed, you must not move the Marvinette folder. If you do, you'll have to execute the install command again
+#### Warning: Once you run the command, you must not move the Marvinette folder. If you do, you'll have to execute the install command again
 ___
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette)
