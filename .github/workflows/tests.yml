@@ -20,8 +20,6 @@ jobs:
           coverage: xdebug
       - name: Get dependencies
         uses: php-actions/composer@v6
-        with:
-          args: require phpunit/phpunit ^9
       - name: Execute unit tests
         run: |
           php -v
