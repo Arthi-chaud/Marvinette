@@ -19,7 +19,7 @@ final class UserInputTest extends MarvinetteTestCase
 		$expectedLineCount = 3;
 		$lines = [];
 		$expectedLines = ['Hello', 'World', 'Marvin'];
-		$this->defineStdinClone($expectedLines);
+		$this->defineStdin($expectedLines);
 		while (!$eof) {
 			try {
 				$line = UserInput::getUserLine();
@@ -37,7 +37,7 @@ final class UserInputTest extends MarvinetteTestCase
 	{
 		$lines = ['Hello', 'World', 'Marvin'];
 		$expected = ['Marvin'];
-		$this->defineStdinClone($lines);
+		$this->defineStdin($lines);
 		$this->expectOutputString("Enter Option\nEnter Option\nEnter Option\n");
 
 		$entered = UserInput::getOption(function() {
@@ -50,7 +50,7 @@ final class UserInputTest extends MarvinetteTestCase
 	{
 		$lines = ['Hello', 'World', 'Marvin', 'BYE'];
 		$expected = ['TROLOLOL'];
-		$this->defineStdinClone($lines);
+		$this->defineStdin($lines);
 		$this->expectOutputString("Enter Option\nEnter Option\nEnter Option\nEnter Option\nEnter Option\n\n");
 		$catched = false;
 		try {
@@ -67,7 +67,7 @@ final class UserInputTest extends MarvinetteTestCase
 	{
 		$this->hideStdout();
 		$fileLines = ['Hello', 'Trololol', 'Y', "END"];
-		$this->defineStdinClone($fileLines);
+		$this->defineStdin($fileLines);
 		$answer = UserInput::getYesNoOption("", "", Display\Color::Black);
 		$this->assertEquals($answer, true);
 	}

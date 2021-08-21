@@ -11,7 +11,7 @@ final class ProjectManagerTest extends MarvinetteTestCase
 		if (file_exists('Marvinette.json'))
 			unlink('Marvinette.json');
 		$this->hideStdout();
-		$this->defineStdinClone([
+		$this->defineStdin([
 			'My Name',
 			'README.md',
 			'./',
@@ -33,7 +33,7 @@ final class ProjectManagerTest extends MarvinetteTestCase
 	public function testCreateProjectOverWrite(): void
 	{
 		$this->hideStdout();
-		$this->defineStdinClone([
+		$this->defineStdin([
 			'Y',
 			'My Name',
 			'README.md',
@@ -63,7 +63,7 @@ final class ProjectManagerTest extends MarvinetteTestCase
 
 	public function testModProject(): void
 	{
-		$this->defineStdinClone([
+		$this->defineStdin([
 			'',
 			'main.php',
 			'./src/',
@@ -93,9 +93,10 @@ final class ProjectManagerTest extends MarvinetteTestCase
 
 	public function testDeleteProjectStoppingBefore(): void
 	{
+		$this->hideStdout();
 		mkdir('tests/101');
 		touch('tests/101/stdinput');
-		$this->defineStdinClone([
+		$this->defineStdin([
 			'n', 'Y'
 		]);
 		$this->assertTrue(ProjectManager::deleteProject());
@@ -106,10 +107,11 @@ final class ProjectManagerTest extends MarvinetteTestCase
 
 	public function testDeleteProjectDeletingTests(): void
 	{
+		$this->hideStdout();
 		copy('Marvinette.json', 'Marvinette2.json');
 		mkdir('tests/101');
 		touch('tests/101/stdinput');
-		$this->defineStdinClone([
+		$this->defineStdin([
 			'Y', 'Y'
 		]);
 		$this->assertTrue(ProjectManager::deleteProject());
@@ -120,10 +122,11 @@ final class ProjectManagerTest extends MarvinetteTestCase
 
 	public function testDeleteProjectNotDeletingTests(): void
 	{
+		$this->hideStdout();
 		copy('Marvinette.json', 'Marvinette2.json');
 		mkdir('tests/101');
 		touch('tests/101/stdinput');
-		$this->defineStdinClone([
+		$this->defineStdin([
 			'Y', 'n'
 		]);
 		$this->assertTrue(ProjectManager::deleteProject());
