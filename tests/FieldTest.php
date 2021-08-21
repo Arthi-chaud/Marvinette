@@ -85,12 +85,12 @@ final class FieldTest extends MarvinetteTestCase
 	{
 		$this->hideStdout();
 		$field->set("Hello World");
-		$this->assertTrue($field == "Hello World");
+		$this->assertEquals($field, "Hello World");
 		$field->set(123);
-		$this->assertTrue($field == "123");
+		$this->assertEquals($field, "123");
 		$field->set(false);
-		$this->assertTrue($field == "");
+		$this->assertEquals($field, "");
 		$field->set(true);
-		$this->assertTrue($field == "1");
+		$this->assertEquals($field, "1");
 	}
 }
