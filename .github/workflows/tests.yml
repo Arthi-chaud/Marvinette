@@ -22,11 +22,12 @@ jobs:
           sudo apt-get -y install php7.4-common php7.4-xml php7.4 php7.4-mbstring php-xdebug
           php --ini
           composer require --dev phpunit/phpunit ^9
-      - name: Execute unit tests
+      - name: Setup PHP with Xdebug
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
           coverage: xdebug
+      - name: Execute unit tests
         run: |
           php -v
           mkdir tmp
