@@ -110,8 +110,9 @@ class ProjectManager
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is deleted!");
 		$delete = UserInput::getYesNoOption("Do you want to delete your tests?", Color::Red);
 		if ($delete) {
-			foreach(TestManager::getTestsFolders($project->testsFolder->get(), true) as $test)
+			foreach(TestManager::getTestsFolders($project->testsFolder->get(), true) as $test) {
 				FileManager::deleteFolder($test);
+			}
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are deleted!");
 			UserInterface::popTitle();
