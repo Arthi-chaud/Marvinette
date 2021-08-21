@@ -25,12 +25,14 @@ class MarvinetteTestCase extends TestCase
 	 * @param array $lines lines of the files
 	 * @return void
 	 */
-	public function defineStdinClone(array $lines): void
+	public function defineStdin(array $lines): void
 	{
 		if (isset($GLOBALS['testSTDIN'])) {
 			$fakeStdinHandle = $GLOBALS['testSTDIN'];
 			fclose($fakeStdinHandle);
 		}
+		if (count($lines) == 1)
+			$lines[] = '';
 		file_put_contents(UserInputTest::stdinClone, implode("\n", $lines));
 		$GLOBALS['testSTDIN'] = fopen(UserInputTest::stdinClone, 'r');
 	}

@@ -162,7 +162,7 @@ class TestManager {
 	 * @param string $path a path to what could be a test folder
 	 * @return bool 
 	 */
-	protected static function folderIsATest(string $path): bool
+	public static function folderIsATest(string $path): bool
 	{
 		$files = [];
 		$testsFields = get_object_vars(new Test());

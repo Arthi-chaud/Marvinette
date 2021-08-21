@@ -38,7 +38,7 @@ final class ObjectHelperTest extends MarvinetteTestCase
 
 	public function testPromptObjectFieldWithProjectObject(): Project
 	{
-		$this->defineStdinClone(['PROJECTNAME', 'BINARYNAME', 'PATH', 'python', 'tests']);
+		$this->defineStdin(['PROJECTNAME', 'BINARYNAME', 'PATH', 'python', 'tests']);
 		$project = new Project();
 		UserInterface::setTitle('');
 		ObjectHelper::promptEachObjectField($project, function() {});
@@ -52,7 +52,7 @@ final class ObjectHelperTest extends MarvinetteTestCase
 
 	public function testPromptObjectFieldWithIgnoreField(): void
 	{
-		$this->defineStdinClone(['PROJECTNAME', 'BINARYNAME', 'tests']);
+		$this->defineStdin(['PROJECTNAME', 'BINARYNAME', 'tests']);
 		$project = new Project();
 		UserInterface::setTitle('');
 		ObjectHelper::promptEachObjectField($project, function() {}, false, ['interpreter', 'binaryPath']);
@@ -66,7 +66,7 @@ final class ObjectHelperTest extends MarvinetteTestCase
 	public function testPromptObjectFieldWithMultipleAttemps(): void
 	{
 		$this->hideStdout();
-		$this->defineStdinClone(['', 'PROJECTNAME', 'tmp/end', '', 'BINARYNAME', 'PATH', 'python', 'tests']);
+		$this->defineStdin(['', 'PROJECTNAME', 'tmp/end', '', 'BINARYNAME', 'PATH', 'python', 'tests']);
 		$project = new Project();
 		UserInterface::setTitle('');
 		ObjectHelper::promptEachObjectField($project, function() {});
@@ -82,7 +82,7 @@ final class ObjectHelperTest extends MarvinetteTestCase
 	 */
 	public function testPromptObjectFieldToModify(Project $project): void
 	{
-		$this->defineStdinClone(['', 'BINARYNAME2', 'PATH4', '', 'testers']);
+		$this->defineStdin(['', 'BINARYNAME2', 'PATH4', '', 'testers']);
 		UserInterface::setTitle('');
 		ObjectHelper::promptEachObjectField($project, function() {}, true);
 		$this->assertEquals($project->name->get(), 'PROJECTNAME');

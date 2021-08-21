@@ -2,7 +2,9 @@
 
 ## Functional tests framework. Targeted towards Epitech IT students
 
-[![Unit Tests](https://github.com/Arthi-chaud/Marvinette/actions/workflows/unit_tests.yml/badge.svg?branch=dev)](https://github.com/Arthi-chaud/Marvinette/actions/workflows/unit_tests.yml)
+[![Tests](https://github.com/Arthi-chaud/Marvinette/actions/workflows/tests.yml/badge.svg?branch=dev)](https://github.com/Arthi-chaud/Marvinette/actions/workflows/tests.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arthi-chaud_Marvinette&metric=alert_status)](https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arthi-chaud_Marvinette&metric=coverage)](https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette)
 ---
 Use the framework using the following command-line instruction:
 
@@ -24,7 +26,7 @@ marvinette [option]
         -h, --help: display this usage
 ```
 
-### Installation / Update
+### Installation / Update Command
 
 1 - Clone the repository
 
@@ -35,6 +37,6 @@ marvinette [option]
 ``` bash
 sudo php MarvinetteInstall.php
 ```
-
-
+#### Warning: Once you executed, you must not move the Marvinette folder. If you do, you'll have to execute the install command again
+___
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette)

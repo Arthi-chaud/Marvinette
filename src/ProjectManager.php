@@ -6,6 +6,7 @@ require_once 'src/Utils/UserInput.php';
 require_once 'src/Utils/UserInterface.php';
 require_once 'src/Utils/CommandLine.php';
 require_once 'src/Test.php';
+require_once 'src/TestManager.php';
 require_once 'src/Utils/FileManager.php';
 require_once 'src/Utils/ObjectHelper.php';
 require_once 'src/Exception/EndOfFileException.php';
@@ -53,7 +54,8 @@ class ProjectManager
 
 	public static function displayNoConfigFileFound(): void
 	{
-		UserInterface::setTitle("Error", true);
+		UserInterface::setTitle("Error");
+		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Red)->displayText("No Configuration File Found!");
 		UserInterface::popTitle();
 	}
@@ -108,7 +110,9 @@ class ProjectManager
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's configuration file is deleted!");
 		$delete = UserInput::getYesNoOption("Do you want to delete your tests?", Color::Red);
 		if ($delete) {
-			FileManager::deleteFolder($project->testsFolder->get());
+			foreach(TestManager::getTestsFolders($project->testsFolder->get(), true) as $test) {
+				FileManager::deleteFolder($test);
+			}
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Project's tests file are deleted!");
 			UserInterface::popTitle();
