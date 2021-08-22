@@ -149,4 +149,31 @@ final class TestManagerTest extends MarvinetteTestCase
 		$this->assertTrue($throw);
 		rename('M.json', 'Marvinette.json');
 	}
+
+	public function testExecuteTestNoConfigFile(): void
+	{
+		rename('Marvinette.json', 'M.json');
+		$throw = false;
+		$this->hideStdout();
+		try {
+			TestManager::executeTest();
+		} catch (NoConfigFileException $e) {
+			$throw = true;
+		}
+		$this->assertTrue($throw);
+		rename('M.json', 'Marvinette.json');
+	}
+	public function testExecuteTestsNoConfigFile(): void
+	{
+		rename('Marvinette.json', 'M.json');
+		$throw = false;
+		$this->hideStdout();
+		try {
+			TestManager::executesAllTests();
+		} catch (NoConfigFileException $e) {
+			$throw = true;
+		}
+		$this->assertTrue($throw);
+		rename('M.json', 'Marvinette.json');
+	}
 }
