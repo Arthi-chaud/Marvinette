@@ -17,9 +17,9 @@
 
 3. Inside the repository, execute the following command:
 
-    ```shell
-    sudo php MarvinetteInstall.php
-    ```
+```shell
+sudo php MarvinetteInstall.php
+```
 
 **Warning**: Once you executed the command, you must not move the Marvinette folder. If you do, you'll have to execute the install command again
 
