@@ -14,11 +14,17 @@ function launch(): bool
 		'del-project' => [ProjectManager::class,'deleteProject'],
 		'delete-project' => [ProjectManager::class,'deleteProject'],
 		'mod-project' => [ProjectManager::class,'modProject'],
+	
 		'add-test' => [TestManager::class, 'addTest'],
+		'create-test' => [TestManager::class, 'addTest'],
 		'del-test' => [TestManager::class, 'deleteTest'],
+		'delete-test' => [TestManager::class, 'deleteTest'],
 		'mod-test' => [TestManager::class, 'modTest'],
+
 		'execute-test' => [TestManager::class, 'executeTest'],
+		'exec-test' => [TestManager::class, 'executeTest'],
 		'execute-tests' => [TestManager::class, 'executesAllTests'],
+		'exec-all' => [TestManager::class, 'executesAllTests'],
 	];
 	$options = CommandLine::getArguments(array_keys($optionsCalls));
 	foreach ($optionsCalls as $option => $call) {
