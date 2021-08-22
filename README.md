@@ -31,21 +31,21 @@ sudo php MarvinetteInstall.php
     - go to your project's directory
     - execute the command:
 
-        ```bash
-        marvinette --create-project
-        ```
+    ```shell
+    marvinette --create-project
+    ```
 
     - You will be prompt to enter different values.
     - You can modify your configuration file using the following command (avoid changing the file yourself):
 
-        ```bash
-        marvinette --mod-project
-        ```
+    ```shell
+    marvinette --mod-project
+    ```
 
 2. You can now create your first functionnal test!
     - execute the command:
 
-        ```bash
+        ```shell
         marvinette --add-test
         ```
 
@@ -55,14 +55,14 @@ sudo php MarvinetteInstall.php
 3. Your tests are ready to be executed!
     - To execute one test, execute the command:
 
-        ```bash
+        ```shell
         marvinette --execute-test
         ```
 
         You will be asked to choose which test to execute
     - To execute all your tests, execute the command:
 
-        ```bash
+        ```shell
         marvinette --execute-tests
         ```
 
