@@ -69,7 +69,7 @@ sudo php MarvinetteInstall.php
 
 ## Available commands
 
-Use the framework using the following command-line instruction:
+Use the framework using the following command-line instructions:
 
 ```shell
 marvinette [option]
