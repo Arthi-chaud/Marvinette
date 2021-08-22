@@ -64,8 +64,7 @@ class ProjectManager
 	{
 		UserInterface::setTitle("Modify Project");
 		if (!file_exists(Project::ConfigurationFile)) {
-			self::displayNoConfigFileFound();
-			return false;
+			throw new NoConfigFileException();
 		}
 		$project = new Project(Project::ConfigurationFile);
 
@@ -91,8 +90,7 @@ class ProjectManager
 	{
 		UserInterface::setTitle("Delete Project");
 		if (!file_exists(Project::ConfigurationFile)) {
-			self::displayNoConfigFileFound();
-			return false;
+			throw new NoConfigFileException();
 		}
 		$project = new Project(Project::ConfigurationFile);
 		UserInterface::displayTitle();

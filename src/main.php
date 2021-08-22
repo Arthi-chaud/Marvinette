@@ -41,6 +41,11 @@ if ($argv && $argv[0] && realpath($argv[0]) === __FILE__) {
 	try {
 		UserInterface::setTitle("Marvinette", true);
 		$returnCode = launch() ? 0 : 1;
+	} catch (NoConfigFileException $e) {
+		ProjectManager::displayNoConfigFileFound();
+		UserInterface::displayTitle();
+		UserInterface::$displayer->setColor(Display\Color::Red)->displayText("Exiting...");
+		$returnCode = 1;
 	} catch (MarvinetteException $e) {
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Display\Color::Red)->displayText("Exiting...");

@@ -56,8 +56,13 @@ final class ProjectManagerTest extends MarvinetteTestCase
 	public function testModProjectNoConfigFile(): void
 	{
 		rename('Marvinette.json', 'M.json');
-		$this->assertFalse(ProjectManager::modProject());
-		$this->expectOutputString("| Error\t|\tNo Configuration File Found!\n");
+		try {
+			ProjectManager::modProject();
+		} catch (NoConfigFileException $e) {
+			$throw = true;
+		}
+		$this->assertTrue($throw);
+		
 		rename('M.json', 'Marvinette.json');
 	}
 
@@ -85,8 +90,12 @@ final class ProjectManagerTest extends MarvinetteTestCase
 	public function testDeleteProjectNoConfigFile(): void
 	{
 		rename('Marvinette.json', 'M.json');
-		$this->assertFalse(ProjectManager::deleteProject());
-		$this->expectOutputString("| Error\t|\tNo Configuration File Found!\n");
+		try {
+			ProjectManager::deleteProject();
+		} catch (NoConfigFileException $e) {
+			$throw = true;
+		}
+		$this->assertTrue($throw);
 		rename('M.json', 'Marvinette.json');
 	}
 

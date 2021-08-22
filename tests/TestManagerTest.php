@@ -93,5 +93,60 @@ final class TestManagerTest extends MarvinetteTestCase
 		TestManager::deleteTest();
 		$this->assertFalse(is_dir('tests/101'));
 		$this->assertTrue(is_dir('tests/102'));
+		FileManager::deleteFolder('tests/102');
+	}
+
+	public function testModTestNoConfigFile(): void
+	{
+		rename('Marvinette.json', 'M.json');
+		$throw = false;
+		$this->hideStdout();
+		try {
+			TestManager::modTest();
+		} catch (NoConfigFileException $e) {
+			$throw = true;
+		}
+		$this->assertTrue($throw);
+		rename('M.json', 'Marvinette.json');
+	}
+
+	public function testModTestEmptyFolder(): void
+	{
+		$throw = false;
+		$this->hideStdout();
+		try {
+			TestManager::modTest();
+		} catch (InvalidTestFolderException $e) {
+			$throw = true;
+		}
+		$this->assertTrue($throw);
+	}
+
+	public function testAddTestNoConfigFile(): void
+	{
+		rename('Marvinette.json', 'M.json');
+		$throw = false;
+		$this->hideStdout();
+		try {
+			TestManager::addTest();
+		} catch (NoConfigFileException $e) {
+			$throw = true;
+		}
+		$this->assertTrue($throw);
+		rename('M.json', 'Marvinette.json');
+	}
+
+	public function testDeleteTestNoConfigFile(): void
+	{
+		rename('Marvinette.json', 'M.json');
+		$throw = false;
+		$this->hideStdout();
+		try {
+			TestManager::deleteTest();
+		} catch (NoConfigFileException $e) {
+			$throw = true;
+		}
+		$this->assertTrue($throw);
+		rename('M.json', 'Marvinette.json');
 	}
 }

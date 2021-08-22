@@ -4,6 +4,7 @@ require_once 'src/Display/Color.php';
 require_once 'src/Display/Displayer.php';
 require_once 'src/ProjectManager.php';
 require_once 'src/Exception/InvalidTestFolderException.php';
+require_once 'src/Exception/NoConfigFileException.php';
 
 use Display\Color;
 
@@ -15,6 +16,9 @@ class TestManager {
 	public static function addTest(?Project $project = null)
 	{
 		UserInterface::setTitle("Add Test");
+		if (!file_exists(Project::ConfigurationFile)) {
+			throw new NoConfigFileException();
+		}
 		if (!$project) {
 			$project = new Project(Project::ConfigurationFile);
 		}
@@ -36,6 +40,9 @@ class TestManager {
 	public static function modTest()
 	{
 		UserInterface::setTitle('Modify Test');
+		if (!file_exists(Project::ConfigurationFile)) {
+			throw new NoConfigFileException();
+		}
 		$project = new Project(Project::ConfigurationFile);
 		$testsFolder = $project->testsFolder->get();
 		$testName = self::selectTest($project);
@@ -82,6 +89,9 @@ class TestManager {
 	public static function executeTest(?string $testName = null, ?Project $project = null): bool
 	{
 		$testStatus = true;
+		if (!file_exists(Project::ConfigurationFile)) {
+			throw new NoConfigFileException();
+		}
 		if (!$project) {
 			$project = new Project(Project::ConfigurationFile);
 		}
@@ -118,6 +128,9 @@ class TestManager {
 	public static function executesAllTests(?Project $project = null): bool
 	{
 		UserInterface::setTitle("Executing");
+		if (!file_exists(Project::ConfigurationFile)) {
+			throw new NoConfigFileException();
+		}
 		if (!$project) {
 			$project = new Project(Project::ConfigurationFile);
 		}
@@ -148,6 +161,9 @@ class TestManager {
 	public static function deleteTest(): void
 	{
 		UserInterface::setTitle("Delete Test");
+		if (!file_exists(Project::ConfigurationFile)) {
+			throw new NoConfigFileException();
+		}
 		$project = new Project(Project::ConfigurationFile);
 		$testName = self::selectTest($project);
 
