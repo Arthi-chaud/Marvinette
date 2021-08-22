@@ -17,7 +17,7 @@
 
 3. Inside the repository, execute the following command:
 
-    ```bash
+    ```shell
     sudo php MarvinetteInstall.php
     ```
 
