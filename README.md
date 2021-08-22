@@ -45,9 +45,9 @@ sudo php MarvinetteInstall.php
 2. You can now create your first functionnal test!
     - execute the command:
 
-        ```shell
-        marvinette --add-test
-        ```
+    ```shell
+    marvinette --add-test
+    ```
 
     - You will be prompt to enter different values.
     - In your test's folder, some files will be empty: you'll have to fill them yourself (expectedStdout/Stderr, stdinput, stdout/stderrFilter). If a file is empty, for example expectedStdout, the standard output of the programm will be compared with the file's content. If you don't want to, simply delete the file.
@@ -55,16 +55,16 @@ sudo php MarvinetteInstall.php
 3. Your tests are ready to be executed!
     - To execute one test, execute the command:
 
-        ```shell
-        marvinette --execute-test
-        ```
+    ```shell
+    marvinette --execute-test
+    ```
 
-        You will be asked to choose which test to execute
+    You will be asked to choose which test to execute
     - To execute all your tests, execute the command:
 
-        ```shell
-        marvinette --execute-tests
-        ```
+    ```shell
+    marvinette --execute-tests
+    ```
 
 Use the framework using the following command-line instruction:
 
