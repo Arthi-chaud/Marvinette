@@ -5,7 +5,7 @@
 [![Tests](https://github.com/Arthi-chaud/Marvinette/actions/workflows/tests.yml/badge.svg?branch=dev)](https://github.com/Arthi-chaud/Marvinette/actions/workflows/tests.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arthi-chaud_Marvinette&metric=alert_status)](https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arthi-chaud_Marvinette&metric=coverage)](https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette)
-![Documentation(https://img.shields.io/badge/Documentation-Doxygen-blue)](https://arthi-chaud.github.io/Marvinette/)
+[![Documentation](https://img.shields.io/badge/Documentation-Doxygen-blue)](https://arthi-chaud.github.io/Marvinette/)
 
 ---
 
