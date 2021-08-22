@@ -65,6 +65,9 @@ sudo php MarvinetteInstall.php
     ```shell
     marvinette --execute-tests
     ```
+---
+
+## Available commands
 
 Use the framework using the following command-line instruction:
 
