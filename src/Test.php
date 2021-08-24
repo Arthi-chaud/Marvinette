@@ -302,7 +302,7 @@ class Test
 
 	/**
 	 * @brief if true, will compare program's stderr to file filled by the user
-	 * @var string
+	 * @var bool
 	 */
 	public Field $expectedStderr;
 

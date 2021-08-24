@@ -14,12 +14,11 @@ final class TestManagerTest extends MarvinetteTestCase
 	{
 		if (file_exists('Marvinette.json'))
 			unlink('Marvinette.json');
-		$this->hideStdout();
 		$this->defineStdin([
 			'My Name',
-			'README.md',
-			'./',
-			'',
+			'MYFAKEPROJECT.py',
+			'./tests',
+			'python3',
 			'',
 			'n'
 		]);
@@ -59,6 +58,7 @@ final class TestManagerTest extends MarvinetteTestCase
 
 	public function testFolderIsATest(): void
 	{
+		$this->hideStdout();
 		mkdir('tests/101');
 		touch('tests/101/stdinput');
 		mkdir('tests/102');
@@ -71,6 +71,7 @@ final class TestManagerTest extends MarvinetteTestCase
 
 	public function testFolderIsNotATest(): void
 	{
+		$this->hideStdout();
 		mkdir('tests/103');
 		$this->assertFalse(TestManager::folderIsATest('tests/103'));
 		touch('tests/103/stderrFilter');
@@ -86,7 +87,7 @@ final class TestManagerTest extends MarvinetteTestCase
 		touch('tests/101/stdinput');
 		mkdir('tests/102');
 		touch('tests/102/expectedStdout');
-		//$this->hideStdout();
+		$this->hideStdout();
 		$this->defineStdin([
 			'0'
 		]);
@@ -175,5 +176,175 @@ final class TestManagerTest extends MarvinetteTestCase
 		}
 		$this->assertTrue($throw);
 		rename('M.json', 'Marvinette.json');
+	}
+
+	public function testaddTest()
+	{
+		$this->hideStdout();
+		$this->defineStdin([
+			'101',
+			'--argc 1 --argv 2',
+			'10',
+			'grep \'hello\'',
+			'grep \'world\'',
+			'trololol',
+			'Y',
+			'Y',
+			'n',
+			'set me up',
+			'tear me down',
+		]);
+		TestManager::addTest();
+		$this->assertTrue(is_dir('tests/101'));
+		$this->assertTrue(file_exists('tests/101/commandLineArguments'));
+		$this->assertTrue(file_exists('tests/101/expectedReturnCode'));
+		$this->assertTrue(file_exists('tests/101/stdoutFilter'));
+		$this->assertTrue(file_exists('tests/101/stderrFilter'));
+		$this->assertTrue(file_exists('tests/101/expectedStdout'));
+		$this->assertFalse(file_exists('tests/101/expectedStderr'));
+		$this->assertTrue(file_exists('tests/101/setup'));
+		$this->assertTrue(file_exists('tests/101/stdinput'));
+		$this->assertTrue(file_exists('tests/101/teardown'));
+
+		$this->assertEquals(file_get_contents('tests/101/commandLineArguments'), '--argc 1 --argv 2');
+		$this->assertEquals(file_get_contents('tests/101/expectedReturnCode'), '10');
+		$this->assertEquals(file_get_contents('tests/101/stdoutFilter'), "grep 'hello'");
+		$this->assertEquals(file_get_contents('tests/101/stderrFilter'),  "grep 'world'");
+		$this->assertEquals(file_get_contents('tests/101/expectedStdout'), '');
+		//$this->assertEquals(file_get_contents('tests/101/expectedStderr'), '');
+		$this->assertEquals(file_get_contents('tests/101/setup'), 'set me up');
+		$this->assertEquals(file_get_contents('tests/101/teardown'), 'tear me down');
+		$this->assertEquals(file_get_contents('tests/101/stdinput'), '');
+		//FileManager::deleteFolder('tests/101');
+	}
+
+	public function testModTest()
+	{
+		$this->hideStdout();
+		$this->defineStdin([
+			'0',
+			'',
+			'',
+			'0',
+			'grep \'world1\'',
+			'',
+			'trololol',
+			'Y',
+			'n',
+			'Y',
+			'  set me up    ',
+			'trololol',
+		]);
+		TestManager::modTest();
+		$this->assertTrue(is_dir('tests/101'));
+		$this->assertTrue(file_exists('tests/101/commandLineArguments'));
+		$this->assertTrue(file_exists('tests/101/expectedReturnCode'));
+		$this->assertTrue(file_exists('tests/101/stdoutFilter'));
+		$this->assertTrue(file_exists('tests/101/stderrFilter'));
+		$this->assertFalse(file_exists('tests/101/expectedStdout'));
+		$this->assertTrue(file_exists('tests/101/expectedStderr'));
+		$this->assertTrue(file_exists('tests/101/setup'));
+		$this->assertTrue(file_exists('tests/101/stdinput'));
+		$this->assertTrue(file_exists('tests/101/teardown'));
+
+		$this->assertEquals(file_get_contents('tests/101/commandLineArguments'), '--argc 1 --argv 2');
+		$this->assertEquals(file_get_contents('tests/101/expectedReturnCode'), '0');
+		$this->assertEquals(file_get_contents('tests/101/stdoutFilter'), "grep 'world1'");
+		$this->assertEquals(file_get_contents('tests/101/stderrFilter'),  "grep 'world'");
+		$this->assertEquals(file_get_contents('tests/101/expectedStderr'), '');
+		$this->assertEquals(file_get_contents('tests/101/setup'), 'set me up');
+		$this->assertEquals(file_get_contents('tests/101/teardown'), 'trololol');
+		$this->assertEquals(file_get_contents('tests/101/stdinput'), '');
+		FileManager::deleteFolder('tests/101');
+	}
+
+	public function testExecuteAllTestsWithoutTests()
+	{
+		$this->expectException(InvalidTestFolderException::class);
+		$this->expectOutputString("| Create Project\t|\tEnter the project's name: | Create Project\t|\tEnter the project's binary name: | Create Project\t|\tEnter the project's binary path (By default: Current directory): | Create Project\t|\tEnter the project's interpreter (By default: none (when it is an ELF file or a script using a shebang)): | Create Project\t|\tEnter the project's tests folder (By default in 'tests' folder): | Create Project\t|\tThe Project's configuration file is created!\n| Create Project\t|\tWould You Like to add a test now [Y/n]: | Executing\t|\tNo tests available\n");
+		$this->assertTrue(TestManager::executesAllTests());
+	}
+
+
+	public function testExecuteTest()
+	{
+		$this->defineStdin([
+			'First Test',
+			'100 15',
+			'0',
+			'head -n 120 | tail -n 10',
+			'',
+			'',
+			'Y',
+			'n',
+			'',
+			'',
+			'0',
+			''
+		]);
+		$this->hideStdout();
+		TestManager::addTest();
+		file_put_contents('tests/First Test/expectedStdout', "110 0.02130\n111 0.02033\n112 0.01931\n113 0.01827\n114 0.01721\n115 0.01613\n116 0.01506\n117 0.01399\n118 0.01295\n119 0.01192\n");
+		$this->assertTrue(TestManager::executeTest());
+	}
+
+	public function testExecuteAnotherTest()
+	{
+		$this->hideStdout();
+		$this->defineStdin([
+			'Second Test',
+			'100 15',
+			'',
+			'tail -n 2',
+			'',
+			'',
+			'Y',
+			'n',
+			'',
+			'',
+			'1',
+			''
+		]);
+		TestManager::addTest();
+		file_put_contents('tests/Second Test/expectedStdout', "199 0.00000\n200 0.00000\n");
+		$this->assertTrue(TestManager::executeTest());
+	}
+
+	public function testExecuteAllTestsWithoutFailure()
+	{
+
+		$this->expectOutputString("| Create Project\t|\tEnter the project's name: | Create Project\t|\tEnter the project's binary name: | Create Project\t|\tEnter the project's binary path (By default: Current directory): | Create Project\t|\tEnter the project's interpreter (By default: none (when it is an ELF file or a script using a shebang)): | Create Project\t|\tEnter the project's tests folder (By default in 'tests' folder): | Create Project\t|\tThe Project's configuration file is created!\n| Create Project\t|\tWould You Like to add a test now [Y/n]: | Test 'First Test'\t|\tExecuting Test 'First Test'...\n| Test 'First Test'\t|\tFirst Test: Test passed!\n| Test 'Second Test'\t|\tExecuting Test 'Second Test'...\n| Test 'Second Test'\t|\tSecond Test: Test passed!\n| Executing	|	Test Count: 2 | Success: 2 | Failed: 0\n");
+		$this->assertTrue(TestManager::executesAllTests());
+	}
+
+	public function testExecuteFailingTest()
+	{
+		$this->hideStdout();
+		$this->defineStdin([
+			'Third Test',
+			'100 15',
+			'',
+			'tail -n 2',
+			'',
+			'',
+			'Y',
+			'n',
+			'',
+			'',
+			'2',
+			''
+		]);
+		TestManager::addTest();
+		file_put_contents('tests/Third Test/expectedStdout', "200 0.00000\n");
+		$this->assertFalse(TestManager::executeTest());
+	}
+
+	public function testExecuteAllTestsWithFailure()
+	{
+		$this->expectOutputString("| Create Project\t|\tEnter the project's name: | Create Project\t|\tEnter the project's binary name: | Create Project\t|\tEnter the project's binary path (By default: Current directory): | Create Project\t|\tEnter the project's interpreter (By default: none (when it is an ELF file or a script using a shebang)): | Create Project\t|\tEnter the project's tests folder (By default in 'tests' folder): | Create Project\t|\tThe Project's configuration file is created!\n| Create Project\t|\tWould You Like to add a test now [Y/n]: | Test 'First Test'\t|\tExecuting Test 'First Test'...\n| Test 'First Test'\t|\tFirst Test: Test passed!\n| Test 'Second Test'\t|\tExecuting Test 'Second Test'...\n| Test 'Second Test'\t|\tSecond Test: Test passed!\n| Test 'Third Test'\t|\tExecuting Test 'Third Test'...\n| Test 'Third Test'\t|\tThird Test: Test Failed! Expected Output differs. Return code: 1\n| Test 'Third Test'	|	0a1\n| Test 'Third Test'	|	> 199 0.00000\n| Test 'Third Test'	|	\n| Executing	|	Test Count: 3 | Success: 2 | Failed: 1\n");
+		$this->assertFalse(TestManager::executesAllTests());
+		FileManager::deleteFolder('tests/First Test');
+		FileManager::deleteFolder('tests/Second Test');
+		FileManager::deleteFolder('tests/Third Test');
 	}
 }

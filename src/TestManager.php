@@ -142,8 +142,8 @@ class TestManager {
 			throw new InvalidTestFolderException();
 		}
 		foreach ($tests as $testName) {
-			$testStatus = self::executeTest($testName, $project);
-			if ($testStatus) {
+			$testSucces = self::executeTest($testName, $project);
+			if (!$testSucces) {
 				$failedTestCount++;
 			}
 		}

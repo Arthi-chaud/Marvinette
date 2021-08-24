@@ -144,4 +144,11 @@ final class ProjectManagerTest extends MarvinetteTestCase
 		FileManager::deleteFolder('tests/101');
 		rename('Marvinette2.json', 'Marvinette.json');
 	}
+
+	public function testDisplayNoConfigFileFound()
+	{
+		$this->expectOutputString("| Error\t|\tNo Configuration File Found!\n");
+		ProjectManager::displayNoConfigFileFound();
+	}
+
 }
