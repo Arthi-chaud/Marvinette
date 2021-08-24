@@ -24,7 +24,6 @@ jobs:
           php -v
           mkdir tmp
           ./vendor/bin/phpunit tests --testdox --coverage-clover=coverage-report.clover --log-junit=test-report.xml --coverage-filter src
-          ls -l
       - name: Fix Coverage File Path
         run: |
           sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' test-report.xml

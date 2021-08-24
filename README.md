@@ -1,6 +1,6 @@
 [![Marvinette](images/logo.PNG)](images/logo.PNG)
 
-## Functional tests framework. Targeted towards Epitech IT students
+## Functional tests framework written in PHP. Targeted towards Epitech IT students
 
 [![Tests](https://github.com/Arthi-chaud/Marvinette/actions/workflows/tests.yml/badge.svg?branch=dev)](https://github.com/Arthi-chaud/Marvinette/actions/workflows/tests.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arthi-chaud_Marvinette&metric=alert_status)](https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette)
@@ -65,8 +65,11 @@ sudo php MarvinetteInstall.php
     ```shell
     marvinette --execute-tests
     ```
+---
 
-Use the framework using the following command-line instruction:
+## Available commands
+
+Use the framework using the following command-line instructions:
 
 ```shell
 marvinette [option]
