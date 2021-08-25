@@ -91,4 +91,31 @@ marvinette [option]
 
 ---
 
+## What are the created files for?
+
+Upon test creation, several files are generated in the ```testFolder```/```testName``` folder:
+
+- ```commandLineArguments```: contains the arguments which will be passed to the program. If the file doesn't exists, no parameters will be sent.
+- ```interpreterArguments```: contains the arguments which will be passed to the program's interpreter. If the file doesn't exists, no parameters will be sent. The arguments will be read only if an interpreter is set in the ```Marvinette.json``` file.
+- ```expectedReturnCode```: if the file exists, the returned code from the program will be compared with the number in the file (if the file's content is not a number, the comparison will be scrapped). If there is no such file, no comparison will be done.
+- ```stdoutFilter```: if the file exists, the standard output of the program will be piped onto the command written in the file.
+- ```stderrFilter```: if the file exists, the error output of the program will be piped onto the command written in the file.
+- ```stdinput```: if the file exists, the content of the file will be standard input to the program.
+- ```expectedStdout```: if the file exists, the (filtered) standard output will be compared to the file's content. If there is no such file, no comparison will be done.
+- ```expectedStderr```: if the file exists, the (filtered) error output will be compared to the file's content. If there is no such file, no comparison will be done.
+- ```setup```: if the file exists, the command written in the file will be executed before the program is launched.
+- ```teardown```: if the file exists, the command written in the file will be executed after the program is launched.
+
+If a ```setup```, ```stdout/stderrFilter``` or ```teardwon``` command doesn't return 0, the test will fail.
+
+---
+
+## Compatibility & Pre-Requisites
+
+To use Marvinette, you'll need to execute your tests on an Unix-based OS (Windows compatibility incoming...).
+
+Also, you'll need PHP >= 7.4. No other library needed (the ```vendor``` folder and composer configuration file are used for Marvinette's unit tests)
+
+---
+
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette)
