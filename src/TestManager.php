@@ -239,11 +239,20 @@ class TestManager {
 			UserInterface::$displayer->setColor(Color::Blue)->displayText("$i - " . basename($testsName[$i]));
 			$choices[] = "$i";
 		}
-		$selected = UserInput::getOption(function () use ($testCount) {
-			UserInterface::displayTitle();
-			UserInterface::$displayer->setColor(Color::Yellow)->displayText("Select a test (between 0 and " . ($testCount - 1) . '): ', false);
-		}, $choices);
+		$selectedIndex = null;
+		if ($testCount > 1) {
+			$selectedIndex = UserInput::getOption(function () use ($testCount) {
+				UserInterface::displayTitle();
+				UserInterface::$displayer->setColor(Color::Yellow)->displayText("Select a test (between 0 and " . ($testCount - 1) . '): ', false);
+			}, $choices);
+		} else {
+			if (UserInput::getYesNoOption("Select this test ?", Color::Yellow)) {
+				$selectedIndex = 0;
+			}
+		}
 		UserInterface::popTitle();
-		return basename($testsName[$selected]);
+		if (is_null($selectedIndex))
+			return null;
+		return basename($testsName[$selectedIndex]);
 	}
 }

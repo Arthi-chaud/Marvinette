@@ -44,6 +44,34 @@ final class TestManagerTest extends MarvinetteTestCase
 		FileManager::deleteFolder('tests/102');
 	}
 
+	public function testSelectTestOneChoice(): void
+	{
+		mkdir('tests/101');
+		touch('tests/101/stdinput');
+		$this->hideStdout();
+		$this->defineStdin([
+			'b',
+			'Y'
+
+		]);
+		$this->assertEquals(TestManager::selectTest(new Project('Marvinette.json')), '101');
+		FileManager::deleteFolder('tests/101');
+	}
+
+	public function testSelectTestOneChoiceSayNo(): void
+	{
+		mkdir('tests/101');
+		touch('tests/101/stdinput');
+		$this->hideStdout();
+		$this->defineStdin([
+			'b',
+			'n'
+
+		]);
+		$this->assertNull(TestManager::selectTest(new Project('Marvinette.json')));
+		FileManager::deleteFolder('tests/101');
+	}
+
 	public function testSelectTestEmptyFolder(): void
 	{
 		$throw = false;
@@ -225,7 +253,7 @@ final class TestManagerTest extends MarvinetteTestCase
 	{
 		$this->hideStdout();
 		$this->defineStdin([
-			'0',
+			'Y',
 			'',
 			'',
 			'',
@@ -286,8 +314,7 @@ final class TestManagerTest extends MarvinetteTestCase
 			'n',
 			'',
 			'',
-			'0',
-			''
+			'Y'
 		]);
 		$this->hideStdout();
 		TestManager::addTest();
@@ -403,7 +430,7 @@ final class TestManagerTest extends MarvinetteTestCase
 		unlink('Marvinette.json');
 		rename('M.json', 'Marvinette.json');
 		$this->defineStdin([
-			'0',
+			'Y',
 			'103',
 			'100 15',
 			'0',
