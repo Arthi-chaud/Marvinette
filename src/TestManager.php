@@ -23,13 +23,16 @@ class TestManager {
 			$project = new Project(Project::ConfigurationFile);
 		}
 		$test = new Test();
+		$ignoredFields = [];
+		if ($project->interpreter->get() == null)
+			$ignoredFields[] = 'interpreterArguments';
 		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
 			$helpMsg = $field->getPromptHelp();
 			$help = $helpMsg ? " ($helpMsg)" : "";
 			$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Blue)->displayText("Test's $cleanedFieldName$help: ", false);
-		});
+		}, false, $ignoredFields);
 		$test->export($project->testsFolder->get());
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
@@ -47,7 +50,9 @@ class TestManager {
 		$testsFolder = $project->testsFolder->get();
 		$testName = self::selectTest($project);
 		$test = new Test(FileManager::normalizePath("$testsFolder/$testName"));
-
+		$ignoredFields = [];
+		if ($project->interpreter->get() == null)
+			$ignoredFields[] = 'interpreterArguments';
 		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the test's new ". UserInterface::cleanCamelCase($fieldName), false);
@@ -55,7 +60,7 @@ class TestManager {
 				UserInterface::$displayer->setColor(Color::Yellow)->displayText(' (' . $field->getPromptHelp() . ')', false);
 			}
 			UserInterface::$displayer->setColor(Color::Yellow)->displayText( ', Leave empty if no change needed: ', false);
-		}, true);
+		}, true, $ignoredFields);
 		foreach(get_object_vars($test) as $fieldName => $field) {
 			if ($fieldName == 'name') {
 				continue;

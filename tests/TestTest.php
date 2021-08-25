@@ -520,8 +520,9 @@ final class TestTest extends MarvinetteTestCase
 		$project->interpreter->set('python3');
 		$project->testsFolder->set('tmp/');
 		$project->export('tmp/Marvinette.json');
-
+		
 		$test = new Test();
+		$test->interpreterArguments->set("-E");
 		$test->name->set("First Example");
 		$test->commandLineArguments->set("100 15");
 		$test->expectedReturnCode->set("0");
@@ -529,7 +530,7 @@ final class TestTest extends MarvinetteTestCase
 		$test->expectedStdout->set("Y");
 
 		$command = $this->callMethod($test, 'buildCommand', [$project, 'tmp/First Example']);
-		$this->assertEquals($command, "python3 tests/MYFAKEPROJECT.py 100 15 > /tmp/MarvinetteStdout 2> /tmp/MarvinetteStderr");
+		$this->assertEquals($command, "python3 -E tests/MYFAKEPROJECT.py 100 15 > /tmp/MarvinetteStdout 2> /tmp/MarvinetteStderr");
 	}
 
 	public function testExecute(): void

@@ -178,12 +178,13 @@ final class TestManagerTest extends MarvinetteTestCase
 		rename('M.json', 'Marvinette.json');
 	}
 
-	public function testaddTest()
+	public function testAddTest()
 	{
 		$this->hideStdout();
 		$this->defineStdin([
 			'101',
 			'--argc 1 --argv 2',
+			'-E',
 			'10',
 			'grep \'hello\'',
 			'grep \'world\'',
@@ -197,6 +198,7 @@ final class TestManagerTest extends MarvinetteTestCase
 		TestManager::addTest();
 		$this->assertTrue(is_dir('tests/101'));
 		$this->assertTrue(file_exists('tests/101/commandLineArguments'));
+		$this->assertTrue(file_exists('tests/101/interpreterArguments'));
 		$this->assertTrue(file_exists('tests/101/expectedReturnCode'));
 		$this->assertTrue(file_exists('tests/101/stdoutFilter'));
 		$this->assertTrue(file_exists('tests/101/stderrFilter'));
@@ -207,6 +209,7 @@ final class TestManagerTest extends MarvinetteTestCase
 		$this->assertTrue(file_exists('tests/101/teardown'));
 
 		$this->assertEquals(file_get_contents('tests/101/commandLineArguments'), '--argc 1 --argv 2');
+		$this->assertEquals(file_get_contents('tests/101/interpreterArguments'), '-E');
 		$this->assertEquals(file_get_contents('tests/101/expectedReturnCode'), '10');
 		$this->assertEquals(file_get_contents('tests/101/stdoutFilter'), "grep 'hello'");
 		$this->assertEquals(file_get_contents('tests/101/stderrFilter'),  "grep 'world'");
@@ -225,6 +228,7 @@ final class TestManagerTest extends MarvinetteTestCase
 			'0',
 			'',
 			'',
+			'',
 			'0',
 			'grep \'world1\'',
 			'',
@@ -238,6 +242,7 @@ final class TestManagerTest extends MarvinetteTestCase
 		TestManager::modTest();
 		$this->assertTrue(is_dir('tests/101'));
 		$this->assertTrue(file_exists('tests/101/commandLineArguments'));
+		$this->assertTrue(file_exists('tests/101/interpreterArguments'));
 		$this->assertTrue(file_exists('tests/101/expectedReturnCode'));
 		$this->assertTrue(file_exists('tests/101/stdoutFilter'));
 		$this->assertTrue(file_exists('tests/101/stderrFilter'));
@@ -248,6 +253,7 @@ final class TestManagerTest extends MarvinetteTestCase
 		$this->assertTrue(file_exists('tests/101/teardown'));
 
 		$this->assertEquals(file_get_contents('tests/101/commandLineArguments'), '--argc 1 --argv 2');
+		$this->assertEquals(file_get_contents('tests/101/interpreterArguments'), '-E');
 		$this->assertEquals(file_get_contents('tests/101/expectedReturnCode'), '0');
 		$this->assertEquals(file_get_contents('tests/101/stdoutFilter'), "grep 'world1'");
 		$this->assertEquals(file_get_contents('tests/101/stderrFilter'),  "grep 'world'");
@@ -271,6 +277,7 @@ final class TestManagerTest extends MarvinetteTestCase
 		$this->defineStdin([
 			'First Test',
 			'100 15',
+			'',
 			'0',
 			'head -n 120 | tail -n 10',
 			'',
@@ -294,6 +301,7 @@ final class TestManagerTest extends MarvinetteTestCase
 		$this->defineStdin([
 			'Second Test',
 			'100 15',
+			'',
 			'',
 			'tail -n 2',
 			'',
@@ -324,6 +332,7 @@ final class TestManagerTest extends MarvinetteTestCase
 			'Third Test',
 			'100 15',
 			'',
+			'',
 			'tail -n 2',
 			'',
 			'',
@@ -346,5 +355,83 @@ final class TestManagerTest extends MarvinetteTestCase
 		FileManager::deleteFolder('tests/First Test');
 		FileManager::deleteFolder('tests/Second Test');
 		FileManager::deleteFolder('tests/Third Test');
+	}
+
+	public function testAddTestForProjectWithoutInterpreter()
+	{
+		unlink('Marvinette.json');
+		$this->defineStdin([
+			'My Name',
+			'README.me',
+			'',
+			'',
+			'',
+			'Y',
+			'102',
+			'100 15',
+			'0',
+			'head -n 120 | tail -n 10',
+			'',
+			'',
+			'Y',
+			'n',
+			'',
+			'',
+			''
+		]);
+		ProjectManager::createProject();
+		$this->assertTrue(is_dir('tests/102'));
+		$this->assertTrue(file_exists('tests/102/commandLineArguments'));
+		$this->assertFalse(file_exists('tests/102/interpreterArguments'));
+		$this->assertTrue(file_exists('tests/102/expectedReturnCode'));
+		$this->assertTrue(file_exists('tests/102/stdoutFilter'));
+		$this->assertFalse(file_exists('tests/102/stderrFilter'));
+		$this->assertTrue(file_exists('tests/102/expectedStdout'));
+		$this->assertFalse(file_exists('tests/102/expectedStderr'));
+		$this->assertFalse(file_exists('tests/102/setup'));
+		$this->assertFalse(file_exists('tests/102/stdinput'));
+		$this->assertFalse(file_exists('tests/102/teardown'));
+
+		$this->assertEquals(file_get_contents('tests/102/commandLineArguments'), '100 15');
+		$this->assertEquals(file_get_contents('tests/102/expectedReturnCode'), '0');
+		$this->assertEquals(file_get_contents('tests/102/stdoutFilter'), "head -n 120 | tail -n 10");
+		rename('Marvinette.json', 'M.json');
+	}
+
+	public function testModTestForProjectWithoutInterpreter()
+	{
+		unlink('Marvinette.json');
+		rename('M.json', 'Marvinette.json');
+		$this->defineStdin([
+			'0',
+			'103',
+			'100 15',
+			'0',
+			'head -n 120 | tail -n 10',
+			'',
+			'',
+			'Y',
+			'n',
+			'',
+			'',
+			''
+		]);
+		TestManager::modTest();
+		$this->assertTrue(is_dir('tests/103'));
+		$this->assertTrue(file_exists('tests/103/commandLineArguments'));
+		$this->assertFalse(file_exists('tests/103/interpreterArguments'));
+		$this->assertTrue(file_exists('tests/103/expectedReturnCode'));
+		$this->assertTrue(file_exists('tests/103/stdoutFilter'));
+		$this->assertFalse(file_exists('tests/103/stderrFilter'));
+		$this->assertTrue(file_exists('tests/103/expectedStdout'));
+		$this->assertFalse(file_exists('tests/103/expectedStderr'));
+		$this->assertFalse(file_exists('tests/103/setup'));
+		$this->assertFalse(file_exists('tests/103/stdinput'));
+		$this->assertFalse(file_exists('tests/103/teardown'));
+
+		$this->assertEquals(file_get_contents('tests/103/commandLineArguments'), '100 15');
+		$this->assertEquals(file_get_contents('tests/103/expectedReturnCode'), '0');
+		$this->assertEquals(file_get_contents('tests/103/stdoutFilter'), "head -n 120 | tail -n 10");
+		FileManager::deleteFolder('tests/103');
 	}
 }
