@@ -85,6 +85,23 @@ marvinette [option]
 
         -h, --help: display this usage
 ```
+---
+## What are the created files for?
+
+Upon test creation, several fiels are generated in the ```$testFolder```/```$testName``` folder:
+
+- ```commandLineArguments```: contains the arguments which will be passed to the program. If the file doesn't exists, no parameters will be sent.
+- ```interpreterArguments```: contains the arguments which will be passed to the program's interpreter. If the file doesn't exists, no parameters will be sent. The content will be read only if an interpreter is set in the ```Marvinette.json``` file.
+- ```expectedReturnCode```: if the file exists, the returned code from the program will be compared with the number in the file (if the file's content is not a number, the comparison will be scrapped). If there is no such file, no comparison will be done.
+- ```stdoutFilter```: if the file exists, the standard output of the program will be piped onto the command written in the file.
+- ```stderrFilter```: if the file exists, the error output of the program will be piped onto the command written in the file.
+- ```stdinput```: if the file exists, the content of the file will be standard input to the program.
+- ```expectedStdout```: if the file exists, the (filtered) standard output will be compared to the file's content. If there is no such file, no comparison will be done.
+- ```expectedStderr```: if the file exists, the (filtered) error output will be compared to the file's content. If there is no such file, no comparison will be done.
+- ```setup```: if the file exists, the command written in the file will be executed before the program is launched.
+- ```teardown```: if the file exists, the command written in the file will be executed after the program is launched.
+
+If a ```setup```, ```stdout/stderrFilter``` or ```teardwon``` command doesn't return 0, the test will fail.
 
 ---
 ## Compatibility & Pre-Requisites
