@@ -87,5 +87,12 @@ marvinette [option]
 ```
 
 ---
+## Compatibility & Pre-Requisites
+
+To use Marvinette, you'll need to execute your tests on an Unix-based OS (Windows compatibility incoming...).
+
+Also, you'll need PHP >= 7.4. No other library needed (the ```vendor``` folder and composer configuration file are used for Marvinette's unit tests)
+
+---
 
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette)
