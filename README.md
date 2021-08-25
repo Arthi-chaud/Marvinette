@@ -94,7 +94,7 @@ marvinette [option]
 
 ## What are the created files for?
 
-The framework's configuration file, ```Marvinette.json```, holds the following informations
+The framework's configuration file, ```Marvinette.json```, holds the following informations:
 
 - ```name```: The name of the project
 - ``` binary name```: the name of the binary/script to execute
