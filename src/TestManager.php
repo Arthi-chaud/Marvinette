@@ -50,6 +50,9 @@ class TestManager {
 		$project = new Project(Project::ConfigurationFile);
 		$testsFolder = $project->testsFolder->get();
 		$testName = self::selectTest($project);
+		if (is_null($testName)) {
+			return true;
+		}
 		$test = new Test(FileManager::normalizePath("$testsFolder/$testName"));
 		$ignoredFields = [];
 		if ($project->interpreter->get() == null) {
@@ -104,6 +107,9 @@ class TestManager {
 		}
 		if ($testName == null) {
 			$testName = self::selectTest($project);
+		}
+		if (is_null($testName)) {
+			return true;
 		}
 		UserInterface::setTitle("Test '$testName'");
 		$testPath = FileManager::normalizePath($project->testsFolder->get() . "/$testName");
@@ -173,7 +179,9 @@ class TestManager {
 		}
 		$project = new Project(Project::ConfigurationFile);
 		$testName = self::selectTest($project);
-
+		if (is_null($testName)) {
+			return;
+		}
 		FileManager::deleteFolder($project->testsFolder->get() . DIRECTORY_SEPARATOR . $testName);
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Yellow)->displayText("The test '$testName' has been correctly deleted!");
