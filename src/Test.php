@@ -36,6 +36,8 @@ class Test
 
 		$this->commandLineArguments = new Field(function($args) {}, null, "The arguments to pass to the program");
 
+		$this->interpreterArguments = new Field(function($args) {}, null, "The arguments to pass to the interpreter");
+
 		$this->expectedReturnCode = new Field(
 		function($r) {
 			if ($r == "") {
@@ -206,7 +208,11 @@ class Test
 			$command .= ' ' . $this->commandLineArguments->get();
 		}
 		if ($interpreter != null) {
-			$command = "$interpreter $command";
+			$interpreterCommand = $interpreter;
+			if ($this->interpreterArguments->get()) {
+				$interpreterCommand .= ' ' . $this->interpreterArguments->get();
+			}
+			$command = "$interpreterCommand $command";
 		}
 		if ($this->stdinput->get() && file_exists($stdinputPath)) {
 			$command = "cat '$stdinputPath' | ($command)";
@@ -269,6 +275,12 @@ class Test
 	 * @var ?string
 	*/
 	public Field $commandLineArguments;
+
+	/**
+	 * @brief The arguements to send to the interpreter if exists
+	 * @var ?string
+	*/
+	public Field $interpreterArguments;
 
 	/**
 	 * @brief The return code expected at the end of the test, beteen 0 and 255
