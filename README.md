@@ -65,6 +65,7 @@ sudo php MarvinetteInstall.php
     ```shell
     marvinette --execute-tests
     ```
+
 ---
 
 ## Available commands
@@ -93,6 +94,16 @@ marvinette [option]
 
 ## What are the created files for?
 
+The framework's configuration file, ```Marvinette.json```, holds the following informations
+
+- ```name```: The name of the project
+- ``` binary name```: the name of the binary/script to execute
+- ```binary path```: the path to the binary/script
+- ```interpreter```: the interpreter of the script (null if ELF file)
+- ```tests folder```: the path to the tests' folder
+
+**Warning**: For optimization reasons, it is **not recommended** to modify the file yourself. If you want to change values, please use the marvinette command (see previous section).
+
 Upon test creation, several files are generated in the ```testFolder```/```testName``` folder:
 
 - ```commandLineArguments```: contains the arguments which will be passed to the program. If the file doesn't exists, no parameters will be sent.
@@ -107,6 +118,9 @@ Upon test creation, several files are generated in the ```testFolder```/```testN
 - ```teardown```: if the file exists, the command written in the file will be executed after the program is launched.
 
 If a ```setup```, ```stdout/stderrFilter``` or ```teardwon``` command doesn't return 0, the test will fail.
+
+Upon creation, feel free to change the files' content by yourself.
+Be careful not to leave any *useless* line breaks of trailing spaces
 
 ---
 
