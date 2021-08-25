@@ -209,8 +209,9 @@ class Test
 		}
 		if ($interpreter != null) {
 			$interpreterCommand = $interpreter;
-			if ($this->interpreterArguments->get())
+			if ($this->interpreterArguments->get()) {
 				$interpreterCommand .= ' ' . $this->interpreterArguments->get();
+			}
 			$command = "$interpreterCommand $command";
 		}
 		if ($this->stdinput->get() && file_exists($stdinputPath)) {

@@ -24,8 +24,9 @@ class TestManager {
 		}
 		$test = new Test();
 		$ignoredFields = [];
-		if ($project->interpreter->get() == null)
+		if ($project->interpreter->get() == null) {
 			$ignoredFields[] = 'interpreterArguments';
+		}
 		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
 			$helpMsg = $field->getPromptHelp();
 			$help = $helpMsg ? " ($helpMsg)" : "";
@@ -51,8 +52,9 @@ class TestManager {
 		$testName = self::selectTest($project);
 		$test = new Test(FileManager::normalizePath("$testsFolder/$testName"));
 		$ignoredFields = [];
-		if ($project->interpreter->get() == null)
+		if ($project->interpreter->get() == null) {
 			$ignoredFields[] = 'interpreterArguments';
+		}
 		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Green)->displayText("Enter the test's new ". UserInterface::cleanCamelCase($fieldName), false);
