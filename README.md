@@ -85,13 +85,15 @@ marvinette [option]
 
         -h, --help: display this usage
 ```
+
 ---
+
 ## What are the created files for?
 
-Upon test creation, several fiels are generated in the ```$testFolder```/```$testName``` folder:
+Upon test creation, several files are generated in the ```testFolder```/```testName``` folder:
 
 - ```commandLineArguments```: contains the arguments which will be passed to the program. If the file doesn't exists, no parameters will be sent.
-- ```interpreterArguments```: contains the arguments which will be passed to the program's interpreter. If the file doesn't exists, no parameters will be sent. The content will be read only if an interpreter is set in the ```Marvinette.json``` file.
+- ```interpreterArguments```: contains the arguments which will be passed to the program's interpreter. If the file doesn't exists, no parameters will be sent. The arguments will be read only if an interpreter is set in the ```Marvinette.json``` file.
 - ```expectedReturnCode```: if the file exists, the returned code from the program will be compared with the number in the file (if the file's content is not a number, the comparison will be scrapped). If there is no such file, no comparison will be done.
 - ```stdoutFilter```: if the file exists, the standard output of the program will be piped onto the command written in the file.
 - ```stderrFilter```: if the file exists, the error output of the program will be piped onto the command written in the file.
@@ -104,6 +106,7 @@ Upon test creation, several fiels are generated in the ```$testFolder```/```$tes
 If a ```setup```, ```stdout/stderrFilter``` or ```teardwon``` command doesn't return 0, the test will fail.
 
 ---
+
 ## Compatibility & Pre-Requisites
 
 To use Marvinette, you'll need to execute your tests on an Unix-based OS (Windows compatibility incoming...).
