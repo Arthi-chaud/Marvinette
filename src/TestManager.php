@@ -50,6 +50,9 @@ class TestManager {
 		$project = new Project(Project::ConfigurationFile);
 		$testsFolder = $project->testsFolder->get();
 		$testName = self::selectTest($project);
+		if (is_null($testName)) {
+			return true;
+		}
 		$test = new Test(FileManager::normalizePath("$testsFolder/$testName"));
 		$ignoredFields = [];
 		if ($project->interpreter->get() == null) {
@@ -104,6 +107,9 @@ class TestManager {
 		}
 		if ($testName == null) {
 			$testName = self::selectTest($project);
+		}
+		if (is_null($testName)) {
+			return true;
 		}
 		UserInterface::setTitle("Test '$testName'");
 		$testPath = FileManager::normalizePath($project->testsFolder->get() . "/$testName");
@@ -173,7 +179,9 @@ class TestManager {
 		}
 		$project = new Project(Project::ConfigurationFile);
 		$testName = self::selectTest($project);
-
+		if (is_null($testName)) {
+			return;
+		}
 		FileManager::deleteFolder($project->testsFolder->get() . DIRECTORY_SEPARATOR . $testName);
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Yellow)->displayText("The test '$testName' has been correctly deleted!");
@@ -239,11 +247,20 @@ class TestManager {
 			UserInterface::$displayer->setColor(Color::Blue)->displayText("$i - " . basename($testsName[$i]));
 			$choices[] = "$i";
 		}
-		$selected = UserInput::getOption(function () use ($testCount) {
-			UserInterface::displayTitle();
-			UserInterface::$displayer->setColor(Color::Yellow)->displayText("Select a test (between 0 and " . ($testCount - 1) . '): ', false);
-		}, $choices);
+		$selectedIndex = null;
+		if ($testCount > 1) {
+			$selectedIndex = UserInput::getOption(function () use ($testCount) {
+				UserInterface::displayTitle();
+				UserInterface::$displayer->setColor(Color::Yellow)->displayText("Select a test (between 0 and " . ($testCount - 1) . '): ', false);
+			}, $choices);
+		} else {
+			if (UserInput::getYesNoOption("Select this test ?", Color::Yellow)) {
+				$selectedIndex = 0;
+			}
+		}
 		UserInterface::popTitle();
-		return basename($testsName[$selected]);
+		if (is_null($selectedIndex))
+			return null;
+		return basename($testsName[$selectedIndex]);
 	}
 }
