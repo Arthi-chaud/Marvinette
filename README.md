@@ -27,15 +27,15 @@ sudo php MarvinetteInstall.php
 
 ## How to Create and Execute your tests
 
-1. Before anything else, your must create your project's configuration file for Marvinette. To do so:
+1. Before anything else, you must create your project's configuration file for Marvinette. To do so:
     - go to your project's directory
-    - execute the command:
+    - execute the following command:
 
     ```shell
     marvinette --create-project
     ```
 
-    - You will be prompt to enter different values.
+    - You will be prompt to enter several values.
     - You can modify your configuration file using the following command (avoid changing the file yourself):
 
     ```shell
