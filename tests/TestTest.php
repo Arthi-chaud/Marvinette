@@ -533,6 +533,30 @@ final class TestTest extends MarvinetteTestCase
 		$this->assertEquals($command, "python3 -E tests/MYFAKEPROJECT.py 100 15 > /tmp/MarvinetteStdout 2> /tmp/MarvinetteStderr");
 	}
 
+
+	public function testBuildCommandWithEmptyEnv(): void
+	{
+		$project = new Project();
+		$project->name->set('101');
+		$project->binaryName->set('MYFAKEPROJECT.py');
+		$project->binaryPath->set('tests/');
+		$project->interpreter->set('python3');
+		$project->testsFolder->set('tmp/');
+		$project->export('tmp/Marvinette.json');
+		
+		$test = new Test();
+		$test->interpreterArguments->set("-E");
+		$test->name->set("First Example");
+		$test->commandLineArguments->set("100 15");
+		$test->expectedReturnCode->set("0");
+		$test->stdoutFilter->set("head -n 2");
+		$test->emptyEnv->set(true);
+		$test->expectedStdout->set("Y");
+
+		$command = $this->callMethod($test, 'buildCommand', [$project, 'tmp/First Example']);
+		$this->assertEquals($command, "env -i python3 -E tests/MYFAKEPROJECT.py 100 15 > /tmp/MarvinetteStdout 2> /tmp/MarvinetteStderr");
+	}
+
 	public function testExecute(): void
 	{
 		$this->expectOutputString("Setup\nTeardown\n");
