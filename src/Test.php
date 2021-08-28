@@ -61,6 +61,10 @@ class Test
 			[Field::class, 'YesNoErrorHandler'],
 			[Field::class, 'YesNoDataCleaner'],
 			"[Y/n] By default no. If you say yes, an empty file will be created so you can set what to write on stdin");
+		$this->emptyEnv = new Field(
+			[Field::class, 'YesNoErrorHandler'],
+			[Field::class, 'YesNoDataCleaner'],
+			"[Y/n] By default no. If you say yes, in this test, the program will be executed with an empty env");
 		$this->expectedStdout = new Field(
 			[Field::class, 'YesNoErrorHandler'],
 			[Field::class, 'YesNoDataCleaner'],
@@ -214,6 +218,9 @@ class Test
 			}
 			$command = "$interpreterCommand $command";
 		}
+		if ($this->emptyEnv->get()) {
+			$command = "env -i $command";
+		}
 		if ($this->stdinput->get() && file_exists($stdinputPath)) {
 			$command = "cat '$stdinputPath' | ($command)";
 		}
@@ -305,6 +312,12 @@ class Test
 	 * @var bool
 	 */
 	public Field $stdinput;
+
+	/**
+	 * @brief if true, the tested program will be executed with an empty env
+	 * @var bool
+	 */
+	public Field $emptyEnv;
 
 	/**
 	 * @brief if true, will compare program's stdout to file filled by the user
