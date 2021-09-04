@@ -13,7 +13,7 @@ function install()
 		$HOME = getenv('HOME');
 		if (!$HOME|| $HOME == [] || $HOME == '')
 			throw new Exception("Impossible to access 'HOME' variable");
-		$scriptPath = '$HOME/bin/';
+		$scriptPath = "$HOME/bin/";
 	} else {
 		$scriptPath = '.' . DIRECTORY_SEPARATOR;
 		$scriptName .= '.ps1';
