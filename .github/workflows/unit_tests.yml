@@ -1,0 +1,38 @@
+name: Unit Tests
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - window_test_workflow
+
+jobs:
+  TestsExecution:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+        with:
+           fetch-depth: 0
+      - name: Setup PHP with Xdebug
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          coverage: xdebug
+      - name: Get dependencies
+        uses: php-actions/composer@v6
+      - name: Execute unit tests
+        run: |
+          php -v
+          mkdir tmp
+          ./vendor/bin/phpunit tests --testdox --coverage-clover=coverage-report.clover --log-junit=test-report.xml --coverage-filter src
+          ls -l
+      - name: Upload coverage files
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage_files
+          path: |
+            test-report.xml
+            coverage-report.clover
+
+          
