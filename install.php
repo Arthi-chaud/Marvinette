@@ -8,11 +8,11 @@ function install()
 	$CWD = getcwd();
 	if (!$CWD)
 		throw new Exception('Impossible to get current working directory');
-	$HOME = getenv('HOME');
-	if (!$HOME|| $HOME == [] || $HOME == '')
-		throw new Exception("Impossible to access 'HOME' variable");
 	$scriptName = 'marvinette';
 	if (!$isWindows) {
+		$HOME = getenv('HOME');
+		if (!$HOME|| $HOME == [] || $HOME == '')
+			throw new Exception("Impossible to access 'HOME' variable");
 		$scriptPath = '$HOME/bin/';
 	} else {
 		$scriptPath = '.' . DIRECTORY_SEPARATOR;
