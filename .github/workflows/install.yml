@@ -19,16 +19,16 @@ jobs:
             name: Windows
     steps:
       - uses: actions/checkout@v2.3.4
-      - name: Install
-        run: php install.php
-      - name: Check marvinette is launch-able (Linux)
+      - name: Install and Check marvinette is launch-able (Linux)
         if:  ${{ matrix.name == 'Linux'}}
         run: |
+          sudo php install.php
           which marvinette
           file $HOME/bin/marvinette
           marvinette --help
-      - name: Check marvinette is launch-able (Windows)
+      - name: Install and check marvinette is launch-able (Windows)
         if:  ${{ matrix.name == 'Windows'}}
         run: |
+          php install.php
           $env:Path += ";D:\a\Marvinette\Marvinette"
           marvinette --help
