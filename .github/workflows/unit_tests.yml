@@ -28,7 +28,7 @@ jobs:
           php-version: '8.0'
           coverage: xdebug
       - name: Get Composer
-        if: matrix.name == 'Windows'
+        if: matrix.name == 'Linux'
         uses: php-actions/composer@v6
       - name: Execute unit tests
         shell: bash
