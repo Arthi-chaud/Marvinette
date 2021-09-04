@@ -1,21 +1,25 @@
 <?php
 
+$isWindows = sys_get_temp_dir() != '/tmp';
+
 function install()
 {
-	$isWindows = sys_get_temp_dir() == '/tmp';
+	global $isWindows;
 	$CWD = getcwd();
 	if (!$CWD)
 		throw new Exception('Impossible to get current working directory');
 	$HOME = getenv('HOME');
 	if (!$HOME|| $HOME == [] || $HOME == '')
 		throw new Exception("Impossible to access 'HOME' variable");
+	$scriptName = 'marvinette';
 	if (!$isWindows) {
 		$scriptPath = '$HOME/bin/';
 	} else {
-		$scriptPath = 'somewhere in path';
+		$scriptPath = '.' . DIRECTORY_SEPARATOR;
+		$scriptName .= '.ps1';
 	}
-	file_put_contents($scriptPath . 'marvinette', getScriptContent($CWD, $isWindows));
-	chmod($scriptPath . 'marvinette', 0777);
+	file_put_contents($scriptPath . $scriptName, getScriptContent($CWD, $isWindows));
+	chmod($scriptPath . $scriptName, 0777);
 }
 
 function getScriptContent(string $projectPath, bool $isWindows = false): string
@@ -40,6 +44,9 @@ function getScriptContent(string $projectPath, bool $isWindows = false): string
 try {
 	install();
 	echo "Marvinette is installed!\n";
+	if ($isWindows) {
+		echo "Add '" . getcwd() . "' to your PATH environment variable and you're ready to go!\n";
+	}
 } catch (Exception $e) {
 	echo "An error occured: " . $e->getMessage() . "\n";
 	echo "Exiting...\n";
