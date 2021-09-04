@@ -23,7 +23,6 @@ jobs:
         with:
            fetch-depth: 0
       - name: Setup PHP with Xdebug
-        if: matrix.name == 'Linux'
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.0'
