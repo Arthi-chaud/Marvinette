@@ -156,13 +156,13 @@ final class ProjectTest extends MarvinetteTestCase
 
 		$project->binaryPath->set("tests/");
 		$project->binaryName->set("binary");
-		$this->assertEquals($project->buildBinaryAccessPath(), "tests/binary");
+		$this->assertEquals($project->buildBinaryAccessPath(), FileManager::normalizePath("tests/binary"));
 	}
 
 	public function testInterpreterExists(): void
 	{
 		$project = new Project();
-		$project->interpreter->set('python3');
+		$project->interpreter->set('php');
 		$this->assertTrue($project->interpreterExists());
 	}
 
