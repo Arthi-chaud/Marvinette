@@ -10,7 +10,7 @@ require_once 'src/Utils/UserInput.php';
 
 final class UserInputTest extends MarvinetteTestCase
 {
-	const stdinClone = '/tmp/marvinetteTest';
+	const stdinClone = TmpFileFolder . DIRECTORY_SEPARATOR . 'marvinetteTest';
 
 	public function testGetUserInput(): void
 	{
