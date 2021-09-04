@@ -248,7 +248,7 @@ class Test
 		$expectedOutputFile = FileManager::normalizePath("$testPath/expected$streamName");
 		$actualOutputFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . $streamName);
 		$diffOutputFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpDiffFilePrefix);
-		$this->executeSystemCommand("diff '$expectedOutputFile' '$actualOutputFile' > $diffOutputFile", "Expected Output differs.");
+		$this->executeSystemCommand("diff --strip-trailing-cr '$expectedOutputFile' '$actualOutputFile' > $diffOutputFile", "Expected Output differs.");
 	}
 
 	/**

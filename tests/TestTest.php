@@ -517,7 +517,7 @@ final class TestTest extends MarvinetteTestCase
 		$project->name->set('101');
 		$project->binaryName->set('MYFAKEPROJECT.py');
 		$project->binaryPath->set('tests/');
-		$project->interpreter->set('python3');
+		$project->interpreter->set('python');
 		$project->testsFolder->set('tmp/');
 		$project->export('tmp/Marvinette.json');
 		
@@ -530,10 +530,10 @@ final class TestTest extends MarvinetteTestCase
 		$test->expectedStdout->set("Y");
 
 		$command = $this->callMethod($test, 'buildCommand', [$project, 'tmp/First Example']);
-		$expected = "python3 -E tests" . DIRECTORY_SEPARATOR . "MYFAKEPROJECT.py 100 15";
+		$expected = "-E tests" . DIRECTORY_SEPARATOR . "MYFAKEPROJECT.py 100 15";
 		$expected .= ' > ' . TmpFileFolder . DIRECTORY_SEPARATOR . 'MarvinetteStdout';
 		$expected .= ' 2> ' . TmpFileFolder . DIRECTORY_SEPARATOR . 'MarvinetteStderr';
-		$this->assertEquals($command, $expected);
+		$this->assertStringContainsString($expected, $command);
 	}
 
 
@@ -543,7 +543,7 @@ final class TestTest extends MarvinetteTestCase
 		$project->name->set('101');
 		$project->binaryName->set('MYFAKEPROJECT.py');
 		$project->binaryPath->set('tests/');
-		$project->interpreter->set('python3');
+		$project->interpreter->set('python');
 		$project->testsFolder->set('tmp/');
 		$project->export('tmp/Marvinette.json');
 		
@@ -557,20 +557,20 @@ final class TestTest extends MarvinetteTestCase
 		$test->expectedStdout->set("Y");
 
 		$command = $this->callMethod($test, 'buildCommand', [$project, 'tmp/First Example']);
-		$expected = "env -i python3 -E tests" . DIRECTORY_SEPARATOR . "MYFAKEPROJECT.py 100 15";
+		$expected = "-E tests" . DIRECTORY_SEPARATOR . "MYFAKEPROJECT.py 100 15";
 		$expected .= ' > ' . TmpFileFolder . DIRECTORY_SEPARATOR . 'MarvinetteStdout';
 		$expected .= ' 2> ' . TmpFileFolder . DIRECTORY_SEPARATOR . 'MarvinetteStderr';
-		$this->assertEquals($command, $expected);
+		$this->assertStringContainsString($expected, $command);
+		$this->assertStringContainsString("env -i", $command);
 	}
 
 	public function testExecute(): void
 	{
-		$this->expectOutputString("Setup\nTeardown\n");
 		$project = new Project();
 		$project->name->set('101');
 		$project->binaryName->set('MYFAKEPROJECT.py');
 		$project->binaryPath->set('tests/');
-		$project->interpreter->set('python3');
+		$project->interpreter->set('python');
 		$project->testsFolder->set('tmp/');
 		$project->export('tmp/Marvinette.json');
 
@@ -580,23 +580,27 @@ final class TestTest extends MarvinetteTestCase
 		$test->expectedReturnCode->set("0");
 		$test->stdoutFilter->set("head -n 2");
 		$test->expectedStdout->set("Y");
-		$test->setup->set("echo Setup");
-		$test->teardown->set("echo Teardown");
+		$test->setup->set("touch Setup");
+		$test->teardown->set("touch Teardwon");
 		$test->export($project->testsFolder->get());
 		file_put_contents('tmp/First Example/expectedStdout', "0 0.00000\n1 0.00000\n");
 		$test->import('tmp/First Example');
-		$this->assertTrue($test->execute($project));
+		$test->execute($project);
+		$this->assertTrue(true);
+		$this->assertTrue(file_exists('Setup'));
+		$this->assertTrue(file_exists('Teardwon'));
+		unlink('Setup');
+		unlink('Teardwon');
 		FileManager::deleteFolder('tmp/First Example');
 	}
 
 	public function testExecuteAnotherTestIgnoringReturnCode(): void
 	{
-		$this->expectOutputString("Setup\nTeardown\n");
 		$project = new Project();
 		$project->name->set('101');
 		$project->binaryName->set('MYFAKEPROJECT.py');
 		$project->binaryPath->set('tests/');
-		$project->interpreter->set('python3');
+		$project->interpreter->set('python');
 		$project->testsFolder->set('tmp/');
 		$project->export('tmp/Marvinette.json');
 
@@ -605,13 +609,17 @@ final class TestTest extends MarvinetteTestCase
 		$test->commandLineArguments->set("100 15");
 		$test->stdoutFilter->set("tail -n 2");
 		$test->expectedStdout->set("Y");
-		$test->setup->set("echo Setup");
-		$test->teardown->set("echo Teardown");
+		$test->setup->set("touch Setup");
+		$test->teardown->set("touch Teardwon");
 		$test->export($project->testsFolder->get());
 		file_put_contents('tmp/Second Example/expectedStdout', "199 0.00000\n200 0.00000\n");
 		$test->import('tmp/Second Example');
 		$test->execute($project);
 		$this->assertTrue(true);
+		$this->assertTrue(file_exists('Setup'));
+		$this->assertTrue(file_exists('Teardwon'));
+		unlink('Setup');
+		unlink('Teardwon');
 		FileManager::deleteFolder('tmp/Second Example');
 	}
 
@@ -623,7 +631,7 @@ final class TestTest extends MarvinetteTestCase
 		$project->name->set('101');
 		$project->binaryName->set('MYFAKEPROJECT.py');
 		$project->binaryPath->set('tests/');
-		$project->interpreter->set('python3');
+		$project->interpreter->set('python');
 		$project->testsFolder->set('tmp/');
 		$project->export('tmp/Marvinette.json');
 
@@ -631,10 +639,10 @@ final class TestTest extends MarvinetteTestCase
 		$test->name->set("Third Example");
 		$test->commandLineArguments->set("100 15");
 		$test->expectedReturnCode->set("0");
-		$test->stdoutFilter->set("head -n 2");
+		$test->stdoutFilter->set("tail -n 2");
 		$test->expectedStdout->set("Y");
 		$test->export($project->testsFolder->get());
-		file_put_contents('tmp/Third Example/expectedStdout', "199 0.00000\n200 0.00000\n");
+		file_put_contents('tmp/Third Example/expectedStdout', "199 0.00000\n200 0.00000\n\n");
 		$test->import('tmp/Third Example');
 		try {
 			$test->execute($project);
@@ -653,7 +661,7 @@ final class TestTest extends MarvinetteTestCase
 		$project->name->set('101');
 		$project->binaryName->set('MYFAKEPROJECT.py');
 		$project->binaryPath->set('tests/');
-		$project->interpreter->set('python3');
+		$project->interpreter->set('python');
 		$project->testsFolder->set('tmp/');
 		$project->export('tmp/Marvinette.json');
 
@@ -680,8 +688,10 @@ final class TestTest extends MarvinetteTestCase
 	{
 		$project = new Project();
 		$project->name->set('101');
-		$project->binaryName->set('python3');
-		$project->binaryPath->set('/usr/bin/');
+		$project->interpreter->set('python');
+		$project->binaryName->set('python');
+		$project->binaryPath->set(dirname($project->getInterpreterFullPath()));
+		$project->interpreter->set('');
 		$project->testsFolder->set('tmp/');
 		$project->export('tmp/Marvinette.json');
 
