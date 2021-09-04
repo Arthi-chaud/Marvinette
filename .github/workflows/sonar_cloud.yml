@@ -5,8 +5,8 @@ on:
     branches: 
       - master
       - dev
-    types: 
-      - push
+    types:
+      - completed
 
 jobs:
   StaticAnalysis:
