@@ -24,13 +24,15 @@ jobs:
       - name: Check marvinette is launch-able (Linux)
         if:  ${{ matrix.name == 'Linux'}}
         run: |
-          cd /
+          cd ..
           which marvinette
           file $HOME/bin/marvinette
           marvinette --help
       - name: Check marvinette is launch-able (Windows)
         if:  ${{ matrix.name == 'Windows'}}
+        shell: bash
         run: |
+          export PATH=$PATH:$CWD
           cd ..
           cd ..
           which marvinette
