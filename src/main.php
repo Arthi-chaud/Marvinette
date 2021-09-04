@@ -25,6 +25,9 @@ function launch(): bool
 		'exec-test' => [TestManager::class, 'executeTest'],
 		'execute-tests' => [TestManager::class, 'executesAllTests'],
 		'exec-all' => [TestManager::class, 'executesAllTests'],
+
+		'h' => [UserInterface::class, 'displayHelp'],
+		'help' => [UserInterface::class, 'displayHelp'],
 	];
 	$options = CommandLine::getArguments(array_keys($optionsCalls));
 	foreach ($optionsCalls as $option => $call) {

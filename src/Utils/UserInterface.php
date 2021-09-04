@@ -56,7 +56,7 @@ class UserInterface
 		reset(self::$titlesStack);
 	}
 
-	public static function displayHelp(): void
+	public static function displayHelp(): bool
 	{
 		$usage = [
 			"marvinette [option]",
@@ -74,6 +74,7 @@ class UserInterface
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Display\Color::White)->displayText($line);
 		}
+		return true;
 	}
 
 	/**
