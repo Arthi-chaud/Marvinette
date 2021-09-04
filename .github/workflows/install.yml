@@ -29,10 +29,6 @@ jobs:
           marvinette --help
       - name: Check marvinette is launch-able (Windows)
         if:  ${{ matrix.name == 'Windows'}}
-        shell: bash
         run: |
-          export PATH=$PATH:$CWD
-          cd ..
-          cd ..
-          which marvinette
+          $env:Path += ";D:\a\Marvinette\Marvinette"
           marvinette --help
