@@ -28,8 +28,9 @@ jobs:
           php-version: '8.0'
           coverage: xdebug
       - name: Get Composer
+        if: matrix.name == 'Windows'
         uses: php-actions/composer@v6
-      - name: Execute unit tests linux
+      - name: Execute unit tests
         shell: bash
         run: |
           mkdir tmp
