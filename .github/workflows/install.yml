@@ -24,7 +24,6 @@ jobs:
         run: |
           sudo php install.php
           which marvinette
-          file $HOME/bin/marvinette
           marvinette --help
       - name: Install and check marvinette is launch-able (Windows)
         if:  ${{ matrix.name == 'Windows'}}
