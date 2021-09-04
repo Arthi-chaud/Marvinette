@@ -152,7 +152,6 @@ class Test
 			$this->executeSystemCommand($this->setup->get(), 'Setup failed');
 		}
 		$command = $this->buildCommand($project, $testPath);
-		var_dump($command);
 		$this->executeTestCommand($command);
 		foreach([self::TmpFileStderrPrefix, self::TmpFileStdoutPrefix] as $stream) {
 			$this->filterOutput($stream, $testPath);
