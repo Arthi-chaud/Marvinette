@@ -28,8 +28,7 @@ jobs:
         with:
           php-version: '8.0'
           coverage: xdebug
-      - name: Get dependencies
-        if: matrix.name == 'Linux'
+      - name: Get Composer
         uses: php-actions/composer@v6
       - name: Execute unit tests linux
         shell: bash
