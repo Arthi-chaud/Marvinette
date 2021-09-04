@@ -6,7 +6,7 @@ on:
       - dev
       - window_support
 jobs:
-  TestInstallation:
+  InstallationTest:
     name: "Run installation script on ${{ matrix.name }}"
     runs-on: ${{ matrix.os }}
     strategy:
@@ -22,14 +22,14 @@ jobs:
       - name: Install
         run: php install.php
       - name: Check marvinette is launch-able (Linux)
-        if:  ${{ matrix.runner == 'Linux'}}
+        if:  ${{ matrix.name == 'Linux'}}
         run: |
           cd /
           which marvinette
           file $HOME/bin/marvinette
           marvinette --help
       - name: Check marvinette is launch-able (Windows)
-        if:  ${{ matrix.runner == 'Windows'}}
+        if:  ${{ matrix.name == 'Windows'}}
         run: |
           cd ..
           cd ..
