@@ -31,10 +31,16 @@ jobs:
       - name: Get dependencies
         if: matrix.name == 'Linux'
         uses: php-actions/composer@v6
-      - name: Execute unit tests
+      - name: Execute unit tests linux
+        if: matrix.name == 'Linux'
         run: |
           mkdir tmp
           ./vendor/bin/phpunit tests --testdox --coverage-clover=coverage-report.clover --log-junit=test-report.xml --coverage-filter src
+      - name: Execute unit tests Windows
+        if: matrix.name == 'Windows'
+        run: |
+          mkdir tmp
+          .\vendor\bin\phpunit tests --testdox --coverage-clover=coverage-report.clover --log-junit=test-report.xml --coverage-filter src
       - name: Upload coverage files
         if: matrix.name == 'Linux'
         uses: actions/upload-artifact@v2
