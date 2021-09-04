@@ -6,12 +6,14 @@ use Display\Color;
 require_once 'src/Exception/MarvinetteException.php';
 require_once 'src/Field.php';
 
+define('TmpFileFolder', sys_get_temp_dir());
+
 /**
  * @brief Object representing the test's instruction
 */
 class Test
 {
-	const TmpFileFolder = '/tmp';
+	const TmpFileFolder = TmpFileFolder;
 
 	const TmpFilePrefix = 'Marvinette';
 

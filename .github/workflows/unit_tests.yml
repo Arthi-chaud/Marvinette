@@ -32,7 +32,6 @@ jobs:
       - name: Execute unit tests
         shell: bash
         run: |
-          ls -l
           mkdir tmp
           ./vendor/bin/phpunit tests --testdox --coverage-clover=coverage-report.clover --log-junit=test-report.xml --coverage-filter src
       - name: Upload coverage files
