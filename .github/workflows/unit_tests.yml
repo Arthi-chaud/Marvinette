@@ -27,7 +27,7 @@ jobs:
         with:
           php-version: '8.0'
           coverage: xdebug
-      - name: Get Composer
+      - name: Get PHPUnit dependency with composer
         run: composer install
       - name: Execute unit tests
         shell: bash
