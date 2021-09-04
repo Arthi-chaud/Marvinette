@@ -112,6 +112,7 @@ Upon test creation, several files are generated in the ```testFolder```/```testN
 - ```stdoutFilter```: if the file exists, the standard output of the program will be piped onto the command written in the file.
 - ```stderrFilter```: if the file exists, the error output of the program will be piped onto the command written in the file.
 - ```stdinput```: if the file exists, the content of the file will be standard input to the program.
+- ```emptyEnv```: if the file exists, the test command will be executed within an empty environment (the file's content will not be read).
 - ```expectedStdout```: if the file exists, the (filtered) standard output will be compared to the file's content. If there is no such file, no comparison will be done.
 - ```expectedStderr```: if the file exists, the (filtered) error output will be compared to the file's content. If there is no such file, no comparison will be done.
 - ```setup```: if the file exists, the command written in the file will be executed before the program is launched.
