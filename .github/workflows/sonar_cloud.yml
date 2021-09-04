@@ -5,7 +5,6 @@ on:
     branches: 
       - master
       - dev
-      - window_test_workflow
 
 jobs:
   StaticAnalysis:
@@ -15,8 +14,9 @@ jobs:
         with:
            fetch-depth: 0
       - name: Download coverage files from unit tests' job
-        uses: actions/download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2.14.1
         with:
+          workflow: unit_tests.yml
           name: coverage_files
       - name: Fix Coverage File Path
         run: |

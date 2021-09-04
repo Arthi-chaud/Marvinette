@@ -4,7 +4,6 @@ on:
     branches:
       - master
       - dev
-      - window_test_workflow
 
 jobs:
   TestsExecution:
