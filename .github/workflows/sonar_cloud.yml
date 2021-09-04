@@ -2,9 +2,10 @@ name: Static Analysis
 on:
   workflow_run:
     workflows: ["Unit Tests"]
-    branches: [master, dev, window_test_workflow]
-    types: 
-      - completed
+    branches: 
+      - master
+      - dev
+      - window_test_workflow
 
 jobs:
   StaticAnalysis:
