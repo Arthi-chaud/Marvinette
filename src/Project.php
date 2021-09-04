@@ -114,8 +114,10 @@ class Project
 		if (!$this->interpreter->get()) {
 			throw new MarvinetteException("No Interpreter set");
 		}
-		foreach (explode(':', getenv('PATH')) as $path) {
-			if (file_exists(FileManager::normalizePath("$path/". $this->interpreter->get()))) {
+		$interpreterExtension = pathinfo($this->interpreter->get(), PATHINFO_EXTENSION);
+		$cleanInterpreterName = basename($this->interpreter->get(), ".$interpreterExtension");
+		foreach (explode(PATH_SEPARATOR , getenv('PATH')) as $path) {
+			if (glob(FileManager::normalizePath("$path/$cleanInterpreterName*")) != []) {
 				return true;
 			}
 		}
