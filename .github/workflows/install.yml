@@ -24,7 +24,6 @@ jobs:
       - name: Check marvinette is launch-able (Linux)
         if:  ${{ matrix.name == 'Linux'}}
         run: |
-          cd ..
           which marvinette
           file $HOME/bin/marvinette
           marvinette --help
