@@ -10,7 +10,7 @@ function install()
 		throw new Exception('Impossible to get current working directory');
 	$scriptName = 'marvinette';
 	if (!$isWindows) {
-		$scriptPath = "/usr/local/bin";
+		$scriptPath = "/usr/local/bin/";
 	} else {
 		$scriptPath = '.' . DIRECTORY_SEPARATOR;
 		$scriptName .= '.ps1';
