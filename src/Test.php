@@ -154,7 +154,6 @@ class Test
 		$command = $this->buildCommand($project, $testPath);
 		var_dump($command);
 		$this->executeTestCommand($command);
-		var_dump(file_get_contents('C:\Users\arthu\AppData\Local\Temp\MarvinetteStdout'));
 		foreach([self::TmpFileStderrPrefix, self::TmpFileStdoutPrefix] as $stream) {
 			$this->filterOutput($stream, $testPath);
 			$this->compareOutput($stream, $testPath);
