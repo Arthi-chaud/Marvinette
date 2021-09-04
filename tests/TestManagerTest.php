@@ -18,7 +18,7 @@ final class TestManagerTest extends MarvinetteTestCase
 			'My Name',
 			'MYFAKEPROJECT.py',
 			'./tests',
-			'python3',
+			'python',
 			'',
 			'n'
 		]);
@@ -319,7 +319,7 @@ final class TestManagerTest extends MarvinetteTestCase
 			'',
 			'Y'
 		]);
-		$this->hideStdout();
+		//$this->hideStdout();
 		TestManager::addTest();
 		file_put_contents('tests/First Test/expectedStdout', "110 0.02130\n111 0.02033\n112 0.01931\n113 0.01827\n114 0.01721\n115 0.01613\n116 0.01506\n117 0.01399\n118 0.01295\n119 0.01192\n");
 		$this->assertTrue(TestManager::executeTest());

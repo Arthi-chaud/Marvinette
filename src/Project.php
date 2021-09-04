@@ -111,17 +111,26 @@ class Project
 	 */
 	public function interpreterExists(): bool
 	{
+		return $this->getInterpreterFullPath() != null;
+	}
+	/**
+	 * Using PATh Env var, get interpreter's full path, or null if not 
+	 * throw if no interpreter is set
+	 */
+	public function getInterpreterFullPath(): ?string
+	{
 		if (!$this->interpreter->get()) {
 			throw new MarvinetteException("No Interpreter set");
 		}
 		$interpreterExtension = pathinfo($this->interpreter->get(), PATHINFO_EXTENSION);
 		$cleanInterpreterName = basename($this->interpreter->get(), ".$interpreterExtension");
 		foreach (explode(PATH_SEPARATOR , getenv('PATH')) as $path) {
-			if (glob(FileManager::normalizePath("$path/$cleanInterpreterName*")) != []) {
-				return true;
+			$matching = glob(FileManager::normalizePath("$path/$cleanInterpreterName*"));
+			if ($matching != []) {
+				return $matching[0];
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**

@@ -16,12 +16,12 @@ final class TestTest extends MarvinetteTestCase
 
 		$project->name->set('Name');
 		$project->binaryName->set('README.md');
-		$project->export('/tmp/out.json');
+		$project->export('out.json');
 	}
 
 	public function tearDown(): void
 	{
-		unlink('/tmp/out.json');
+		unlink('out.json');
 	}
 
 	public function testSetName(): void
@@ -52,7 +52,7 @@ final class TestTest extends MarvinetteTestCase
 		$Test = new Test();
 		$Test->name->set("MY NAME");
 		try {
-			$Test->name->set("a/b");
+			$Test->name->set('a' . DIRECTORY_SEPARATOR . 'b');
 		} catch (Exception $e) {
 			$thrown = true;
 		}
@@ -479,7 +479,7 @@ final class TestTest extends MarvinetteTestCase
 	{
 		$test = new Test();
 
-		$this->expectOutputString("Hello World\n");
+		$this->expectOutputString("Hello World" . PHP_EOL);
 		$this->callMethod($test, 'executeSystemCommand', ['echo Hello World', null, 0]);
 	}
 
@@ -530,7 +530,10 @@ final class TestTest extends MarvinetteTestCase
 		$test->expectedStdout->set("Y");
 
 		$command = $this->callMethod($test, 'buildCommand', [$project, 'tmp/First Example']);
-		$this->assertEquals($command, "python3 -E tests/MYFAKEPROJECT.py 100 15 > /tmp/MarvinetteStdout 2> /tmp/MarvinetteStderr");
+		$expected = "python3 -E tests" . DIRECTORY_SEPARATOR . "MYFAKEPROJECT.py 100 15";
+		$expected .= ' > ' . TmpFileFolder . DIRECTORY_SEPARATOR . 'MarvinetteStdout';
+		$expected .= ' 2> ' . TmpFileFolder . DIRECTORY_SEPARATOR . 'MarvinetteStderr';
+		$this->assertEquals($command, $expected);
 	}
 
 
@@ -554,7 +557,10 @@ final class TestTest extends MarvinetteTestCase
 		$test->expectedStdout->set("Y");
 
 		$command = $this->callMethod($test, 'buildCommand', [$project, 'tmp/First Example']);
-		$this->assertEquals($command, "env -i python3 -E tests/MYFAKEPROJECT.py 100 15 > /tmp/MarvinetteStdout 2> /tmp/MarvinetteStderr");
+		$expected = "env -i python3 -E tests" . DIRECTORY_SEPARATOR . "MYFAKEPROJECT.py 100 15";
+		$expected .= ' > ' . TmpFileFolder . DIRECTORY_SEPARATOR . 'MarvinetteStdout';
+		$expected .= ' 2> ' . TmpFileFolder . DIRECTORY_SEPARATOR . 'MarvinetteStderr';
+		$this->assertEquals($command, $expected);
 	}
 
 	public function testExecute(): void
@@ -579,8 +585,7 @@ final class TestTest extends MarvinetteTestCase
 		$test->export($project->testsFolder->get());
 		file_put_contents('tmp/First Example/expectedStdout', "0 0.00000\n1 0.00000\n");
 		$test->import('tmp/First Example');
-		$test->execute($project);
-		$this->assertTrue(true);
+		$this->assertTrue($test->execute($project));
 		FileManager::deleteFolder('tmp/First Example');
 	}
 

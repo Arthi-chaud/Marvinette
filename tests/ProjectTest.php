@@ -178,7 +178,7 @@ final class ProjectTest extends MarvinetteTestCase
 		$project = new Project();
 		$this->expectException(Exception::class);
 		$this->expectExceptionMessage('No Interpreter set');
-		$this->assertFalse($project->interpreterExists());
+		$project->interpreterExists();
 	}
 
 	public function testIsReadyToBeTested(): void
@@ -239,9 +239,9 @@ final class ProjectTest extends MarvinetteTestCase
 		$project->binaryPath->set("./");
 		$project->binaryName->set("README.md");
 		$project->testsFolder->set('testers/');
-		$project->export('/tmp/out.json');
-		$this->assertTrue(file_exists('/tmp/out.json'));
-		$object = json_decode(file_get_contents('/tmp/out.json'), true);
+		$project->export('out.json');
+		$this->assertTrue(file_exists('out.json'));
+		$object = json_decode(file_get_contents('out.json'), true);
 
 		$this->assertEquals($object['name'], 'name');
 		$this->assertEquals($object['binary path'], '.');
@@ -255,18 +255,18 @@ final class ProjectTest extends MarvinetteTestCase
 		$thrown = false;
 		$project = new Project();
 		try {
-			$project->export("/tmp/out2.json");
+			$project->export("out2.json");
 		} catch (Exception $e) {
 			$thrown = true;
 			$this->assertEquals($e->getMessage(), "Project is not ready to be exported, missing mandatory field");
 		}
 		$this->assertTrue($thrown);
-		$this->assertFalse(file_exists('/tmp/out2.json'));
+		$this->assertFalse(file_exists('out2.json'));
 	}
 
 	public function testImport(): void
 	{
-		$project = new Project('/tmp/out.json');
+		$project = new Project('out.json');
 
 		$this->assertEquals($project->name->get(), 'name');
 		$this->assertEquals($project->binaryPath->get(), '.');
