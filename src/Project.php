@@ -125,7 +125,10 @@ class Project
 		$interpreterExtension = pathinfo($this->interpreter->get(), PATHINFO_EXTENSION);
 		$cleanInterpreterName = basename($this->interpreter->get(), ".$interpreterExtension");
 		foreach (explode(PATH_SEPARATOR , getenv('PATH')) as $path) {
-			$matching = glob(FileManager::normalizePath("$path/$cleanInterpreterName*"));
+			$globbedPath = "$path/$cleanInterpreterName";
+			if (DIRECTORY_SEPARATOR == '\\') // if we're on windows
+				$globbedPath .= '.*';
+			$matching = glob(FileManager::normalizePath($globbedPath));
 			if ($matching != []) {
 				return $matching[0];
 			}
