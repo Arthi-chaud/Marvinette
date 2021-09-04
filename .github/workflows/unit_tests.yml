@@ -8,6 +8,8 @@ on:
 
 jobs:
   TestsExecution:
+    name: "Run unit tests on ${{ matrix.name }}"
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
