@@ -2,33 +2,39 @@
 
 function install()
 {
-	if (posix_getuid() != 0)
-		throw new Exception("Please execute this script using sudo");
+	$isWindows = sys_get_temp_dir() == '/tmp';
 	$CWD = getcwd();
-
 	if (!$CWD)
 		throw new Exception('Impossible to get current working directory');
-	$PATH = getenv('PATH');
-	if (!$PATH|| $PATH == [] || $PATH == '')
-		throw new Exception("Impossible to access 'PATH' variable");
-	$scriptPath = '/usr/bin';
-	if (substr($scriptPath, -1, 1) != DIRECTORY_SEPARATOR)
-		$scriptPath .= DIRECTORY_SEPARATOR;
-	file_put_contents($scriptPath . 'marvinette', getScriptContent($CWD));
+	$HOME = getenv('HOME');
+	if (!$HOME|| $HOME == [] || $HOME == '')
+		throw new Exception("Impossible to access 'HOME' variable");
+	if (!$isWindows) {
+		$scriptPath = '$HOME/bin/';
+	} else {
+		$scriptPath = 'somewhere in path';
+	}
+	file_put_contents($scriptPath . 'marvinette', getScriptContent($CWD, $isWindows));
 	chmod($scriptPath . 'marvinette', 0777);
 }
 
-function getScriptContent(string $projectPath): string
+function getScriptContent(string $projectPath, bool $isWindows = false): string
 {
 	if (substr($projectPath, -1, 1) != DIRECTORY_SEPARATOR)
 		$projectPath .= DIRECTORY_SEPARATOR;
-	$content = [
-		"#!/bin/sh",
-		'php  ' . $projectPath . 'src/main.php $@',
-		'exit $?'
-	];
+	if (!$isWindows) {
+		$content = [
+			"#!/bin/sh",
+			'php  ' . $projectPath . 'src/main.php $@',
+			'exit $?'
+		];
+	} else {
+		$content = [
+			"Invoke-Expression \"php $projectPath" . 'src/main.php $args"',
+			'return', 
+		];
+	}
 	return implode("\n", $content);
-	
 }
 
 try {

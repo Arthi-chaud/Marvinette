@@ -19,8 +19,19 @@ jobs:
             name: Windows
     steps:
       - uses: actions/checkout@v2.3.4
-      - name: Check marvinette is launch-able
+      - name: Install
+        run: php install.php
+      - name: Check marvinette is launch-able (Linux)
+        if:  ${{ matrix.runner == 'Linux'}}
         run: |
-          sudo php install.php
+          cd /
           which marvinette
-          file /usr/bin/marvinette
+          file $HOME/bin/marvinette
+          marvinette --help
+      - name: Check marvinette is launch-able (Windows)
+        if:  ${{ matrix.runner == 'Windows'}}
+        run: |
+          cd ..
+          cd ..
+          which marvinette
+          marvinette --help
