@@ -4,6 +4,7 @@ on:
     branches:
       - master
       - dev
+      - window_support
 jobs:
   TestInstallation:
     name: "Run installation script on ${{ matrix.name }}"
