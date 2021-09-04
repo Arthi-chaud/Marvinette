@@ -118,7 +118,7 @@ Upon test creation, several files are generated in the ```testFolder```/```testN
 - ```setup```: if the file exists, the command written in the file will be executed before the program is launched.
 - ```teardown```: if the file exists, the command written in the file will be executed after the program is launched.
 
-If a ```setup```, ```stdout/stderrFilter``` or ```teardwon``` command doesn't return 0, the test will fail.
+If a ```setup```, ```stdout/stderrFilter``` or ```teardown``` command doesn't return 0, the test will fail.
 
 Upon creation, feel free to change the files' content by yourself.
 Be careful not to leave any *useless* line breaks of trailing spaces
