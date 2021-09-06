@@ -22,12 +22,12 @@ jobs:
       - name: Install and Check marvinette is launch-able (Linux)
         if:  ${{ matrix.name == 'Linux'}}
         run: |
-          sudo php install.php
+          sudo php MarvinetteInstall.php
           which marvinette
           marvinette --help
       - name: Install and check marvinette is launch-able (Windows)
         if:  ${{ matrix.name == 'Windows'}}
         run: |
-          php install.php
+          php MarvinetteInstall.php
           $env:Path += ";D:\a\Marvinette\Marvinette"
           marvinette --help
