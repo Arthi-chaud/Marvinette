@@ -195,11 +195,11 @@ class Project
 		if (!$json) {
 			throw new InvalidConfigFileException();
 		}
-		ObjectHelper::forEachObjectField($this, function($name, $field) use ($json) {
-			if (!array_key_exists($name, $json))
+		ObjectHelper::forEachObjectField($this, function($name, $field) use (&$json) {
+			if (!array_key_exists(UserInterface::cleanCamelCase($name), $json)) {
 				throw new InvalidConfigFileException();
-			$cameCalseName = UserInterface::toCamelCase($name);
-			$field->set($json[$cameCalseName]);
+			}
+			$field->set($json[UserInterface::cleanCamelCase($name)]);
 			return true;
 		});
 	}

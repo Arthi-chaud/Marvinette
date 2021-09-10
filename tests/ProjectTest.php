@@ -285,8 +285,7 @@ final class ProjectTest extends MarvinetteTestCase
 
 	public function testImportInvalidFile(): void
 	{
-		$this->expectException(Exception::class);
-		$this->expectExceptionMessage("File README.md: Invalid JSON File.");
+		$this->expectException(InvalidConfigFileException::class);
 		new Project('README.md');
 	}
 }
