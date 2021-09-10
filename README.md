@@ -80,8 +80,9 @@ marvinette [option]
 
     option:
         --create-project: Create a main configuration file, required to make tests
+        --create-sample-project: Create a sample configuration file. The values will be changed by the user.
         --del-project, --delete-project: Delete configuration file and existing tests
-        --mod-project: Modify the projec\'s info.
+        --mod-project: Modify the project\'s info.
         
         --add-test, --create-test: Create a functionnal test
         --mod-test: Modify a functionnal test
@@ -105,7 +106,8 @@ The framework's configuration file, ```Marvinette.json```, holds the following i
 - ```interpreter```: the interpreter of the script (null if ELF file)
 - ```tests folder```: the path to the tests' folder
 
-**Warning**: For optimization reasons, it is **not recommended** to modify the file yourself. If you want to change values, please use the marvinette command (see previous section).
+If you do not want to use the command-line interface to configure your project, use the ```--create-sample-project```.
+It will create a sample configuration file and you change change the values by yourself
 
 Upon test creation, several files are generated in the ```testFolder```/```testName``` folder:
 

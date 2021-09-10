@@ -47,6 +47,24 @@ class ProjectManager
 		return true;
 	}
 
+	public static function createSampleProject(): bool
+	{
+		UserInterface::setTitle("Create Sample Project");
+		if (file_exists(Project::ConfigurationFile)) {
+			if (self::promptOverWriteProject()) {
+				unlink(Project::ConfigurationFile);
+			} else {
+				return true;
+			}
+		}
+		UserInterface::displayTitle();
+		UserInterface::$displayer->setColor(Color::Cyan)->displayText("Generating Sample Configuration File...");
+		Project::exportSample();
+		UserInterface::displayTitle();
+		UserInterface::$displayer->setColor(Color::Green)->displayText("Done!");
+		return true;
+	}
+
 	public static function promptAddTest(): bool
 	{
 		return UserInput::getYesNoOption("Would You Like to add a test now", Color::Blue);

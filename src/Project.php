@@ -2,6 +2,7 @@
 
 require_once 'src/Field.php';
 require_once 'src/Exception/MarvinetteException.php';
+require_once 'src/Exception/InvalidConfigFileException.php';
 
 /**
  * @brief Object representing the project's important infos
@@ -25,7 +26,7 @@ class Project
 
 		$this->binaryName = new Field(function($binaryName) {
 			if (!$binaryName) {
-				throw new MarvinetteException("The Project's binary name shouldn't be empty");
+				throw new InvalidConfigFileException();
 			}
 			if (strchr($binaryName, '/') || strchr($binaryName, '\\')) {
 				throw new MarvinetteException("The binary name should not contain a '". DIRECTORY_SEPARATOR. "'");
@@ -167,6 +168,21 @@ class Project
 	}
 
 	/**
+	 * Exports to Marvinette.json an empty configation structure
+	 */
+	public static function exportSample(): void
+	{
+		$obj = [];
+		$project = new Project();
+		ObjectHelper::forEachObjectField($project, function($name, $_) use (&$obj) {
+			$obj[UserInterface::cleanCamelCase($name)] = "";
+			return true;
+		});
+		$jsoned = json_encode($obj, JSON_PRETTY_PRINT);
+		file_put_contents(Project::ConfigurationFile, $jsoned);
+	}
+
+	/**
 	 * Fills the object's field using json file
 	 * @param string $infile the path to a valid JSON Project file
 	 */
@@ -175,14 +191,17 @@ class Project
 		if (!file_exists($infile)) {
 			throw new MarvinetteException("$infile does not exists.");
 		}
-		$object = json_decode(file_get_contents($infile), true);
-		if (!$object) {
-			throw new MarvinetteException("File $infile: Invalid JSON File.");
+		$json = json_decode(file_get_contents($infile), true);
+		if (!$json) {
+			throw new InvalidConfigFileException();
 		}
-		foreach($object as $fieldName => $field) {
-			$cameCalseName = UserInterface::toCamelCase($fieldName);
-			$this->$cameCalseName->set($field);
-		}
+		ObjectHelper::forEachObjectField($this, function($name, $field) use ($json) {
+			if (!array_key_exists($name, $json))
+				throw new InvalidConfigFileException();
+			$cameCalseName = UserInterface::toCamelCase($name);
+			$field->set($json[$cameCalseName]);
+			return true;
+		});
 	}
 }
 

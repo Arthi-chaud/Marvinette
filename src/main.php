@@ -11,6 +11,7 @@ function launch(): bool
 {
 	$optionsCalls = [
 		'create-project' => [ProjectManager::class,'createProject'],
+		'create-sample-project' => [ProjectManager::class,'createSampleProject'],
 		'del-project' => [ProjectManager::class,'deleteProject'],
 		'delete-project' => [ProjectManager::class,'deleteProject'],
 		'mod-project' => [ProjectManager::class,'modProject'],
@@ -49,7 +50,13 @@ if ($argv && $argv[0] && realpath($argv[0]) === __FILE__) {
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Display\Color::Red)->displayText("Exiting...");
 		$returnCode = 1;
+	} catch (EndOfFileException $e) {
+		UserInterface::displayTitle();
+		UserInterface::$displayer->setColor(Display\Color::Red)->displayText("Exiting...");
+		$returnCode = 1;
 	} catch (MarvinetteException $e) {
+		UserInterface::displayTitle();
+		UserInterface::$displayer->setColor(Display\Color::Red)->displayText($e->getMessage());
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Display\Color::Red)->displayText("Exiting...");
 		$returnCode = 1;
