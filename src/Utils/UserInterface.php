@@ -66,14 +66,15 @@ class UserInterface
 			"\t--create-sample-project: Create a sample configuration file. The values will be changed by the user.",
 			"\t--del-project, --delete-project: Delete configuration file and existing tests",
 			"\t--mod-project: Modify the project's info.",
-			
+			"",
 			"\t--add-test, --create-test: Create a functionnal test",
+			"\t--create-sample-project: Create a sample test file. The values will be changed by the user.",
 			"\t--mod-test: Modify a functionnal test",
 			"\t--del-test, --delete-test: Delete a functionnal test",
-	
+			"",
 			"\t--execute-test,--exec-test : Execute a test",
 			"\t--execute-tests, --exec-all  : Execute all tests",
-	
+			"",
 			"\t-h, --help: display this usage",
 		];
 		foreach ($usage as $line) {
