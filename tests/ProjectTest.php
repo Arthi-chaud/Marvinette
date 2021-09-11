@@ -278,8 +278,7 @@ final class ProjectTest extends MarvinetteTestCase
 
 	public function testImportNoFile(): void
 	{
-		$this->expectException(Exception::class);
-		$this->expectExceptionMessage("/tmp/trololol does not exists.");
+		$this->expectException(NoConfigFileException::class);
 		new Project('/tmp/trololol');
 	}
 
