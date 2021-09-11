@@ -18,6 +18,7 @@ function launch(): bool
 	
 		'add-test' => [TestManager::class, 'addTest'],
 		'create-test' => [TestManager::class, 'addTest'],
+		'create-sample-test::' => [TestManager::class,'createSampleTest'],
 		'del-test' => [TestManager::class, 'deleteTest'],
 		'delete-test' => [TestManager::class, 'deleteTest'],
 		'mod-test' => [TestManager::class, 'modTest'],
@@ -32,8 +33,11 @@ function launch(): bool
 	];
 	$options = CommandLine::getArguments(array_keys($optionsCalls));
 	foreach ($optionsCalls as $option => $call) {
+		while (substr($option, -1) == ':') {
+			$option = substr($option, 0, strlen($option) - 1);
+		}
 		if (array_key_exists($option, $options)) {
-			return boolval(call_user_func($call));
+			return boolval(call_user_func($call, $options[$option]));
 		}
 	}
 	UserInterface::displayHelp();

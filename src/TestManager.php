@@ -16,9 +16,6 @@ class TestManager {
 	public static function addTest(?Project $project = null)
 	{
 		UserInterface::setTitle("Add Test");
-		if (!file_exists(Project::ConfigurationFile)) {
-			throw new NoConfigFileException();
-		}
 		if (!$project) {
 			$project = new Project(Project::ConfigurationFile);
 		}
@@ -38,6 +35,41 @@ class TestManager {
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
 		UserInterface::popTitle();
+		return true;
+	}
+
+	public static function createSampleTest(string $name = null): bool
+	{
+		$test = new Test();
+		$fields = array_keys(get_object_vars($test));
+		UserInterface::setTitle("Create Sample Test");
+		$project = new Project(Project::ConfigurationFile);
+		if ($name == null) {
+			$ignoredFields = array_slice($fields, 1);
+			ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
+				$helpMsg = $field->getPromptHelp();
+				$help = $helpMsg ? " ($helpMsg)" : "";
+				$cleanedFieldName = UserInterface::cleanCamelCase($fieldName);
+				UserInterface::displayTitle();
+				UserInterface::$displayer->setColor(Color::Blue)->displayText("Test's $cleanedFieldName$help: ", false);
+			}, false, $ignoredFields);
+			$name = $test->name->get();
+		}
+		UserInterface::displayTitle();
+		UserInterface::$displayer->setColor(Color::Cyan)->displayText("Generating Sample Tests Files...");
+		$testPath = FileManager::normalizePath($project->testsFolder->get() . '/' . $name . '/');
+		if (is_dir($testPath) || file_exists($testPath))
+			throw new MarvinetteException("$name: Name already taken");
+		mkdir($testPath, 0777, true);
+		ObjectHelper::forEachObjectField($test, function ($fieldName, $_) use ($testPath) {
+			if ($fieldName == 'name') {
+				return true;
+			}
+			touch($testPath . $fieldName);
+			return true;
+		});
+		UserInterface::displayTitle();
+		UserInterface::$displayer->setColor(Color::Green)->displayText("Done");
 		return true;
 	}
 
@@ -99,9 +131,6 @@ class TestManager {
 	public static function executeTest(?string $testName = null, ?Project $project = null): bool
 	{
 		$testStatus = true;
-		if (!file_exists(Project::ConfigurationFile)) {
-			throw new NoConfigFileException();
-		}
 		if (!$project) {
 			$project = new Project(Project::ConfigurationFile);
 		}
@@ -141,9 +170,6 @@ class TestManager {
 	public static function executesAllTests(?Project $project = null): bool
 	{
 		UserInterface::setTitle("Executing");
-		if (!file_exists(Project::ConfigurationFile)) {
-			throw new NoConfigFileException();
-		}
 		if (!$project) {
 			$project = new Project(Project::ConfigurationFile);
 		}
@@ -174,9 +200,6 @@ class TestManager {
 	public static function deleteTest(): void
 	{
 		UserInterface::setTitle("Delete Test");
-		if (!file_exists(Project::ConfigurationFile)) {
-			throw new NoConfigFileException();
-		}
 		$project = new Project(Project::ConfigurationFile);
 		$testName = self::selectTest($project);
 		if (is_null($testName)) {

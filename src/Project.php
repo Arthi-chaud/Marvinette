@@ -189,7 +189,7 @@ class Project
 	public function import(string $infile): void
 	{
 		if (!file_exists($infile)) {
-			throw new MarvinetteException("$infile does not exists.");
+			throw new NoConfigFileException("$infile does not exists.");
 		}
 		$json = json_decode(file_get_contents($infile), true);
 		if (!$json) {
