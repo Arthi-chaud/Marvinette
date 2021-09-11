@@ -85,7 +85,7 @@ marvinette [option]
         --mod-project: Modify the project\'s info.
         
         --add-test, --create-test: Create a functionnal test
-        --create-sample-project: Create a sample test file. The values will be changed by the user.
+        --create-sample-test: Create a sample test file. The values will be changed by the user.
         --mod-test: Modify a functionnal test
         --del-test, --delete-test: Delete a functionnal test
 
