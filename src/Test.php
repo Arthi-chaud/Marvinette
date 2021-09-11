@@ -109,6 +109,22 @@ class Test
 		}
 	}
 
+	public static function exportSample(string $testsFolder, string $name)
+	{
+		$test = new Test();
+		$testPath = FileManager::normalizePath($testsFolder . '/' . $name . '/');
+		if (is_dir($testPath) || file_exists($testPath))
+			throw new MarvinetteException("$name: Name already taken");
+		mkdir($testPath, 0777, true);
+		ObjectHelper::forEachObjectField($test, function ($fieldName, $_) use ($testPath) {
+			if ($fieldName == 'name') {
+				return true;
+			}
+			touch($testPath . $fieldName);
+			return true;
+		});
+	}
+
 	/**
 	 * @brief import test from file in folder
 	 * @param $testsFolder the path to the test folder

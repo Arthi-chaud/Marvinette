@@ -150,5 +150,32 @@ final class ProjectManagerTest extends MarvinetteTestCase
 		$this->expectOutputString("| Error\t|\tNo Configuration File Found!\n");
 		ProjectManager::displayNoConfigFileFound();
 	}
+	
+	public function testEmportSampleProjectOverwriting()
+	{
+		$this->hideStdout();
+		$this->defineStdin(['Y']);
+		ProjectManager::createSampleProject();
+		$this->assertTrue(file_exists('Marvinette.json'));
+		$obj = json_decode(file_get_contents('Marvinette.json'), true);
+		$this->assertEquals("", $obj['name']);
+		$this->assertEquals("", $obj['binary name']);
+		$this->assertEquals("", $obj['binary path']);
+		$this->assertEquals("", $obj['interpreter']);
+		$this->assertEquals("", $obj['tests folder']);
+	}
 
+	public function testEmportSampleProject()
+	{
+		unlink('Marvinette.json');
+		$this->hideStdout();
+		ProjectManager::createSampleProject();
+		$this->assertTrue(file_exists('Marvinette.json'));
+		$obj = json_decode(file_get_contents('Marvinette.json'), true);
+		$this->assertEquals("", $obj['name']);
+		$this->assertEquals("", $obj['binary name']);
+		$this->assertEquals("", $obj['binary path']);
+		$this->assertEquals("", $obj['interpreter']);
+		$this->assertEquals("", $obj['tests folder']);
+	}
 }

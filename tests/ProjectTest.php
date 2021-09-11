@@ -249,6 +249,16 @@ final class ProjectTest extends MarvinetteTestCase
 		$this->assertNull($object['interpreter']);
 		$this->assertEquals($object['tests folder'], 'testers');
 	}
+	public function testEmportSample()
+	{
+		Project::exportSample();
+		$obj = json_decode(file_get_contents('Marvinette.json'), true);
+		$this->assertEquals("", $obj['name']);
+		$this->assertEquals("", $obj['binary name']);
+		$this->assertEquals("", $obj['binary path']);
+		$this->assertEquals("", $obj['interpreter']);
+		$this->assertEquals("", $obj['tests folder']);
+	}
 
 	public function testExportWhenNotReady(): void
 	{

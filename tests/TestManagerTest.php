@@ -468,4 +468,26 @@ final class TestManagerTest extends MarvinetteTestCase
 		$this->assertEquals(file_get_contents('tests/103/stdoutFilter'), "head -n 120 | tail -n 10");
 		FileManager::deleteFolder('tests/103');
 	}
+
+	public function testExmportSampleNoParam()
+	{
+		$this->hideStdout();
+		$this->defineStdin(['101']);
+		TestManager::createSampleTest();
+		$this->assertTrue(is_dir('tests/101'));
+		$this->assertEquals('', file_get_contents('tests/101/commandLineArguments'));
+		$this->assertEquals('', file_get_contents('tests/101/emptyEnv'));
+		$this->assertEquals('', file_get_contents('tests/101/expectedReturnCode'));
+		$this->assertEquals('', file_get_contents('tests/101/expectedStderr'));
+		$this->assertEquals('', file_get_contents('tests/101/expectedStdout'));
+		$this->assertEquals('', file_get_contents('tests/101/interpreterArguments'));
+		$this->assertEquals('', file_get_contents('tests/101/setup'));
+		$this->assertEquals('', file_get_contents('tests/101/stderrFilter'));
+		$this->assertEquals('', file_get_contents('tests/101/stdinput'));
+		$this->assertEquals('', file_get_contents('tests/101/stdoutFilter'));
+		$this->assertEquals('', file_get_contents('tests/101/teardown'));
+		$this->assertEquals('', file_get_contents('tests/101/commandLineArguments'));
+		$this->assertEquals('', file_get_contents('tests/101/commandLineArguments'));
+		FileManager::deleteFolder('tests/101');
+	}
 }

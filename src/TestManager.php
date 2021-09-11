@@ -38,14 +38,13 @@ class TestManager {
 		return true;
 	}
 
-	public static function createSampleTest(string $name = null): bool
+	public static function createSampleTest(?string $name = null): bool
 	{
-		$test = new Test();
-		$fields = array_keys(get_object_vars($test));
 		UserInterface::setTitle("Create Sample Test");
 		$project = new Project(Project::ConfigurationFile);
 		if ($name == null) {
-			$ignoredFields = array_slice($fields, 1);
+			$test = new Test();
+			$ignoredFields = array_slice(array_keys(get_object_vars($test)), 1);
 			ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
 				$helpMsg = $field->getPromptHelp();
 				$help = $helpMsg ? " ($helpMsg)" : "";
@@ -57,17 +56,7 @@ class TestManager {
 		}
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("Generating Sample Tests Files...");
-		$testPath = FileManager::normalizePath($project->testsFolder->get() . '/' . $name . '/');
-		if (is_dir($testPath) || file_exists($testPath))
-			throw new MarvinetteException("$name: Name already taken");
-		mkdir($testPath, 0777, true);
-		ObjectHelper::forEachObjectField($test, function ($fieldName, $_) use ($testPath) {
-			if ($fieldName == 'name') {
-				return true;
-			}
-			touch($testPath . $fieldName);
-			return true;
-		});
+		Test::exportSample($project->testsFolder->get(), $name);
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Green)->displayText("Done");
 		return true;
