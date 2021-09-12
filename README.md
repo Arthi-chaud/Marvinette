@@ -108,7 +108,7 @@ The framework's configuration file, ```Marvinette.json```, holds the following i
 - ```tests folder```: the path to the tests' folder
 
 If you do not want to use the command-line interface to configure your project, use the ```--create-sample-project```.
-It will create a sample configuration file and you change change the values by yourself
+It will create a sample configuration file and you change the values by yourself
 
 Upon test creation, several files are generated in the ```testFolder```/```testName``` folder:
 
