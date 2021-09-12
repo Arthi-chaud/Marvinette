@@ -97,14 +97,14 @@ final class TestManagerTest extends MarvinetteTestCase
 		FileManager::deleteFolder('tests/102');
 	}
 
-	public function testFolderIsNotATest(): void
+	public function testFolderIsATestWithGarbage(): void
 	{
 		$this->hideStdout();
 		mkdir('tests/103');
 		$this->assertFalse(TestManager::folderIsATest('tests/103'));
 		touch('tests/103/stderrFilter');
 		touch('tests/103/lololol');
-		$this->assertFalse(TestManager::folderIsATest('tests/103'));
+		$this->assertTrue(TestManager::folderIsATest('tests/103'));
 		$this->assertFalse(TestManager::folderIsATest('tests'));
 		FileManager::deleteFolder('tests/103');
 	}

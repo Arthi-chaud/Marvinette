@@ -159,7 +159,7 @@ class TestManager {
 	public static function executesAllTests(?Project $project = null): bool
 	{
 		UserInterface::setTitle("Executing");
-		if (!$project) {
+		if ($project == null) {
 			$project = new Project(Project::ConfigurationFile);
 		}
 		$failedTestCount = 0;
@@ -208,6 +208,7 @@ class TestManager {
 	public static function folderIsATest(string $path): bool
 	{
 		$files = [];
+		$okCount = 0;
 		$testsFields = get_object_vars(new Test());
 		$path = FileManager::normalizePath($path);
 		$path = FileManager::removeEndDirSeparator($path);
@@ -215,15 +216,12 @@ class TestManager {
 			return false;
 		}
 		$files = glob("$path/*");
-		if ($files == []) {
-			return false;
-		}
 		foreach ($files as $file) {
-			if (!in_array(basename($file), array_keys($testsFields))) {
-				return false;
+			if (in_array(basename($file), array_keys($testsFields))) {
+				$okCount += 1;
 			}
 		}
-		return true;	
+		return $okCount > 0;	
 	}
 
 	/**

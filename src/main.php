@@ -37,7 +37,7 @@ function launch(): bool
 			$option = substr($option, 0, strlen($option) - 1);
 		}
 		if (array_key_exists($option, $options)) {
-			return boolval(call_user_func($call, $options[$option]));
+			return boolval(call_user_func($call, $options[$option] == false ? null : $options[$option]));
 		}
 	}
 	UserInterface::displayHelp();
