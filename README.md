@@ -45,7 +45,7 @@ php MarvinetteInstall.php
     marvinette --mod-project
     ```
 
-2. You can now create your first functionnal test!
+2. You can now create your first functional test!
     - execute the command:
 
     ```shell
@@ -53,7 +53,7 @@ php MarvinetteInstall.php
     ```
 
     - You will be prompt to enter different values.
-    - In your test's folder, some files will be empty: you'll have to fill them yourself (expectedStdout/Stderr, stdinput, stdout/stderrFilter). If a file is empty, for example expectedStdout, the standard output of the programm will be compared with the file's content. If you don't want to, simply delete the file.
+    - In your test's folder, some files will be empty: you'll have to fill them yourself (expectedStdout/Stderr, standard input, stdout/stderrFilter). If a file is empty, for example expectedStdout, the standard output of the program will be compared with the file's content. If you don't want to, simply delete the file.
 
 3. Your tests are ready to be executed!
     - To execute one test, execute the command:
@@ -84,10 +84,10 @@ marvinette [option]
         --del-project, --delete-project: Delete configuration file and existing tests
         --mod-project: Modify the project\'s info.
         
-        --add-test, --create-test: Create a functionnal test
+        --add-test, --create-test: Create a functional test
         --create-sample-test: Create a sample test file. The values will be changed by the user.
-        --mod-test: Modify a functionnal test
-        --del-test, --delete-test: Delete a functionnal test
+        --mod-test: Modify a functional test
+        --del-test, --delete-test: Delete a functional test
 
         --execute-test,--exec-test : Execute a test
         --execute-tests, --exec-all  : Execute all tests
@@ -99,7 +99,7 @@ marvinette [option]
 
 ## What are the created files for?
 
-The framework's configuration file, ```Marvinette.json```, holds the following informations:
+The framework's configuration file, ```Marvinette.json```, holds the following information:
 
 - ```name```: The name of the project
 - ``` binary name```: the name of the binary/script to execute
