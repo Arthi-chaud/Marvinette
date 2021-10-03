@@ -117,7 +117,7 @@ class TestManager {
 		return true;
 	}
 	
-	public static function executeTest(?string $testName = null, ?Project $project = null): bool
+	public static function executeTest(?string $testName = null, ?Project $project = null): ?bool
 	{
 		$testStatus = true;
 		if (!$project) {
@@ -127,11 +127,17 @@ class TestManager {
 			$testName = self::selectTest($project);
 		}
 		if (is_null($testName)) {
-			return true;
+			return false;
 		}
 		UserInterface::setTitle("Test '$testName'");
 		$testPath = FileManager::normalizePath($project->testsFolder->get() . "/$testName");
 		$test = new Test($testPath);
+		$binaryPath = FileManager::normalizePath($project->binaryPath . '/' . $project->binaryName);
+		if (!file_exists($binaryPath)) {
+			UserInterface::displayTitle();
+			UserInterface::$displayer->setColor(Color::Red)->displayText("'$binaryPath': Project's file not found...");
+			return null;
+		}
 		try {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Cyan)->displayText("Executing Test '$testName'...");
@@ -171,7 +177,7 @@ class TestManager {
 		}
 		foreach ($tests as $testName) {
 			$testSucces = self::executeTest($testName, $project);
-			if (!$testSucces) {
+			if (is_null($testSucces) || !$testSucces) {
 				$failedTestCount++;
 			}
 		}
