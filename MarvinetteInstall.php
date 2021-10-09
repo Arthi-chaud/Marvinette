@@ -15,23 +15,33 @@ function copyFolder(string $sourcePath, string $destPath)
 	}
 }
 
+function getInstallPath(): string
+{
+	global $isWindows;
+	if ($isWindows)
+		return getcwd() . DIRECTORY_SEPARATOR;
+	$linuxInstallPath = $_SERVER['HOME'] . "/.local/lib/";
+	if (is_dir($linuxInstallPath))
+		return $linuxInstallPath;
+	return getcwd() . DIRECTORY_SEPARATOR;
+}
+
 function install()
 {
 	global $isWindows;
-	$CWD = getcwd();
-	$scriptName = 'marvinette';
 
-	if (!$CWD)
-		throw new Exception('Impossible to get current working directory');
+	$scriptName = 'marvinette';
 	if ($isWindows) {
-		$scriptPath = '.' . DIRECTORY_SEPARATOR;
+		$installPath = getInstallPath();
+		$scriptPath = "." . DIRECTORY_SEPARATOR;
 		$scriptName .= '.ps1';
 	} else {
+		$installPath = getInstallPath();
 		$scriptPath = $_SERVER['HOME'] . "/.local/bin/";
 		if (!is_dir($scriptPath))
 			$scriptPath = "/usr/bin/";
 	}
-	file_put_contents($scriptPath . $scriptName, getScriptContent($CWD, $isWindows));
+	file_put_contents($scriptPath . $scriptName, getScriptContent($installPath, $isWindows));
 	chmod($scriptPath . $scriptName, 0777);
 	if (!$isWindows) {
 		$installPath = $_SERVER['HOME'] . "/.local/lib/";
@@ -47,7 +57,7 @@ function getScriptContent(string $projectPath, bool $isWindows = false): string
 	if (!$isWindows) {
 		$content = [
 			"#!/bin/sh",
-			'php ~/.local/lib/marvinette/src/main.php $@',
+			'php  ' . $projectPath . 'src/main.php $@',
 			'exit $?'
 		];
 	} else {
