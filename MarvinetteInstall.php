@@ -28,11 +28,15 @@ function install()
 		$scriptName .= '.ps1';
 	} else {
 		$scriptPath = $_SERVER['HOME'] . "/.local/bin/";
+		if (!is_dir($scriptPath))
+			$scriptPath = "/usr/bin/";
 	}
 	file_put_contents($scriptPath . $scriptName, getScriptContent($CWD, $isWindows));
 	chmod($scriptPath . $scriptName, 0777);
 	if (!$isWindows) {
-		copyFolder(".", $_SERVER['HOME'] . "/.local/lib/marvinette");
+		$installPath = $_SERVER['HOME'] . "/.local/lib/";
+		if (is_dir($scriptPath))
+			copyFolder(".", $installPath . "marvinette");
 	}
 }
 
