@@ -10,6 +10,7 @@ jobs:
   TestsExecution:
     name: "Run unit tests on ${{ matrix.name }}"
     runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
     strategy:
       fail-fast: false
       matrix:
