@@ -17,7 +17,6 @@ function copyFolder(string $sourcePath, string $destPath)
 function install()
 {
 	global $isWindows;
-	var_dump($_SERVER);
 	$CWD = getcwd();
 	$scriptName = 'marvinette';
 
