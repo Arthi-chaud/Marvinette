@@ -142,7 +142,7 @@ class Test
 				continue;
 			}
 			$fileContent = file_get_contents(FileManager::normalizePath("$testFolder/$fieldName"));
-			if (is_numeric($fileContent)) {
+			if (is_numeric($fileContent) && !strstr($fieldName, "Arguments")) {
 				$fileContent = intval($fileContent);
 			}
 			if ($fileContent == '' && is_string($fileContent)) {
@@ -226,10 +226,10 @@ class Test
 		$interpreter = $project->interpreter->get();
 		$command = $project->binaryPath->get() . DIRECTORY_SEPARATOR . $project->binaryName->get();
 		$stdinputPath = FileManager::normalizePath("$testPath/stdinput");
-		if ($this->commandLineArguments->get()) {
+		if (!is_null($this->commandLineArguments->get())) {
 			$command .= ' ' . $this->commandLineArguments->get();
 		}
-		if ($interpreter != null) {
+		if (!is_null($interpreter)) {
 			$interpreterCommand = $project->getInterpreterFullPath();
 			if ($this->interpreterArguments->get()) {
 				$interpreterCommand .= ' ' . $this->interpreterArguments->get();
@@ -239,7 +239,7 @@ class Test
 		if ($this->emptyEnv->get()) {
 			$command = "env -i $command";
 		}
-		if ($this->stdinput->get() && file_exists($stdinputPath)) {
+		if (!is_null($this->stdinput->get()) && file_exists($stdinputPath)) {
 			$command = "cat '$stdinputPath' | ($command)";
 		}
 		$command .= ' > ' . self::TmpFileFolder . '/' . self::TmpFilePrefix . self::TmpFileStdoutPrefix;
