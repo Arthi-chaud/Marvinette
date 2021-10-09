@@ -7,10 +7,11 @@ function copyFolder(string $sourcePath, string $destPath)
 	if (!is_dir($destPath))
 		mkdir($destPath);
 	foreach (glob("$sourcePath/*") as $file) {
-		if (is_dir($file))
+		if (is_dir($file)) {
 			copyFolder($file, "$destPath/" . basename($file));
-		else
+		} else {
 			copy($file, "$destPath/" . basename($file));
+		}
 	}
 }
 
