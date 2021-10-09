@@ -45,7 +45,7 @@ function install()
 	chmod($scriptPath . $scriptName, 0777);
 	if (!$isWindows) {
 		$installPath = $_SERVER['HOME'] . "/.local/lib/";
-		if (is_dir($scriptPath))
+		if (is_dir($installPath))
 			copyFolder(".", $installPath . "marvinette");
 	}
 }

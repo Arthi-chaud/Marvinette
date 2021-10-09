@@ -25,11 +25,11 @@ jobs:
         if:  ${{ matrix.name == 'Linux'}}
         run: |
           sudo php MarvinetteInstall.php
-          file -f .local/bin/marvinette
-          file -d .local/lib/marvinette
-          file -f .local/lib/marvinette/src/main
+          file -f ~/.local/bin/marvinette
+          file -d ~/.local/lib/marvinette
+          file -f ~/.local/lib/marvinette/src/main.php
           ls . > expected
-          ls .local/lib/marvinette > actual
+          ls ~/.local/lib/marvinette > actual
           diff actual expected
           which marvinette
           marvinette --help
