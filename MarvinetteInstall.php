@@ -2,21 +2,52 @@
 
 $isWindows = sys_get_temp_dir() != '/tmp';
 
+function copyFolder(string $sourcePath, string $destPath)
+{
+	if (!is_dir($destPath))
+		mkdir($destPath);
+	foreach (glob("$sourcePath/*") as $file) {
+		if (is_dir($file)) {
+			copyFolder($file, "$destPath/" . basename($file));
+		} else {
+			copy($file, "$destPath/" . basename($file));
+		}
+	}
+}
+
+function getInstallPath(): string
+{
+	global $isWindows;
+	if ($isWindows)
+		return getcwd() . DIRECTORY_SEPARATOR;
+	$linuxInstallPath = $_SERVER['HOME'] . "/.local/lib/";
+	if (is_dir($linuxInstallPath))
+		return $linuxInstallPath;
+	return getcwd() . DIRECTORY_SEPARATOR;
+}
+
 function install()
 {
 	global $isWindows;
-	$CWD = getcwd();
-	if (!$CWD)
-		throw new Exception('Impossible to get current working directory');
+
 	$scriptName = 'marvinette';
-	if (!$isWindows) {
-		$scriptPath = "/usr/local/bin/";
-	} else {
-		$scriptPath = '.' . DIRECTORY_SEPARATOR;
+	if ($isWindows) {
+		$installPath = getInstallPath();
+		$scriptPath = "." . DIRECTORY_SEPARATOR;
 		$scriptName .= '.ps1';
-	}
-	file_put_contents($scriptPath . $scriptName, getScriptContent($CWD, $isWindows));
+	} else {
+		$installPath = getInstallPath();
+		$scriptPath = $_SERVER['HOME'] . "/.local/bin/";
+		if (!is_dir($scriptPath))
+			$scriptPath = "/usr/bin/";
+	} 
+	file_put_contents($scriptPath . $scriptName, getScriptContent($installPath, $isWindows));
 	chmod($scriptPath . $scriptName, 0777);
+	if (!$isWindows) {
+		$installPath = $_SERVER['HOME'] . "/.local/lib/";
+		if (is_dir($installPath))
+			copyFolder(".", $installPath . "marvinette");
+	}
 }
 
 function getScriptContent(string $projectPath, bool $isWindows = false): string
