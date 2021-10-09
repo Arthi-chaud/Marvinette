@@ -26,7 +26,7 @@ function getScriptContent(string $projectPath, bool $isWindows = false): string
 	if (!$isWindows) {
 		$content = [
 			"#!/bin/sh",
-			'php  ' . $projectPath . 'src/main.php $@',
+			'php  ' . '~/.local/lib/marvinette/src/main.php $@',
 			'exit $?'
 		];
 	} else {
