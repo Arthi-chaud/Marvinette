@@ -49,10 +49,10 @@ class Test
 				throw new MarvinetteException("Please enter a number superior/equal to 0 (or nothing to ignore)");
 			}
 		}, function($r) {
-			if ($r == "") {
-				return null;
+			if (is_numeric($r)) {
+				return intval($r);
 			}
-			return intval($r);
+			return null;
 		}, "A number between 0 and 255, Leave empty to ignore");
 
 		$this->stdoutFilter = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner'], "A command that will grep the stdout of the program");
