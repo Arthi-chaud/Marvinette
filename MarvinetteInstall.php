@@ -40,7 +40,7 @@ function install()
 		$scriptPath = $_SERVER['HOME'] . "/.local/bin/";
 		if (!is_dir($scriptPath))
 			$scriptPath = "/usr/bin/";
-	}
+	} 
 	file_put_contents($scriptPath . $scriptName, getScriptContent($installPath, $isWindows));
 	chmod($scriptPath . $scriptName, 0777);
 	if (!$isWindows) {
