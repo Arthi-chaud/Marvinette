@@ -15,6 +15,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
+            container: arthichaud/ci_docker_image:latest
             name: Linux
           - os: windows-latest
             name: Windows
