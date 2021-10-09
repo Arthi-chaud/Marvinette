@@ -20,7 +20,6 @@
 ```shell
 php MarvinetteInstall.php
 ```
-**Warning**: (Only for Linux) You might need to execute the command with `sudo`
 
 4. (Only For Windows) Add the path of the marvinette folder to your `PATH` environment variable
 
