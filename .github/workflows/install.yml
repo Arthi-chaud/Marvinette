@@ -26,6 +26,9 @@ jobs:
           file -f .local/bin/marvinette
           file -d .local/lib/marvinette
           file -f .local/lib/marvinette/src/main
+          ls . > expected
+          ls .local/lib/marvinette > actual
+          diff actual expected
           which marvinette
           marvinette --help
       - name: Install and check marvinette is launch-able (Windows)
