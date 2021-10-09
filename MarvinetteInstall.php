@@ -20,7 +20,7 @@ function getInstallPath(): string
 	global $isWindows;
 	if ($isWindows)
 		return getcwd() . DIRECTORY_SEPARATOR;
-	$linuxInstallPath = $_SERVER['HOME'] . "/.local/lib/";
+	$linuxInstallPath = $_SERVER['HOME'] . "/.local/lib/marvinette";
 	if (is_dir($linuxInstallPath))
 		return $linuxInstallPath;
 	return getcwd() . DIRECTORY_SEPARATOR;
