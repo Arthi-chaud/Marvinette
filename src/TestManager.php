@@ -87,29 +87,27 @@ class TestManager {
 			}
 			UserInterface::$displayer->setColor(Color::Yellow)->displayText( ', Leave empty if no change needed: ', false);
 		}, true, $ignoredFields);
+
+		$jsonContent = [];
 		foreach(get_object_vars($test) as $fieldName => $field) {
 			if ($fieldName == 'name') {
 				continue;
 			}
 			$fieldValue = $field->get();
-			$fieldFileName = FileManager::normalizePath("$testsFolder/$testName/$fieldName");
-			$fileExists = file_exists(FileManager::normalizePath($fieldFileName));
-			if (is_bool($fieldValue)) {
-				if ($fieldValue && !$fileExists) {
-					file_put_contents($fieldFileName, '');
-				}
-				if (!$fieldValue && $fileExists) {
+			if (in_array($fieldName, ['expected' . Test::TmpFileStderrPrefix, 'expected' . Test::TmpFileStdoutPrefix, 'stdinput'])) {
+				$fieldFileName = FileManager::normalizePath("$testsFolder/$testName/$fieldName");
+				$fileExists = file_exists(FileManager::normalizePath($fieldFileName));
+				if ($fileExists && $fieldValue == false)
 					unlink($fieldFileName);
-				}
+				else if (!$fileExists && $fieldValue == true)
+					touch($fieldFileName);
 			} else {
-				if (!is_null($fieldValue)) {
-					file_put_contents($fieldFileName, $fieldValue);
-				}
-				if (is_string($fieldValue) && !$fieldValue && $fileExists) {
-					unlink($fieldFileName);
-				}
+				$jsonContent[$fieldName] = $field->get();
 			}
 		}
+		$outputConfig = FileManager::normalizePath("$testsFolder/$testName/" . Test::ConfigFile);
+		unlink($outputConfig);
+		file_put_contents($outputConfig, json_encode($jsonContent, JSON_PRETTY_PRINT));
 		rename(FileManager::normalizePath("$testsFolder/$testName"), FileManager::normalizePath("$testsFolder/" . $test->name->get()));
 		UserInterface::displayTitle();
 		UserInterface::$displayer->setColor(Color::Cyan)->displayText("The Test's files are ready!");
