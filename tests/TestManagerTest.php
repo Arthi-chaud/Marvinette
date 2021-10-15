@@ -28,9 +28,9 @@ final class TestManagerTest extends MarvinetteTestCase
 	public function testSelectTest(): void
 	{
 		mkdir('tests/101');
-		touch('tests/101/stdinput');
+		touch('tests/101/config.json');
 		mkdir('tests/102');
-		touch('tests/102/expectedStdout');
+		touch('tests/102/config.json');
 		$this->hideStdout();
 		$this->defineStdin([
 			'2',
@@ -47,7 +47,7 @@ final class TestManagerTest extends MarvinetteTestCase
 	public function testSelectTestOneChoice(): void
 	{
 		mkdir('tests/101');
-		touch('tests/101/stdinput');
+		touch('tests/101/config.json');
 		$this->hideStdout();
 		$this->defineStdin([
 			'b',
@@ -61,7 +61,7 @@ final class TestManagerTest extends MarvinetteTestCase
 	public function testSelectTestOneChoiceSayNo(): void
 	{
 		mkdir('tests/101');
-		touch('tests/101/stdinput');
+		touch('tests/101/config.json');
 		$this->hideStdout();
 		$this->defineStdin([
 			'b',
@@ -88,9 +88,9 @@ final class TestManagerTest extends MarvinetteTestCase
 	{
 		$this->hideStdout();
 		mkdir('tests/101');
-		touch('tests/101/stdinput');
+		touch('tests/101/config.json');
 		mkdir('tests/102');
-		touch('tests/102/expectedStdout');
+		touch('tests/102/config.json');
 		$this->assertTrue(TestManager::folderIsATest('tests/101'));
 		$this->assertTrue(TestManager::folderIsATest('tests/102'));
 		FileManager::deleteFolder('tests/101');
@@ -102,7 +102,7 @@ final class TestManagerTest extends MarvinetteTestCase
 		$this->hideStdout();
 		mkdir('tests/103');
 		$this->assertFalse(TestManager::folderIsATest('tests/103'));
-		touch('tests/103/stderrFilter');
+		touch('tests/103/config.json');
 		touch('tests/103/lololol');
 		$this->assertTrue(TestManager::folderIsATest('tests/103'));
 		$this->assertFalse(TestManager::folderIsATest('tests'));
@@ -112,9 +112,9 @@ final class TestManagerTest extends MarvinetteTestCase
 	public function testDeleteTest(): void
 	{
 		mkdir('tests/101');
-		touch('tests/101/stdinput');
+		touch('tests/101/config.json');
 		mkdir('tests/102');
-		touch('tests/102/expectedStdout');
+		touch('tests/102/config.json');
 		$this->hideStdout();
 		$this->defineStdin([
 			'0'
@@ -226,26 +226,30 @@ final class TestManagerTest extends MarvinetteTestCase
 		]);
 		TestManager::addTest();
 		$this->assertTrue(is_dir('tests/101'));
-		$this->assertTrue(file_exists('tests/101/commandLineArguments'));
-		$this->assertTrue(file_exists('tests/101/interpreterArguments'));
-		$this->assertTrue(file_exists('tests/101/expectedReturnCode'));
-		$this->assertTrue(file_exists('tests/101/stdoutFilter'));
-		$this->assertTrue(file_exists('tests/101/stderrFilter'));
+		$this->assertTrue(file_exists('tests/101/config.json'));
+		$jsonContent = json_decode(file_get_contents("tests/101/config.json"), true);
+		$this->assertTrue(array_key_exists('commandLineArguments', $jsonContent));
+		$this->assertTrue(array_key_exists('interpreterArguments', $jsonContent));
+		$this->assertTrue(array_key_exists('expectedReturnCode', $jsonContent));
+		$this->assertTrue(array_key_exists('stdoutFilter', $jsonContent));
+		$this->assertTrue(array_key_exists('setup', $jsonContent));
+		$this->assertTrue(array_key_exists('teardown', $jsonContent));
+		$this->assertTrue(array_key_exists('stderrFilter', $jsonContent));
+		$this->assertFalse(array_key_exists('stdinput', $jsonContent));
+		$this->assertFalse(array_key_exists('expectedStderr', $jsonContent));
+		$this->assertFalse(array_key_exists('expectedStdout', $jsonContent));
 		$this->assertTrue(file_exists('tests/101/expectedStdout'));
 		$this->assertFalse(file_exists('tests/101/expectedStderr'));
-		$this->assertTrue(file_exists('tests/101/setup'));
 		$this->assertTrue(file_exists('tests/101/stdinput'));
-		$this->assertTrue(file_exists('tests/101/teardown'));
 
-		$this->assertEquals(file_get_contents('tests/101/commandLineArguments'), '--argc 1 --argv 2');
-		$this->assertEquals(file_get_contents('tests/101/interpreterArguments'), '-E');
-		$this->assertEquals(file_get_contents('tests/101/expectedReturnCode'), '10');
-		$this->assertEquals(file_get_contents('tests/101/stdoutFilter'), "grep 'hello'");
-		$this->assertEquals(file_get_contents('tests/101/stderrFilter'),  "grep 'world'");
+		$this->assertEquals($jsonContent['commandLineArguments'], '--argc 1 --argv 2');
+		$this->assertEquals($jsonContent['interpreterArguments'], '-E');
+		$this->assertEquals($jsonContent['expectedReturnCode'], 10);
+		$this->assertEquals($jsonContent['stdoutFilter'], "grep 'hello'");
+		$this->assertEquals($jsonContent['stderrFilter'],  "grep 'world'");
+		$this->assertEquals($jsonContent['setup'], 'set me up');
+		$this->assertEquals($jsonContent['teardown'], 'tear me down');
 		$this->assertEquals(file_get_contents('tests/101/expectedStdout'), '');
-		//$this->assertEquals(file_get_contents('tests/101/expectedStderr'), '');
-		$this->assertEquals(file_get_contents('tests/101/setup'), 'set me up');
-		$this->assertEquals(file_get_contents('tests/101/teardown'), 'tear me down');
 		$this->assertEquals(file_get_contents('tests/101/stdinput'), '');
 		//FileManager::deleteFolder('tests/101');
 	}
@@ -414,20 +418,24 @@ final class TestManagerTest extends MarvinetteTestCase
 		]);
 		ProjectManager::createProject();
 		$this->assertTrue(is_dir('tests/102'));
-		$this->assertTrue(file_exists('tests/102/commandLineArguments'));
-		$this->assertFalse(file_exists('tests/102/interpreterArguments'));
-		$this->assertTrue(file_exists('tests/102/expectedReturnCode'));
-		$this->assertTrue(file_exists('tests/102/stdoutFilter'));
-		$this->assertFalse(file_exists('tests/102/stderrFilter'));
+		$this->assertTrue(file_exists('tests/102/config.json'));
+		$jsonContent = json_decode(file_get_contents("tests/102/config.json"), true);
+		
+		
 		$this->assertTrue(file_exists('tests/102/expectedStdout'));
 		$this->assertFalse(file_exists('tests/102/expectedStderr'));
-		$this->assertFalse(file_exists('tests/102/setup'));
 		$this->assertFalse(file_exists('tests/102/stdinput'));
-		$this->assertFalse(file_exists('tests/102/teardown'));
+		
+		$this->assertNull($jsonContent['teardown']);
+		$this->assertNull($jsonContent['stderrFilter']);
+		$this->assertNull($jsonContent['interpreterArguments']);
 
-		$this->assertEquals(file_get_contents('tests/102/commandLineArguments'), '100 15');
-		$this->assertEquals(file_get_contents('tests/102/expectedReturnCode'), '0');
-		$this->assertEquals(file_get_contents('tests/102/stdoutFilter'), "head -n 120 | tail -n 10");
+		$this->assertTrue(array_key_exists('commandLineArguments', $jsonContent));
+		$this->assertTrue(array_key_exists('expectedReturnCode', $jsonContent));
+		$this->assertTrue(array_key_exists('stdoutFilter', $jsonContent));
+		$this->assertEquals($jsonContent['commandLineArguments'], '100 15');
+		$this->assertEquals($jsonContent['expectedReturnCode'], '0');
+		$this->assertEquals($jsonContent['stdoutFilter'], "head -n 120 | tail -n 10");
 		rename('Marvinette.json', 'M.json');
 	}
 
@@ -475,19 +483,20 @@ final class TestManagerTest extends MarvinetteTestCase
 		$this->defineStdin(['101']);
 		TestManager::createSampleTest();
 		$this->assertTrue(is_dir('tests/101'));
-		$this->assertEquals('', file_get_contents('tests/101/commandLineArguments'));
-		$this->assertEquals('', file_get_contents('tests/101/emptyEnv'));
-		$this->assertEquals('', file_get_contents('tests/101/expectedReturnCode'));
-		$this->assertEquals('', file_get_contents('tests/101/expectedStderr'));
-		$this->assertEquals('', file_get_contents('tests/101/expectedStdout'));
-		$this->assertEquals('', file_get_contents('tests/101/interpreterArguments'));
-		$this->assertEquals('', file_get_contents('tests/101/setup'));
-		$this->assertEquals('', file_get_contents('tests/101/stderrFilter'));
-		$this->assertEquals('', file_get_contents('tests/101/stdinput'));
-		$this->assertEquals('', file_get_contents('tests/101/stdoutFilter'));
-		$this->assertEquals('', file_get_contents('tests/101/teardown'));
-		$this->assertEquals('', file_get_contents('tests/101/commandLineArguments'));
-		$this->assertEquals('', file_get_contents('tests/101/commandLineArguments'));
+		$jsonContent = json_decode(file_get_contents("tests/101/config.json"), true);
+		$this->assertEquals(null, $jsonContent['commandLineArguments']);
+		$this->assertEquals(null, $jsonContent['emptyEnv']);
+		$this->assertEquals(null, $jsonContent['expectedReturnCode']);
+		$this->assertEquals(null, $jsonContent['interpreterArguments']);
+		$this->assertEquals(null, $jsonContent['setup']);
+		$this->assertEquals(null, $jsonContent['stderrFilter']);
+		$this->assertEquals(null, $jsonContent['stdoutFilter']);
+		$this->assertEquals(null, $jsonContent['teardown']);
+		$this->assertEquals(null, $jsonContent['commandLineArguments']);
+		$this->assertEquals(null, $jsonContent['commandLineArguments']);
+		$this->assertTrue(file_exists('tests/101/expectedStderr'));
+		$this->assertTrue(file_exists('tests/101/expectedStdout'));
+		$this->assertTrue(file_exists('tests/101/stdinput'));
 		FileManager::deleteFolder('tests/101');
 	}
 }

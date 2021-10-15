@@ -13,6 +13,9 @@ define('TmpFileFolder', sys_get_temp_dir());
 */
 class Test
 {
+
+	const ConfigFile = 'config.json';
+
 	const TmpFileFolder = TmpFileFolder;
 
 	const TmpFilePrefix = 'Marvinette';
@@ -38,7 +41,7 @@ class Test
 
 		$this->commandLineArguments = new Field(function($args) {}, null, "The arguments to pass to the program");
 
-		$this->interpreterArguments = new Field(function($args) {}, null, "The arguments to pass to the interpreter");
+		$this->interpreterArguments = new Field(function($_) {}, [Field::class, 'EmptyDataCleaner'], "The arguments to pass to the interpreter");
 
 		$this->expectedReturnCode = new Field(
 		function($r) {
@@ -90,39 +93,62 @@ class Test
 	 */
 	public function export(string $testsFolder): void
 	{
+		$exportArray = [];
 		$testPath = FileManager::normalizePath("$testsFolder/" . $this->name->get());
+		
 		if (is_dir($testPath)) {
 			FileManager::deleteFolder($testPath);
 		}
 		mkdir($testPath, 0777, true);
 		foreach(get_object_vars($this) as $fieldName => $field) {
-			if ($fieldName == 'name') {
+			if (in_array($fieldName, ['name', 'stdinput']) ||
+				strpos($fieldName,self::TmpFileStderrPrefix) ||
+				strpos($fieldName,self::TmpFileStdoutPrefix)) {
 				continue;
 			}
-			if (is_bool($field->get()) && $field->get()) {
-				file_put_contents(FileManager::normalizePath("$testPath/$fieldName"), '');
-			} else if (is_string($field->get()) && $field->get()) {
-				file_put_contents(FileManager::normalizePath("$testPath/$fieldName"), $field->get());
-			} else if (is_numeric($field->get())) {
-				file_put_contents(FileManager::normalizePath("$testPath/$fieldName"), $field->get());
+			$exportArray[$fieldName] = $field->get();
+		}
+		file_put_contents(
+			FileManager::normalizePath("$testPath/" . Test::ConfigFile),
+			json_encode($exportArray, JSON_PRETTY_PRINT)
+		);
+
+		foreach(['expected' . self::TmpFileStderrPrefix, 'expected' . self::TmpFileStdoutPrefix, 'stdinput'] as $streamFieldName) {
+			$outputFile = FileManager::normalizePath("$testPath/$streamFieldName");
+			if ($this->$streamFieldName->get() === false) {
+				if (file_exists($outputFile)) {
+					unlink($outputFile);
+				}
+				continue;
+			} else if (file_exists($outputFile)) {
+				continue;
 			}
+			touch($outputFile);
 		}
 	}
 
 	public static function exportSample(string $testsFolder, string $name)
 	{
+		$jsonArray = [];
 		$test = new Test();
 		$testPath = FileManager::normalizePath($testsFolder . '/' . $name . '/');
+		$configFile = FileManager::normalizePath($testPath . Test::ConfigFile);
+
 		if (is_dir($testPath) || file_exists($testPath))
 			throw new MarvinetteException("$name: Name already taken");
 		mkdir($testPath, 0777, true);
 		ObjectHelper::forEachObjectField($test, function ($fieldName, $_) use ($testPath) {
-			if ($fieldName == 'name') {
+			if ($fieldName == 'name')
 				return true;
+			if ($fieldName == 'stdinput' || strpos($fieldName, 'expected')) {
+				file_put_contents($testPath . $fieldName, "");
+			} else {
+				$jsonArray[$fieldName] = null;
 			}
-			touch($testPath . $fieldName);
 			return true;
 		});
+		$json = json_encode($jsonArray, JSON_PRETTY_PRINT);
+		file_put_contents($configFile, $json);
 	}
 
 	/**
@@ -137,22 +163,29 @@ class Test
 			throw new MarvinetteException('Invalid test path');
 		}
 		$this->name->set($testName);
-		foreach(get_object_vars($this) as $fieldName => $field) {
-			if (!file_exists(FileManager::normalizePath("$testFolder/$fieldName"))) {
-				continue;
-			}
-			$fileContent = file_get_contents(FileManager::normalizePath("$testFolder/$fieldName"));
-			if (is_numeric($fileContent) && !strstr($fieldName, "Arguments")) {
-				$fileContent = intval($fileContent);
-			}
-			if ($fileContent == '' && is_string($fileContent)) {
-				$this->$fieldName->set(true);
-				continue;
-			}
+		foreach(['expected' . self::TmpFileStderrPrefix, 'expected' . self::TmpFileStdoutPrefix, 'stdinput'] as $streamFieldName) {
+			$streamFile = FileManager::normalizePath("$testFolder/$streamFieldName");
+			$this->$streamFieldName->set(file_exists($streamFile));
+		}
+		$jsonPath = FileManager::normalizePath("$testFolder/" . Test::ConfigFile);
+		if (!file_exists($jsonPath)) {
+			throw new MarvinetteException("$jsonPath: File doesn't exist.");
+		}
+		$fileContent = file_get_contents($jsonPath);
+		if ($fileContent == false) {
+			throw new MarvinetteException("$jsonPath: Cannot read file.");
+		}
+		$jsonContent = json_decode($fileContent, true);
+		if (is_null($jsonContent)) {
+			throw new MarvinetteException("$jsonPath: Invalid JSON file.");
+		}
+		foreach($jsonContent as $fieldName => $value) {
+			if (!array_key_exists($fieldName, get_object_vars($this)))
+				throw new MarvinetteException("$jsonPath: $fieldName: Invalid Field.");
 			try {
-				$this->$fieldName->set($fileContent);
-			} catch (Exception $_) {
-				$this->$fieldName->set(true);
+				$this->$fieldName->set($value);
+			} catch (Exception $e) {
+				throw new MarvinetteException("$jsonPath: $fieldName: $value: Invalid value.");
 			}
 		}
 	}
@@ -223,13 +256,12 @@ class Test
 	 */
 	private function buildCommand(Project $project, string $testPath): string
 	{
-		$interpreter = $project->interpreter->get();
 		$command = $project->binaryPath->get() . DIRECTORY_SEPARATOR . $project->binaryName->get();
 		$stdinputPath = FileManager::normalizePath("$testPath/stdinput");
 		if (!is_null($this->commandLineArguments->get())) {
 			$command .= ' ' . $this->commandLineArguments->get();
 		}
-		if (!is_null($interpreter)) {
+		if (!is_null($project->interpreter->get())) {
 			$interpreterCommand = $project->getInterpreterFullPath();
 			if ($this->interpreterArguments->get()) {
 				$interpreterCommand .= ' ' . $this->interpreterArguments->get();
@@ -277,12 +309,12 @@ class Test
 		if (!in_array($streamName, [self::TmpFileStderrPrefix, self::TmpFileStdoutPrefix])) {
 			throw new MarvinetteException("filterOutput: '$streamName' is an invalid stream name");
 		}
-		$FilterFieldName = strtolower($streamName) . 'Filter';
-		if (!$this->$FilterFieldName->get()) {
+		$filterFieldName = strtolower($streamName) . 'Filter';
+		if (!$this->$filterFieldName->get()) {
 			return;
 		}
 		$actualOutputFilePath = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . $streamName);
-		$filterCommand = file_get_contents(FileManager::normalizePath("$testPath/$FilterFieldName"));
+		$filterCommand = $this->$filterFieldName->get();
 		$tmpFilterFile = FileManager::normalizePath(self::TmpFileFolder . '/' . self::TmpFilePrefix . 'Filtered' . $streamName);
 		$command = "(cat '$actualOutputFilePath' | $filterCommand) > $tmpFilterFile";
 		$this->executeSystemCommand($command, "$streamName Filtering failed");

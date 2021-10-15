@@ -213,21 +213,7 @@ class TestManager {
 	 */
 	public static function folderIsATest(string $path): bool
 	{
-		$files = [];
-		$okCount = 0;
-		$testsFields = get_object_vars(new Test());
-		$path = FileManager::normalizePath($path);
-		$path = FileManager::removeEndDirSeparator($path);
-		if (!is_dir($path)) {
-			return false;
-		}
-		$files = glob("$path/*");
-		foreach ($files as $file) {
-			if (in_array(basename($file), array_keys($testsFields))) {
-				$okCount += 1;
-			}
-		}
-		return $okCount > 0;	
+		return file_exists(FileManager::normalizePath("$path/" . Test::ConfigFile));
 	}
 
 	/**

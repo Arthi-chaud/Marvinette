@@ -104,22 +104,22 @@ final class ProjectManagerTest extends MarvinetteTestCase
 	{
 		$this->hideStdout();
 		mkdir('tests/101');
-		touch('tests/101/stdinput');
+		touch('tests/101/config.json');
 		$this->defineStdin([
 			'n', 'Y'
 		]);
 		$this->assertTrue(ProjectManager::deleteProject());
-		$this->assertTrue(file_exists('tests/101/stdinput'));
+		$this->assertTrue(file_exists('tests/101/config.json'));
 		$this->assertTrue(file_exists('Marvinette.json'));
 		FileManager::deleteFolder('tests/101');
 	}
 
 	public function testDeleteProjectDeletingTests(): void
 	{
-		$this->hideStdout();
+		//$this->hideStdout();
 		copy('Marvinette.json', 'Marvinette2.json');
 		mkdir('tests/101');
-		touch('tests/101/stdinput');
+		touch('tests/101/config.json');
 		$this->defineStdin([
 			'Y', 'Y'
 		]);
