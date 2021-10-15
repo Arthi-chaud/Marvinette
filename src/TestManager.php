@@ -94,7 +94,7 @@ class TestManager {
 				continue;
 			}
 			$fieldValue = $field->get();
-			if (in_array($fieldName, ['expected' . Test::TmpFileStderrPrefix, 'expected' . Test::TmpFileStdoutPrefix, 'stdinput'])) {
+			if (in_array($fieldName, Test::StreamFields)) {
 				$fieldFileName = FileManager::normalizePath("$testsFolder/$testName/$fieldName");
 				$fileExists = file_exists(FileManager::normalizePath($fieldFileName));
 				if ($fileExists && $fieldValue == false)

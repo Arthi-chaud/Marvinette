@@ -28,6 +28,8 @@ class Test
 
 	const TmpDiffFilePrefix = 'Diff';
 
+	const StreamFields = ['expected' . self::TmpFileStderrPrefix, 'expected' . self::TmpFileStdoutPrefix, 'stdinput'];
+
 	public function __construct(?string $testPath = null)
 	{
 		$this->name = new Field(function($name) {
@@ -101,9 +103,7 @@ class Test
 		}
 		mkdir($testPath, 0777, true);
 		foreach(get_object_vars($this) as $fieldName => $field) {
-			if (in_array($fieldName, ['name', 'stdinput']) ||
-				strpos($fieldName,self::TmpFileStderrPrefix) ||
-				strpos($fieldName,self::TmpFileStdoutPrefix)) {
+			if (in_array($fieldName, array_merge(['name'], self::StreamFields))) {
 				continue;
 			}
 			$exportArray[$fieldName] = $field->get();
@@ -113,7 +113,7 @@ class Test
 			json_encode($exportArray, JSON_PRETTY_PRINT)
 		);
 
-		foreach(['expected' . self::TmpFileStderrPrefix, 'expected' . self::TmpFileStdoutPrefix, 'stdinput'] as $streamFieldName) {
+		foreach(self::StreamFields as $streamFieldName) {
 			$outputFile = FileManager::normalizePath("$testPath/$streamFieldName");
 			if ($this->$streamFieldName->get() === false) {
 				if (file_exists($outputFile)) {
@@ -140,7 +140,7 @@ class Test
 		ObjectHelper::forEachObjectField($test, function ($fieldName, $_) use (&$jsonArray, $testPath) {
 			if ($fieldName == 'name')
 				return true;
-			if (in_array($fieldName, ['expected' . self::TmpFileStderrPrefix, 'expected' . self::TmpFileStdoutPrefix, 'stdinput'])) {
+			if (in_array($fieldName, self::StreamFields)) {
 				file_put_contents($testPath . $fieldName, "");
 			} else {
 				$jsonArray[$fieldName] = null;
@@ -163,7 +163,7 @@ class Test
 			throw new MarvinetteException('Invalid test path');
 		}
 		$this->name->set($testName);
-		foreach(['expected' . self::TmpFileStderrPrefix, 'expected' . self::TmpFileStdoutPrefix, 'stdinput'] as $streamFieldName) {
+		foreach(self::StreamFields as $streamFieldName) {
 			$streamFile = FileManager::normalizePath("$testFolder/$streamFieldName");
 			$this->$streamFieldName->set(file_exists($streamFile));
 		}
