@@ -105,7 +105,7 @@ The framework's configuration file, ```Marvinette.json```, holds the following i
 - ```name```: The name of the project
 - ``` binary name```: the name of the binary/script to execute
 - ```binary path```: the path to the binary/script
-- ```interpreter```: the interpreter of the script (null if ELF file)
+- ```interpreter```: the interpreter of the script (for example: python3 for a python script, or nothing for binary executables)
 - ```tests folder```: the path to the tests' folder
 
 If you do not want to use the command-line interface to configure your project, use the ```--create-sample-project```.
