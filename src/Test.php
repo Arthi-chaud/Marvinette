@@ -137,10 +137,10 @@ class Test
 		if (is_dir($testPath) || file_exists($testPath))
 			throw new MarvinetteException("$name: Name already taken");
 		mkdir($testPath, 0777, true);
-		ObjectHelper::forEachObjectField($test, function ($fieldName, $_) use ($testPath) {
+		ObjectHelper::forEachObjectField($test, function ($fieldName, $_) use (&$jsonArray, $testPath) {
 			if ($fieldName == 'name')
 				return true;
-			if ($fieldName == 'stdinput' || strpos($fieldName, 'expected')) {
+			if (in_array($fieldName, ['expected' . self::TmpFileStderrPrefix, 'expected' . self::TmpFileStdoutPrefix, 'stdinput'])) {
 				file_put_contents($testPath . $fieldName, "");
 			} else {
 				$jsonArray[$fieldName] = null;
