@@ -1,0 +1,198 @@
+\hypertarget{classDisplay_1_1Displayer}{}\section{Display\textbackslash{}Displayer Class Reference}
+\label{classDisplay_1_1Displayer}\index{Display\textbackslash{}\+Displayer@{Display\textbackslash{}\+Displayer}}
+
+
+Display utility class.  
+
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classDisplay_1_1Displayer_a2e7ce80672e8e2433dce68eb7850090d}{display\+Text} (string \$text, bool \$newline=true, bool \$reset\+After=true)
+\item 
+\hyperlink{classDisplay_1_1Displayer_ac1a45d0e8bfd18db8a841172df12b44d}{get\+Color} ()
+\item 
+\hyperlink{classDisplay_1_1Displayer_a2df23fef055ca84673a9a90f55f3e3ee}{set\+Color} (\$color)
+\item 
+\hyperlink{classDisplay_1_1Displayer_af1da840727c16ebc4f08bbec07e5f86a}{reset\+Color} ()
+\item 
+\hyperlink{classDisplay_1_1Displayer_a3db965b4e13997094ba8527bfee8e60f}{get\+Background} ()
+\item 
+\hyperlink{classDisplay_1_1Displayer_ada8b108ad4678f8f94337748db34a062}{set\+Background} (\$background)
+\item 
+\hyperlink{classDisplay_1_1Displayer_afd285ad90f1eb4341a370f17ff7ab725}{reset\+Background} ()
+\item 
+\hyperlink{classDisplay_1_1Displayer_af1a84beba7ba2afd60dbe13814db5f42}{get\+Styles} ()
+\item 
+\hyperlink{classDisplay_1_1Displayer_ab9ba6574d40f5ecd249e461ac7e376b5}{set\+Style} (\$style)
+\item 
+\hyperlink{classDisplay_1_1Displayer_a2f6f5f0314cdb53ea96baa7dda489154}{set\+Styles} (array \$styles)
+\item 
+\hyperlink{classDisplay_1_1Displayer_ad30a8f26128fb57aa7b862a7eb899c0b}{reset\+Styles} ()
+\item 
+\hyperlink{classDisplay_1_1Displayer_a99a0bbaef46d045ad055692abaf153c3}{set} (array \$styles, \$color, \$background)
+\item 
+\hyperlink{classDisplay_1_1Displayer_a42bb7920ed6bc44c6e08747b87b1de63}{reset\+All} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classDisplay_1_1Displayer_a51f8584319905e94fd622a91a79072f8}{get\+Sequence} (\$id)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDisplay_1_1Displayer_a54d4898c73256f0c3b02616cf1bab7fd}\label{classDisplay_1_1Displayer_a54d4898c73256f0c3b02616cf1bab7fd}} 
+{\bfseries \$color} = \hyperlink{classDisplay_1_1Color_a667403f6acc19e11a5edeae75ca44c6d}{Color\+::\+Default}
+\item 
+\mbox{\Hypertarget{classDisplay_1_1Displayer_aa3aa38460d82a6f85298eb84dd369513}\label{classDisplay_1_1Displayer_aa3aa38460d82a6f85298eb84dd369513}} 
+array {\bfseries \$styles} = \mbox{[}$\,$\mbox{]}
+\item 
+\mbox{\Hypertarget{classDisplay_1_1Displayer_a254583ce5b771169dff389a30b82a54d}\label{classDisplay_1_1Displayer_a254583ce5b771169dff389a30b82a54d}} 
+{\bfseries \$background} = \hyperlink{classDisplay_1_1Color_a667403f6acc19e11a5edeae75ca44c6d}{Color\+::\+Default}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Display utility class. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classDisplay_1_1Displayer_a2e7ce80672e8e2433dce68eb7850090d}\label{classDisplay_1_1Displayer_a2e7ce80672e8e2433dce68eb7850090d}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!display\+Text@{display\+Text}}
+\index{display\+Text@{display\+Text}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{display\+Text()}{displayText()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::display\+Text (\begin{DoxyParamCaption}\item[{string}]{\$text,  }\item[{bool}]{\$newline = {\ttfamily true},  }\item[{bool}]{\$reset\+After = {\ttfamily true} }\end{DoxyParamCaption})}
+
+Print text on S\+T\+D\+O\+UT, using set style / color / background. No format will be displayed if the S\+T\+D\+O\+UT is a T\+TY 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$text} & the text to display \\
+\hline
+bool & {\em \$newline} & if true, a newline is displayed after the text \\
+\hline
+bool & {\em \$reset\+After} & if true, resets style / color / background \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+self 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDisplay_1_1Displayer_a3db965b4e13997094ba8527bfee8e60f}\label{classDisplay_1_1Displayer_a3db965b4e13997094ba8527bfee8e60f}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!get\+Background@{get\+Background}}
+\index{get\+Background@{get\+Background}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{get\+Background()}{getBackground()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::get\+Background (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the value of background \mbox{\Hypertarget{classDisplay_1_1Displayer_ac1a45d0e8bfd18db8a841172df12b44d}\label{classDisplay_1_1Displayer_ac1a45d0e8bfd18db8a841172df12b44d}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!get\+Color@{get\+Color}}
+\index{get\+Color@{get\+Color}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{get\+Color()}{getColor()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::get\+Color (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the value of color \mbox{\Hypertarget{classDisplay_1_1Displayer_a51f8584319905e94fd622a91a79072f8}\label{classDisplay_1_1Displayer_a51f8584319905e94fd622a91a79072f8}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!get\+Sequence@{get\+Sequence}}
+\index{get\+Sequence@{get\+Sequence}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{get\+Sequence()}{getSequence()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::get\+Sequence (\begin{DoxyParamCaption}\item[{}]{\$id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+\begin{DoxyParams}[1]{Parameters}
+int & {\em \$id} & the ID of the style/color \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string formatted string for terminal setting 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDisplay_1_1Displayer_af1a84beba7ba2afd60dbe13814db5f42}\label{classDisplay_1_1Displayer_af1a84beba7ba2afd60dbe13814db5f42}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!get\+Styles@{get\+Styles}}
+\index{get\+Styles@{get\+Styles}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{get\+Styles()}{getStyles()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::get\+Styles (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the value of style \mbox{\Hypertarget{classDisplay_1_1Displayer_a42bb7920ed6bc44c6e08747b87b1de63}\label{classDisplay_1_1Displayer_a42bb7920ed6bc44c6e08747b87b1de63}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!reset\+All@{reset\+All}}
+\index{reset\+All@{reset\+All}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{reset\+All()}{resetAll()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::reset\+All (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+resets all presets values, using rest memeber functions \mbox{\Hypertarget{classDisplay_1_1Displayer_afd285ad90f1eb4341a370f17ff7ab725}\label{classDisplay_1_1Displayer_afd285ad90f1eb4341a370f17ff7ab725}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!reset\+Background@{reset\+Background}}
+\index{reset\+Background@{reset\+Background}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{reset\+Background()}{resetBackground()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::reset\+Background (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Reset Background color value to default \mbox{\Hypertarget{classDisplay_1_1Displayer_af1da840727c16ebc4f08bbec07e5f86a}\label{classDisplay_1_1Displayer_af1da840727c16ebc4f08bbec07e5f86a}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!reset\+Color@{reset\+Color}}
+\index{reset\+Color@{reset\+Color}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{reset\+Color()}{resetColor()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::reset\+Color (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Set color field to null
+
+\begin{DoxyReturn}{Returns}
+self 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDisplay_1_1Displayer_ad30a8f26128fb57aa7b862a7eb899c0b}\label{classDisplay_1_1Displayer_ad30a8f26128fb57aa7b862a7eb899c0b}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!reset\+Styles@{reset\+Styles}}
+\index{reset\+Styles@{reset\+Styles}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{reset\+Styles()}{resetStyles()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::reset\+Styles (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Reset Styles values, the array is emptied \mbox{\Hypertarget{classDisplay_1_1Displayer_a99a0bbaef46d045ad055692abaf153c3}\label{classDisplay_1_1Displayer_a99a0bbaef46d045ad055692abaf153c3}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!set@{set}}
+\index{set@{set}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{set()}{set()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::set (\begin{DoxyParamCaption}\item[{array}]{\$styles,  }\item[{}]{\$color,  }\item[{}]{\$background }\end{DoxyParamCaption})}
+
+Set styles and color to use 
+\begin{DoxyParams}{Parameters}
+{\em Display} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classDisplay_1_1Displayer_ada8b108ad4678f8f94337748db34a062}\label{classDisplay_1_1Displayer_ada8b108ad4678f8f94337748db34a062}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!set\+Background@{set\+Background}}
+\index{set\+Background@{set\+Background}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{set\+Background()}{setBackground()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::set\+Background (\begin{DoxyParamCaption}\item[{}]{\$background }\end{DoxyParamCaption})}
+
+Set the value of background
+
+\begin{DoxyReturn}{Returns}
+self 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDisplay_1_1Displayer_a2df23fef055ca84673a9a90f55f3e3ee}\label{classDisplay_1_1Displayer_a2df23fef055ca84673a9a90f55f3e3ee}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!set\+Color@{set\+Color}}
+\index{set\+Color@{set\+Color}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{set\+Color()}{setColor()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::set\+Color (\begin{DoxyParamCaption}\item[{}]{\$color }\end{DoxyParamCaption})}
+
+Set the value of color
+
+\begin{DoxyReturn}{Returns}
+self 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDisplay_1_1Displayer_ab9ba6574d40f5ecd249e461ac7e376b5}\label{classDisplay_1_1Displayer_ab9ba6574d40f5ecd249e461ac7e376b5}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!set\+Style@{set\+Style}}
+\index{set\+Style@{set\+Style}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{set\+Style()}{setStyle()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::set\+Style (\begin{DoxyParamCaption}\item[{}]{\$style }\end{DoxyParamCaption})}
+
+Set the value of style
+
+\begin{DoxyReturn}{Returns}
+self 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDisplay_1_1Displayer_a2f6f5f0314cdb53ea96baa7dda489154}\label{classDisplay_1_1Displayer_a2f6f5f0314cdb53ea96baa7dda489154}} 
+\index{Display\+::\+Displayer@{Display\+::\+Displayer}!set\+Styles@{set\+Styles}}
+\index{set\+Styles@{set\+Styles}!Display\+::\+Displayer@{Display\+::\+Displayer}}
+\subsubsection{\texorpdfstring{set\+Styles()}{setStyles()}}
+{\footnotesize\ttfamily Display\textbackslash{}\+Displayer\+::set\+Styles (\begin{DoxyParamCaption}\item[{array}]{\$styles }\end{DoxyParamCaption})}
+
+Set styles
+
+\begin{DoxyReturn}{Returns}
+self 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Display/Displayer.\+php\end{DoxyCompactItemize}

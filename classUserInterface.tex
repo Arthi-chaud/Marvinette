@@ -1,0 +1,95 @@
+\hypertarget{classUserInterface}{}\section{User\+Interface Class Reference}
+\label{classUserInterface}\index{User\+Interface@{User\+Interface}}
+
+
+Everythong related to user interface.  
+
+
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classUserInterface_a1ab24d0cc7bedc6e44d1a2814db451de}{set\+Title} (string \$title, bool \$display\+Now=false)
+\begin{DoxyCompactList}\small\item\em Set title to display on every call of {\ttfamily display\+C\+L\+I\+Frame} The title stack works like a stack, this is a push function. \end{DoxyCompactList}\item 
+static \hyperlink{classUserInterface_adc9951b8ed9d81b31371198ce14d491f}{pop\+Title} ()
+\item 
+\mbox{\Hypertarget{classUserInterface_a19711e996c35b83c3221f21682e35b02}\label{classUserInterface_a19711e996c35b83c3221f21682e35b02}} 
+static {\bfseries display\+Title} ()
+\item 
+\mbox{\Hypertarget{classUserInterface_a3e684ac62312c4fe7eeb4a1ff203ea9d}\label{classUserInterface_a3e684ac62312c4fe7eeb4a1ff203ea9d}} 
+static {\bfseries display\+Help} ()
+\item 
+static \hyperlink{classUserInterface_ad13abbe2f3f716e40b2005a8965e6c81}{clean\+Camel\+Case} (string \$str)
+\item 
+static \hyperlink{classUserInterface_a537f15b5dcfb8f86c2a001bbe41ca8a9}{to\+Camel\+Case} (string \$str)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classUserInterface_a4a3b840da421859f787023a7b5cd3f6b}\label{classUserInterface_a4a3b840da421859f787023a7b5cd3f6b}} 
+static \hyperlink{classDisplay_1_1Displayer}{Displayer} {\bfseries \$displayer}
+\item 
+\mbox{\Hypertarget{classUserInterface_ab7467a6501ff3bb5b67f17a1c17d6fb4}\label{classUserInterface_ab7467a6501ff3bb5b67f17a1c17d6fb4}} 
+static {\bfseries \$titles\+Stack} = \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Everythong related to user interface. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classUserInterface_ad13abbe2f3f716e40b2005a8965e6c81}\label{classUserInterface_ad13abbe2f3f716e40b2005a8965e6c81}} 
+\index{User\+Interface@{User\+Interface}!clean\+Camel\+Case@{clean\+Camel\+Case}}
+\index{clean\+Camel\+Case@{clean\+Camel\+Case}!User\+Interface@{User\+Interface}}
+\subsubsection{\texorpdfstring{clean\+Camel\+Case()}{cleanCamelCase()}}
+{\footnotesize\ttfamily static User\+Interface\+::clean\+Camel\+Case (\begin{DoxyParamCaption}\item[{string}]{\$str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Turns camel\+Case-\/formatted string into \textquotesingle{}normally\textquotesingle{}-\/cased string 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$str} & a camel\+Case string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string the formatted string; 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classUserInterface_adc9951b8ed9d81b31371198ce14d491f}\label{classUserInterface_adc9951b8ed9d81b31371198ce14d491f}} 
+\index{User\+Interface@{User\+Interface}!pop\+Title@{pop\+Title}}
+\index{pop\+Title@{pop\+Title}!User\+Interface@{User\+Interface}}
+\subsubsection{\texorpdfstring{pop\+Title()}{popTitle()}}
+{\footnotesize\ttfamily static User\+Interface\+::pop\+Title (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Pops last set title from stack The title stack works like a stack, this is a pop function \mbox{\Hypertarget{classUserInterface_a1ab24d0cc7bedc6e44d1a2814db451de}\label{classUserInterface_a1ab24d0cc7bedc6e44d1a2814db451de}} 
+\index{User\+Interface@{User\+Interface}!set\+Title@{set\+Title}}
+\index{set\+Title@{set\+Title}!User\+Interface@{User\+Interface}}
+\subsubsection{\texorpdfstring{set\+Title()}{setTitle()}}
+{\footnotesize\ttfamily static User\+Interface\+::set\+Title (\begin{DoxyParamCaption}\item[{string}]{\$title,  }\item[{bool}]{\$display\+Now = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Set title to display on every call of {\ttfamily display\+C\+L\+I\+Frame} The title stack works like a stack, this is a push function. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$title} & the title string \\
+\hline
+bool & {\em \$display\+Now} & if true, will call display\+Title function \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUserInterface_a537f15b5dcfb8f86c2a001bbe41ca8a9}\label{classUserInterface_a537f15b5dcfb8f86c2a001bbe41ca8a9}} 
+\index{User\+Interface@{User\+Interface}!to\+Camel\+Case@{to\+Camel\+Case}}
+\index{to\+Camel\+Case@{to\+Camel\+Case}!User\+Interface@{User\+Interface}}
+\subsubsection{\texorpdfstring{to\+Camel\+Case()}{toCamelCase()}}
+{\footnotesize\ttfamily static User\+Interface\+::to\+Camel\+Case (\begin{DoxyParamCaption}\item[{string}]{\$str }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Turns a normally\textquotesingle{}-\/cased string into a camel\+Case-\/formatted string 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$str} & a normally cased string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string the camel case string; 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Utils/User\+Interface.\+php\end{DoxyCompactItemize}

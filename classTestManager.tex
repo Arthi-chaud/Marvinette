@@ -1,0 +1,71 @@
+\hypertarget{classTestManager}{}\section{Test\+Manager Class Reference}
+\label{classTestManager}\index{Test\+Manager@{Test\+Manager}}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTestManager_aa9e3945c44816be04e329864d5a2e62f}\label{classTestManager_aa9e3945c44816be04e329864d5a2e62f}} 
+static {\bfseries add\+Test} (?\hyperlink{classProject}{Project} \$project=null)
+\item 
+\mbox{\Hypertarget{classTestManager_aee45ea866ce32f86451843a567db9e80}\label{classTestManager_aee45ea866ce32f86451843a567db9e80}} 
+static {\bfseries create\+Sample\+Test} (?string \$name=null)
+\item 
+\mbox{\Hypertarget{classTestManager_a3d44eb840485d2f33dee6598e0e3b0ba}\label{classTestManager_a3d44eb840485d2f33dee6598e0e3b0ba}} 
+static {\bfseries mod\+Test} ()
+\item 
+\mbox{\Hypertarget{classTestManager_a97efdce7cd3add364637cc24a15a4c48}\label{classTestManager_a97efdce7cd3add364637cc24a15a4c48}} 
+static {\bfseries execute\+Test} (?string \$test\+Name=null, ?\hyperlink{classProject}{Project} \$project=null)
+\item 
+\mbox{\Hypertarget{classTestManager_a4a11654c5a32e8f0ccdd582bdb3ef1fa}\label{classTestManager_a4a11654c5a32e8f0ccdd582bdb3ef1fa}} 
+static {\bfseries executes\+All\+Tests} (?\hyperlink{classProject}{Project} \$project=null)
+\item 
+\mbox{\Hypertarget{classTestManager_a19a87ea290be92044cea0d5606541c37}\label{classTestManager_a19a87ea290be92044cea0d5606541c37}} 
+static {\bfseries delete\+Test} ()
+\item 
+static \hyperlink{classTestManager_a0f62639ed81588be321cafc0a23ac290}{folder\+Is\+A\+Test} (string \$path)
+\item 
+static \hyperlink{classTestManager_aa6ec0809a03f384869c41f51507a2fd4}{get\+Tests\+Folders} (string \$tests\+Folder, bool \$full\+Path=false)
+\item 
+\mbox{\Hypertarget{classTestManager_ad9a11b0c53f20112d0685e4700fcfa12}\label{classTestManager_ad9a11b0c53f20112d0685e4700fcfa12}} 
+static {\bfseries select\+Test} (\hyperlink{classProject}{Project} \$project)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class holding functions to manage tests and their files 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classTestManager_a0f62639ed81588be321cafc0a23ac290}\label{classTestManager_a0f62639ed81588be321cafc0a23ac290}} 
+\index{Test\+Manager@{Test\+Manager}!folder\+Is\+A\+Test@{folder\+Is\+A\+Test}}
+\index{folder\+Is\+A\+Test@{folder\+Is\+A\+Test}!Test\+Manager@{Test\+Manager}}
+\subsubsection{\texorpdfstring{folder\+Is\+A\+Test()}{folderIsATest()}}
+{\footnotesize\ttfamily static Test\+Manager\+::folder\+Is\+A\+Test (\begin{DoxyParamCaption}\item[{string}]{\$path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Checks if a folder is a valid test folder (using \hyperlink{classTest}{Test}\textquotesingle{}s object fields) 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$path} & a path to what could be a test folder \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTestManager_aa6ec0809a03f384869c41f51507a2fd4}\label{classTestManager_aa6ec0809a03f384869c41f51507a2fd4}} 
+\index{Test\+Manager@{Test\+Manager}!get\+Tests\+Folders@{get\+Tests\+Folders}}
+\index{get\+Tests\+Folders@{get\+Tests\+Folders}!Test\+Manager@{Test\+Manager}}
+\subsubsection{\texorpdfstring{get\+Tests\+Folders()}{getTestsFolders()}}
+{\footnotesize\ttfamily static Test\+Manager\+::get\+Tests\+Folders (\begin{DoxyParamCaption}\item[{string}]{\$tests\+Folder,  }\item[{bool}]{\$full\+Path = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\begin{DoxyReturn}{Returns}
+array of string of valid tests folders 
+\end{DoxyReturn}
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$tests\+Folder} & the path to a folder that can contain tests folders \\
+\hline
+bool & {\em \$full\+Path} & if true the array contains tests names concatened with \$tests\+Folder \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Test\+Manager.\+php\end{DoxyCompactItemize}

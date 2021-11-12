@@ -1,0 +1,53 @@
+\hypertarget{classUserInput}{}\section{User\+Input Class Reference}
+\label{classUserInput}\index{User\+Input@{User\+Input}}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classUserInput_aeb9e9aec3db1a0b93c70e394e7cb6956}{get\+Option} (callable \$question\+Prompt, array \$options)
+\item 
+static \hyperlink{classUserInput_a5282771aa3460edbc1b5b65aaeaccaca}{get\+Yes\+No\+Option} (string \$msg, \$color, ?string \$display\+Frame\+Title=null)
+\item 
+static \hyperlink{classUserInput_a2b3700184e207532d8ca67df7ec035b0}{get\+User\+Line} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classUserInput_aeb9e9aec3db1a0b93c70e394e7cb6956}\label{classUserInput_aeb9e9aec3db1a0b93c70e394e7cb6956}} 
+\index{User\+Input@{User\+Input}!get\+Option@{get\+Option}}
+\index{get\+Option@{get\+Option}!User\+Input@{User\+Input}}
+\subsubsection{\texorpdfstring{get\+Option()}{getOption()}}
+{\footnotesize\ttfamily static User\+Input\+::get\+Option (\begin{DoxyParamCaption}\item[{callable}]{\$question\+Prompt,  }\item[{array}]{\$options }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Reads a line from {\ttfamily stdin}. While what\textquotesingle{}s entered is not in {\ttfamily \$options}, {\ttfamily \$question\+Promts} is called and stdin is read 
+\begin{DoxyParams}[1]{Parameters}
+callable & {\em \$question\+Prompt} & a function taking no parameter, called before each line read \\
+\hline
+array & {\em \$options} & an aray of string holding what is expected from stdin \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string a string from \$options read from the stream, or throw if stream has nothing else to read 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classUserInput_a2b3700184e207532d8ca67df7ec035b0}\label{classUserInput_a2b3700184e207532d8ca67df7ec035b0}} 
+\index{User\+Input@{User\+Input}!get\+User\+Line@{get\+User\+Line}}
+\index{get\+User\+Line@{get\+User\+Line}!User\+Input@{User\+Input}}
+\subsubsection{\texorpdfstring{get\+User\+Line()}{getUserLine()}}
+{\footnotesize\ttfamily static User\+Input\+::get\+User\+Line (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Reads a line from S\+T\+D\+IN by calling {\ttfamily fgets} The line is trimmed Also used for unit testing \begin{DoxyReturn}{Returns}
+string$\vert$false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classUserInput_a5282771aa3460edbc1b5b65aaeaccaca}\label{classUserInput_a5282771aa3460edbc1b5b65aaeaccaca}} 
+\index{User\+Input@{User\+Input}!get\+Yes\+No\+Option@{get\+Yes\+No\+Option}}
+\index{get\+Yes\+No\+Option@{get\+Yes\+No\+Option}!User\+Input@{User\+Input}}
+\subsubsection{\texorpdfstring{get\+Yes\+No\+Option()}{getYesNoOption()}}
+{\footnotesize\ttfamily static User\+Input\+::get\+Yes\+No\+Option (\begin{DoxyParamCaption}\item[{string}]{\$msg,  }\item[{}]{\$color,  }\item[{?string}]{\$display\+Frame\+Title = {\ttfamily null} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Get Yes/no option from command-\/line interface \begin{DoxyReturn}{Returns}
+bool true if user said yes, the opposite if no 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Utils/User\+Input.\+php\end{DoxyCompactItemize}

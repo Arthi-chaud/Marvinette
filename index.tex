@@ -1,0 +1,179 @@
+\href{images/logo.PNG}{\tt }
+
+\href{https://github.com/Arthi-chaud/Marvinette/actions/workflows/unit_tests.yml}{\tt } \href{https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette}{\tt } \href{https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette}{\tt } \href{https://arthi-chaud.github.io/Marvinette/}{\tt } 
+
+
+
+
+\begin{DoxyEnumerate}
+\item Clone the repository
+\item Move it to your {\ttfamily \$\+H\+O\+ME} folder (or a directory where you wouldn\textquotesingle{}t want to move the repository)
+\item Inside the repository, execute the following command\+:
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+php MarvinetteInstall.php
+\end{DoxyCode}
+
+
+{\bfseries Warning} If installation fails, try installation using {\ttfamily sudo}
+
+
+\begin{DoxyEnumerate}
+\item (Only For Windows) Add the path of the marvinette folder to your {\ttfamily P\+A\+TH} environment variable
+\end{DoxyEnumerate}
+
+{\bfseries Warning}\+: Once you executed the command, you must not move the Marvinette folder. If you do, you\textquotesingle{}ll have to execute the install command again 
+
+
+
+
+\begin{DoxyEnumerate}
+\item Before anything else, you must create your project\textquotesingle{}s configuration file for Marvinette. To do so\+:
+\begin{DoxyItemize}
+\item go to your project\textquotesingle{}s directory
+\item execute the following command\+:
+\end{DoxyItemize}
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+marvinette --create-project
+\end{DoxyCode}
+
+
+
+\begin{DoxyItemize}
+\item You will be prompt to enter several values.
+\item You can modify your configuration file using the following command (avoid changing the file yourself)\+:
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+marvinette --mod-project
+\end{DoxyCode}
+
+
+
+\begin{DoxyEnumerate}
+\item You can now create your first functional test!
+\begin{DoxyItemize}
+\item execute the command\+:
+\end{DoxyItemize}
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+marvinette --add-test
+\end{DoxyCode}
+
+
+
+\begin{DoxyItemize}
+\item You will be prompt to enter different values.
+\item In your test\textquotesingle{}s folder, some files will be empty\+: you\textquotesingle{}ll have to fill them yourself (expected\+Stdout/\+Stderr, standard input, stdout/stderr\+Filter). If a file is empty, for example expected\+Stdout, the standard output of the program will be compared with the file\textquotesingle{}s content. If you don\textquotesingle{}t want to, simply delete the file.
+\end{DoxyItemize}
+
+Your tests are ready to be executed!
+\begin{DoxyItemize}
+\item To execute one test, execute the command\+:
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+marvinette --execute-test
+\end{DoxyCode}
+
+
+You will be asked to choose which test to execute
+\begin{DoxyItemize}
+\item To execute all your tests, execute the command\+:
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+marvinette --execute-tests
+\end{DoxyCode}
+ 
+
+
+
+Use the framework using the following command-\/line instructions\+:
+
+
+\begin{DoxyCode}
+marvinette [option]
+
+  option:
+    --create-project: Create a main configuration file, required to make tests
+    --create-sample-project: Create a sample configuration file. The values will be changed by the user.
+    --del-project, --delete-project: Delete configuration file and existing tests
+    --mod-project: Modify the project\(\backslash\)'s info.
+
+    --add-test, --create-test: Create a functional test
+    --create-sample-test: Create a sample test file. The values will be changed by the user.
+    --mod-test: Modify a functional test
+    --del-test, --delete-test: Delete a functional test
+
+    --execute-test,--exec-test : Execute a test
+    --execute-tests, --exec-all  : Execute all tests
+
+    -h, --help: display this usage
+\end{DoxyCode}
+ 
+
+
+
+The framework\textquotesingle{}s configuration file, {\ttfamily Marvinette.\+json}, holds the following information\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily name}\+: The name of the project
+\item {\ttfamily binary name}\+: the name of the binary/script to execute
+\item {\ttfamily binary path}\+: the path to the binary/script
+\item {\ttfamily interpreter}\+: the interpreter of the script (for example\+: python3 for a python script, or nothing for binary executables)
+\item {\ttfamily tests folder}\+: the path to the tests\textquotesingle{} folder
+\end{DoxyItemize}
+
+If you do not want to use the command-\/line interface to configure your project, use the {\ttfamily -\/-\/create-\/sample-\/project}. It will create a sample configuration file and you change the values by yourself
+
+Upon test creation, several files are generated in the {\ttfamily test\+Folder}/{\ttfamily test\+Name} folder\+:
+
+
+\begin{DoxyItemize}
+\item A {\ttfamily config.\+json} file, holding the following values\+:
+\begin{DoxyItemize}
+\item {\ttfamily command\+Line\+Arguments}\+: holds the arguments which will be passed to the program.
+\item {\ttfamily interpreter\+Arguments}\+: holds the arguments which will be passed to the program\textquotesingle{}s interpreter. The arguments will be read only if an interpreter is set in the {\ttfamily Marvinette.\+json} file.
+\item {\ttfamily expected\+Return\+Code}\+: the returned code expected from the program\textquotesingle{}s execution (if the field\textquotesingle{}s value is not a number, the comparison will be scrapped).
+\item {\ttfamily stdout\+Filter}\+: the standard output the command will be piped onto.
+\item {\ttfamily stderr\+Filter}\+: the error output the command will be piped onto.
+\item {\ttfamily empty\+Env}\+: if true, the test command will be executed within an empty environment.
+\item {\ttfamily setup}\+: this command will be executed before the program is launched.
+\item {\ttfamily teardown}\+: this command will be executed after the program is launched.
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+Any of the fields can be null. If that\textquotesingle{}s the case, the described action will not be executed.
+
+
+\begin{DoxyItemize}
+\item {\ttfamily stdinput}\+: if the file exists, the content of the file will be standard input to the program.
+\item {\ttfamily expected\+Stdout}\+: if the file exists, the (filtered) standard output will be compared to the file\textquotesingle{}s content. If there is no such file, no comparison will be done.
+\item {\ttfamily expected\+Stderr}\+: if the file exists, the (filtered) error output will be compared to the file\textquotesingle{}s content. If there is no such file, no comparison will be done.
+\end{DoxyItemize}
+
+If a {\ttfamily setup}, {\ttfamily stdout/stderr\+Filter} or {\ttfamily teardown} command doesn\textquotesingle{}t return 0, the test will fail.
+
+Upon creation, feel free to change the files\textquotesingle{} content by yourself. Be careful not to leave any {\itshape useless} line breaks of trailing spaces 
+
+
+
+You can use Marvinette on an Unix-\/based OS or on Windows!
+
+Also, you\textquotesingle{}ll need P\+HP $>$= 7.\+4. No other library needed (the {\ttfamily vendor} folder and composer configuration file are used for Marvinette\textquotesingle{}s unit tests) 
+
+
+
+\href{https://sonarcloud.io/dashboard?id=Arthi-chaud_Marvinette}{\tt } 

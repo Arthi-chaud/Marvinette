@@ -1,0 +1,167 @@
+\hypertarget{classTest}{}\section{Test Class Reference}
+\label{classTest}\index{Test@{Test}}
+
+
+Object representing the test\textquotesingle{}s instruction.  
+
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTest_acf599531126e1b40f3529405e147ecfa}\label{classTest_acf599531126e1b40f3529405e147ecfa}} 
+{\bfseries \+\_\+\+\_\+construct} (?string \$test\+Path=null)
+\item 
+\hyperlink{classTest_a61e3ace38fd982cc3b066c2ab93eb33a}{export} (string \$tests\+Folder)
+\item 
+\hyperlink{classTest_ab1460ff08b4bc23fe5a01b5afcc18dd2}{import} (string \$test\+Folder)
+\begin{DoxyCompactList}\small\item\em import test from file in folder \end{DoxyCompactList}\item 
+\hyperlink{classTest_afd7151c1c51e71d95d814b379e0947cd}{execute} (\hyperlink{classProject}{Project} \$project)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTest_a00189b0d67cee24b1f55ffcf2aa841bf}\label{classTest_a00189b0d67cee24b1f55ffcf2aa841bf}} 
+static {\bfseries export\+Sample} (string \$tests\+Folder, string \$name)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTest_af26d84c2c2033fdbdd33eaf85c67c0ea}\label{classTest_af26d84c2c2033fdbdd33eaf85c67c0ea}} 
+const {\bfseries Config\+File} = \textquotesingle{}config.\+json\textquotesingle{}
+\item 
+\mbox{\Hypertarget{classTest_ae1b59bffc7abfa6aa0f85566b410def5}\label{classTest_ae1b59bffc7abfa6aa0f85566b410def5}} 
+const {\bfseries Tmp\+File\+Folder} = Tmp\+File\+Folder
+\item 
+\mbox{\Hypertarget{classTest_ade02b87da948e70b2f55a3132928b039}\label{classTest_ade02b87da948e70b2f55a3132928b039}} 
+const {\bfseries Tmp\+File\+Prefix} = \textquotesingle{}Marvinette\textquotesingle{}
+\item 
+\mbox{\Hypertarget{classTest_a083345e9a23e8c1eb45a2b0350e9f9dc}\label{classTest_a083345e9a23e8c1eb45a2b0350e9f9dc}} 
+const {\bfseries Tmp\+File\+Stdout\+Prefix} = \textquotesingle{}Stdout\textquotesingle{}
+\item 
+\mbox{\Hypertarget{classTest_ad836169e38502a831a67ed44bec603d4}\label{classTest_ad836169e38502a831a67ed44bec603d4}} 
+const {\bfseries Tmp\+File\+Stderr\+Prefix} = \textquotesingle{}Stderr\textquotesingle{}
+\item 
+\mbox{\Hypertarget{classTest_a659ffaf5e33a76f74a324a1704a453b9}\label{classTest_a659ffaf5e33a76f74a324a1704a453b9}} 
+const {\bfseries Tmp\+File\+Filtered\+Prefix} = \textquotesingle{}Filtered\textquotesingle{}
+\item 
+\mbox{\Hypertarget{classTest_a279a9761018d06d3fc0ae670984c611b}\label{classTest_a279a9761018d06d3fc0ae670984c611b}} 
+const {\bfseries Tmp\+Diff\+File\+Prefix} = \textquotesingle{}Diff\textquotesingle{}
+\item 
+\mbox{\Hypertarget{classTest_a73668b573223cd0a0a655955a1b78b80}\label{classTest_a73668b573223cd0a0a655955a1b78b80}} 
+const {\bfseries Stream\+Fields} = \mbox{[}\textquotesingle{}expected\textquotesingle{} . self\+::\+Tmp\+File\+Stderr\+Prefix, \textquotesingle{}expected\textquotesingle{} . self\+::\+Tmp\+File\+Stdout\+Prefix, \textquotesingle{}stdinput\textquotesingle{}\mbox{]}
+\item 
+\mbox{\Hypertarget{classTest_a9c07752de0d3fb837da28d4a8a81beb8}\label{classTest_a9c07752de0d3fb837da28d4a8a81beb8}} 
+\hyperlink{classField}{Field} {\bfseries \$name}
+\item 
+\mbox{\Hypertarget{classTest_a8e1e0c4ef28384dab9ed434b96b9c8e5}\label{classTest_a8e1e0c4ef28384dab9ed434b96b9c8e5}} 
+\hyperlink{classField}{Field} {\bfseries \$command\+Line\+Arguments}
+\item 
+\mbox{\Hypertarget{classTest_a2481e3e2d064e0d447c301baa8b9cb46}\label{classTest_a2481e3e2d064e0d447c301baa8b9cb46}} 
+\hyperlink{classField}{Field} {\bfseries \$interpreter\+Arguments}
+\item 
+\mbox{\Hypertarget{classTest_a56d12011d910b9aa40ad467b85fe1a40}\label{classTest_a56d12011d910b9aa40ad467b85fe1a40}} 
+\hyperlink{classField}{Field} {\bfseries \$expected\+Return\+Code}
+\item 
+\mbox{\Hypertarget{classTest_a060f5bf12c22e7a4480a8a00759eea52}\label{classTest_a060f5bf12c22e7a4480a8a00759eea52}} 
+\hyperlink{classField}{Field} {\bfseries \$stdout\+Filter}
+\item 
+\mbox{\Hypertarget{classTest_a2407a1d6086e9406c4ce4415f213ac34}\label{classTest_a2407a1d6086e9406c4ce4415f213ac34}} 
+\hyperlink{classField}{Field} {\bfseries \$stderr\+Filter}
+\item 
+\mbox{\Hypertarget{classTest_ad01ebf52ac16148dabb9ec4ea55377bc}\label{classTest_ad01ebf52ac16148dabb9ec4ea55377bc}} 
+\hyperlink{classField}{Field} {\bfseries \$stdinput}
+\item 
+\mbox{\Hypertarget{classTest_a64a9b3cdb03f4c3ea863b57fa3ea1d73}\label{classTest_a64a9b3cdb03f4c3ea863b57fa3ea1d73}} 
+\hyperlink{classField}{Field} {\bfseries \$empty\+Env}
+\item 
+\mbox{\Hypertarget{classTest_a26361a14649bfc158727f160a0a1ba86}\label{classTest_a26361a14649bfc158727f160a0a1ba86}} 
+\hyperlink{classField}{Field} {\bfseries \$expected\+Stdout}
+\item 
+\mbox{\Hypertarget{classTest_ad3f9aa30395f954146dd38e34191afea}\label{classTest_ad3f9aa30395f954146dd38e34191afea}} 
+\hyperlink{classField}{Field} {\bfseries \$expected\+Stderr}
+\item 
+\mbox{\Hypertarget{classTest_a7f746d846f82b595b8f42cc70018843b}\label{classTest_a7f746d846f82b595b8f42cc70018843b}} 
+\hyperlink{classField}{Field} {\bfseries \$setup}
+\item 
+\mbox{\Hypertarget{classTest_ada2e6af518692629f16df255ababf4ae}\label{classTest_ada2e6af518692629f16df255ababf4ae}} 
+\hyperlink{classField}{Field} {\bfseries \$teardown}
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classTest_a76e2356e087e341bba538fef7b30a3dc}{execute\+Test\+Command} (string \$command)
+\item 
+\hyperlink{classTest_ac9eac02dbbf02d982dda6b4aaf4e28fd}{execute\+System\+Command} (string \$command, ?string \$message=null, ?int \$expected\+Return\+Code=0)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Object representing the test\textquotesingle{}s instruction. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classTest_afd7151c1c51e71d95d814b379e0947cd}\label{classTest_afd7151c1c51e71d95d814b379e0947cd}} 
+\index{Test@{Test}!execute@{execute}}
+\index{execute@{execute}!Test@{Test}}
+\subsubsection{\texorpdfstring{execute()}{execute()}}
+{\footnotesize\ttfamily Test\+::execute (\begin{DoxyParamCaption}\item[{\hyperlink{classProject}{Project}}]{\$project }\end{DoxyParamCaption})}
+
+Executes A \hyperlink{classTest}{Test}, Throws when ann error occurs or on fail \begin{DoxyReturn}{Returns}
+bool true on success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTest_ac9eac02dbbf02d982dda6b4aaf4e28fd}\label{classTest_ac9eac02dbbf02d982dda6b4aaf4e28fd}} 
+\index{Test@{Test}!execute\+System\+Command@{execute\+System\+Command}}
+\index{execute\+System\+Command@{execute\+System\+Command}!Test@{Test}}
+\subsubsection{\texorpdfstring{execute\+System\+Command()}{executeSystemCommand()}}
+{\footnotesize\ttfamily Test\+::execute\+System\+Command (\begin{DoxyParamCaption}\item[{string}]{\$command,  }\item[{?string}]{\$message = {\ttfamily null},  }\item[{?int}]{\$expected\+Return\+Code = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Calls {\ttfamily system} function passing \$command as parameter If the return code differs from \$expected\+Return\+Code, throws 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$command} & shell command \\
+\hline
+int & {\em \$expected\+Return\+Code} & If the return code differs from it, the function hrows \\
+\hline
+string & {\em \$message} & what the exception message should contain. The return code will be inserted after \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTest_a76e2356e087e341bba538fef7b30a3dc}\label{classTest_a76e2356e087e341bba538fef7b30a3dc}} 
+\index{Test@{Test}!execute\+Test\+Command@{execute\+Test\+Command}}
+\index{execute\+Test\+Command@{execute\+Test\+Command}!Test@{Test}}
+\subsubsection{\texorpdfstring{execute\+Test\+Command()}{executeTestCommand()}}
+{\footnotesize\ttfamily Test\+::execute\+Test\+Command (\begin{DoxyParamCaption}\item[{string}]{\$command }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+Execute \$command using {\ttfamily system} If the return code differs from what is expected (field expected\+Return\+Code), the function throws 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$command} & the shell command to execute project\textquotesingle{}s binary \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTest_a61e3ace38fd982cc3b066c2ab93eb33a}\label{classTest_a61e3ace38fd982cc3b066c2ab93eb33a}} 
+\index{Test@{Test}!export@{export}}
+\index{export@{export}!Test@{Test}}
+\subsubsection{\texorpdfstring{export()}{export()}}
+{\footnotesize\ttfamily Test\+::export (\begin{DoxyParamCaption}\item[{string}]{\$tests\+Folder }\end{DoxyParamCaption})}
+
+Will export the test in a folder placed in \$tests\+Folder` 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$tests\+Folder} & the path to the folder where the test\textquotesingle{}s folder will be placed \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTest_ab1460ff08b4bc23fe5a01b5afcc18dd2}\label{classTest_ab1460ff08b4bc23fe5a01b5afcc18dd2}} 
+\index{Test@{Test}!import@{import}}
+\index{import@{import}!Test@{Test}}
+\subsubsection{\texorpdfstring{import()}{import()}}
+{\footnotesize\ttfamily Test\+::import (\begin{DoxyParamCaption}\item[{string}]{\$test\+Folder }\end{DoxyParamCaption})}
+
+
+
+import test from file in folder 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \$tests\+Folder} & the path to the test folder \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Test.\+php\end{DoxyCompactItemize}

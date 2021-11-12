@@ -1,0 +1,58 @@
+\hypertarget{classFileManager}{}\section{File\+Manager Class Reference}
+\label{classFileManager}\index{File\+Manager@{File\+Manager}}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classFileManager_a19dfbed0b7597c61ccf94fa42abae688}{delete\+Folder} (string \$folder\+Path)
+\item 
+static \hyperlink{classFileManager_a455adf5b72c5068e606a1e1fdb67a97e}{normalize\+Path} (string \$path)
+\item 
+static \hyperlink{classFileManager_afe8493bc18be1fd7d7d431142c85008e}{remove\+End\+Dir\+Separator} (string \$path)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classFileManager_a19dfbed0b7597c61ccf94fa42abae688}\label{classFileManager_a19dfbed0b7597c61ccf94fa42abae688}} 
+\index{File\+Manager@{File\+Manager}!delete\+Folder@{delete\+Folder}}
+\index{delete\+Folder@{delete\+Folder}!File\+Manager@{File\+Manager}}
+\subsubsection{\texorpdfstring{delete\+Folder()}{deleteFolder()}}
+{\footnotesize\ttfamily static File\+Manager\+::delete\+Folder (\begin{DoxyParamCaption}\item[{string}]{\$folder\+Path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Deletes a folder, and its content 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$folder\+Path} & the full or relative path to a folder \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classFileManager_a455adf5b72c5068e606a1e1fdb67a97e}\label{classFileManager_a455adf5b72c5068e606a1e1fdb67a97e}} 
+\index{File\+Manager@{File\+Manager}!normalize\+Path@{normalize\+Path}}
+\index{normalize\+Path@{normalize\+Path}!File\+Manager@{File\+Manager}}
+\subsubsection{\texorpdfstring{normalize\+Path()}{normalizePath()}}
+{\footnotesize\ttfamily static File\+Manager\+::normalize\+Path (\begin{DoxyParamCaption}\item[{string}]{\$path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+replace every backslashes and forwardslashes with D\+I\+R\+E\+C\+T\+O\+R\+Y\+\_\+\+S\+E\+P\+A\+R\+A\+T\+OR t oobtain cross-\/platform path 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$path} & a file path containing directory separators \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classFileManager_afe8493bc18be1fd7d7d431142c85008e}\label{classFileManager_afe8493bc18be1fd7d7d431142c85008e}} 
+\index{File\+Manager@{File\+Manager}!remove\+End\+Dir\+Separator@{remove\+End\+Dir\+Separator}}
+\index{remove\+End\+Dir\+Separator@{remove\+End\+Dir\+Separator}!File\+Manager@{File\+Manager}}
+\subsubsection{\texorpdfstring{remove\+End\+Dir\+Separator()}{removeEndDirSeparator()}}
+{\footnotesize\ttfamily static File\+Manager\+::remove\+End\+Dir\+Separator (\begin{DoxyParamCaption}\item[{string}]{\$path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Remove last character if it is a directory separator 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$ath} & a filepath \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Utils/File\+Manager.\+php\end{DoxyCompactItemize}

@@ -1,0 +1,141 @@
+\hypertarget{classProject}{}\section{Project Class Reference}
+\label{classProject}\index{Project@{Project}}
+
+
+Object representing the project\textquotesingle{}s important infos.  
+
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classProject_a8cdc8d54b71a7084cd0ed8f30fbec1bc}{\+\_\+\+\_\+construct} (?string \$file\+Path=null)
+\item 
+\hyperlink{classProject_ae494148807f65c817af1e3b0139fee5f}{ready\+To\+Export} ()
+\item 
+\hyperlink{classProject_aba3771ee0f7928f720510eea8a6b3337}{build\+Binary\+Access\+Path} ()
+\item 
+\hyperlink{classProject_a96804c40f63ec38018f480c73a7c20a8}{interpreter\+Exists} ()
+\item 
+\hyperlink{classProject_ab08a24e761958ef13b631cb5155286ad}{get\+Interpreter\+Full\+Path} ()
+\item 
+\hyperlink{classProject_a290cf05d80192d6ea99c119e91631197}{is\+Ready\+To\+Be\+Tested} ()
+\item 
+\hyperlink{classProject_af50a24af7524ef28c4d7b39f53153498}{export} (string \$outfile)
+\item 
+\hyperlink{classProject_a726e3f6542b4b4a15c8c73f92fa84b5a}{import} (string \$infile)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classProject_a5c9ad606315d82f9d09c5fef29b930e2}{export\+Sample} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classProject_af24a2186c2669ac5acfa29fbc71c7bd2}\label{classProject_af24a2186c2669ac5acfa29fbc71c7bd2}} 
+const {\bfseries Configuration\+File} = \char`\"{}Marvinette.\+json\char`\"{}
+\item 
+\mbox{\Hypertarget{classProject_abf56709b7a46b62d9d7febddad179197}\label{classProject_abf56709b7a46b62d9d7febddad179197}} 
+\hyperlink{classField}{Field} {\bfseries \$name}
+\item 
+\mbox{\Hypertarget{classProject_a3b8e966f7165ec5e6df102679eab5bbc}\label{classProject_a3b8e966f7165ec5e6df102679eab5bbc}} 
+\hyperlink{classField}{Field} {\bfseries \$binary\+Name}
+\item 
+\mbox{\Hypertarget{classProject_a010db9bfd82fd07c825f26910b5b1953}\label{classProject_a010db9bfd82fd07c825f26910b5b1953}} 
+\hyperlink{classField}{Field} {\bfseries \$binary\+Path}
+\item 
+\mbox{\Hypertarget{classProject_a410292d6310de22b8404b5128892b3cc}\label{classProject_a410292d6310de22b8404b5128892b3cc}} 
+\hyperlink{classField}{Field} {\bfseries \$interpreter}
+\item 
+\mbox{\Hypertarget{classProject_a31ff999c516ebcbe9103b16eeb73bf5f}\label{classProject_a31ff999c516ebcbe9103b16eeb73bf5f}} 
+\hyperlink{classField}{Field} {\bfseries \$tests\+Folder}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Object representing the project\textquotesingle{}s important infos. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classProject_a8cdc8d54b71a7084cd0ed8f30fbec1bc}\label{classProject_a8cdc8d54b71a7084cd0ed8f30fbec1bc}} 
+\index{Project@{Project}!\+\_\+\+\_\+construct@{\+\_\+\+\_\+construct}}
+\index{\+\_\+\+\_\+construct@{\+\_\+\+\_\+construct}!Project@{Project}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+construct()}{\_\_construct()}}
+{\footnotesize\ttfamily Project\+::\+\_\+\+\_\+construct (\begin{DoxyParamCaption}\item[{?string}]{\$file\+Path = {\ttfamily null} }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em ?string} & \$file\+Path a path to a J\+S\+ON \hyperlink{classProject}{Project} file \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classProject_aba3771ee0f7928f720510eea8a6b3337}\label{classProject_aba3771ee0f7928f720510eea8a6b3337}} 
+\index{Project@{Project}!build\+Binary\+Access\+Path@{build\+Binary\+Access\+Path}}
+\index{build\+Binary\+Access\+Path@{build\+Binary\+Access\+Path}!Project@{Project}}
+\subsubsection{\texorpdfstring{build\+Binary\+Access\+Path()}{buildBinaryAccessPath()}}
+{\footnotesize\ttfamily Project\+::build\+Binary\+Access\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+string binary access path 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProject_af50a24af7524ef28c4d7b39f53153498}\label{classProject_af50a24af7524ef28c4d7b39f53153498}} 
+\index{Project@{Project}!export@{export}}
+\index{export@{export}!Project@{Project}}
+\subsubsection{\texorpdfstring{export()}{export()}}
+{\footnotesize\ttfamily Project\+::export (\begin{DoxyParamCaption}\item[{string}]{\$outfile }\end{DoxyParamCaption})}
+
+Export \hyperlink{classProject}{Project} to J\+S\+ON formatted file 
+\begin{DoxyParams}{Parameters}
+{\em \$outfile} & name of file with J\+S\+O\+N-\/ed \hyperlink{classProject}{Project} class \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProject_a5c9ad606315d82f9d09c5fef29b930e2}\label{classProject_a5c9ad606315d82f9d09c5fef29b930e2}} 
+\index{Project@{Project}!export\+Sample@{export\+Sample}}
+\index{export\+Sample@{export\+Sample}!Project@{Project}}
+\subsubsection{\texorpdfstring{export\+Sample()}{exportSample()}}
+{\footnotesize\ttfamily static Project\+::export\+Sample (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Exports to Marvinette.\+json an empty configation structure \mbox{\Hypertarget{classProject_ab08a24e761958ef13b631cb5155286ad}\label{classProject_ab08a24e761958ef13b631cb5155286ad}} 
+\index{Project@{Project}!get\+Interpreter\+Full\+Path@{get\+Interpreter\+Full\+Path}}
+\index{get\+Interpreter\+Full\+Path@{get\+Interpreter\+Full\+Path}!Project@{Project}}
+\subsubsection{\texorpdfstring{get\+Interpreter\+Full\+Path()}{getInterpreterFullPath()}}
+{\footnotesize\ttfamily Project\+::get\+Interpreter\+Full\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Using P\+A\+Th Env var, get interpreter\textquotesingle{}s full path, or null if not throw if no interpreter is set \mbox{\Hypertarget{classProject_a726e3f6542b4b4a15c8c73f92fa84b5a}\label{classProject_a726e3f6542b4b4a15c8c73f92fa84b5a}} 
+\index{Project@{Project}!import@{import}}
+\index{import@{import}!Project@{Project}}
+\subsubsection{\texorpdfstring{import()}{import()}}
+{\footnotesize\ttfamily Project\+::import (\begin{DoxyParamCaption}\item[{string}]{\$infile }\end{DoxyParamCaption})}
+
+Fills the object\textquotesingle{}s field using json file 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$infile} & the path to a valid J\+S\+ON \hyperlink{classProject}{Project} file \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProject_a96804c40f63ec38018f480c73a7c20a8}\label{classProject_a96804c40f63ec38018f480c73a7c20a8}} 
+\index{Project@{Project}!interpreter\+Exists@{interpreter\+Exists}}
+\index{interpreter\+Exists@{interpreter\+Exists}!Project@{Project}}
+\subsubsection{\texorpdfstring{interpreter\+Exists()}{interpreterExists()}}
+{\footnotesize\ttfamily Project\+::interpreter\+Exists (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Using P\+A\+Th Env var, checks if interpreter exists throw if no interpreter is set \mbox{\Hypertarget{classProject_a290cf05d80192d6ea99c119e91631197}\label{classProject_a290cf05d80192d6ea99c119e91631197}} 
+\index{Project@{Project}!is\+Ready\+To\+Be\+Tested@{is\+Ready\+To\+Be\+Tested}}
+\index{is\+Ready\+To\+Be\+Tested@{is\+Ready\+To\+Be\+Tested}!Project@{Project}}
+\subsubsection{\texorpdfstring{is\+Ready\+To\+Be\+Tested()}{isReadyToBeTested()}}
+{\footnotesize\ttfamily Project\+::is\+Ready\+To\+Be\+Tested (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Checks if the binary exists the interpreter exists (if set) (need to be ready to export) \mbox{\Hypertarget{classProject_ae494148807f65c817af1e3b0139fee5f}\label{classProject_ae494148807f65c817af1e3b0139fee5f}} 
+\index{Project@{Project}!ready\+To\+Export@{ready\+To\+Export}}
+\index{ready\+To\+Export@{ready\+To\+Export}!Project@{Project}}
+\subsubsection{\texorpdfstring{ready\+To\+Export()}{readyToExport()}}
+{\footnotesize\ttfamily Project\+::ready\+To\+Export (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Returns}
+bool true if all necessary fields are set interpreter can be null 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Project.\+php\end{DoxyCompactItemize}

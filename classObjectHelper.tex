@@ -1,0 +1,53 @@
+\hypertarget{classObjectHelper}{}\section{Object\+Helper Class Reference}
+\label{classObjectHelper}\index{Object\+Helper@{Object\+Helper}}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classObjectHelper_ac4635dabbe7d6552d0bc6c3bcb2da485}{for\+Each\+Object\+Field} (\&\$obj, callable \$callable)
+\item 
+static \hyperlink{classObjectHelper_aee0184a88585f2872a33f0311cfe1457}{prompt\+Each\+Object\+Field} (\&\$obj, callable \$display\+Prompt, bool \$mod\+Prompt=false, array \$ignored\+Fields=\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Set of function which help iterate through object\textquotesingle{}s fields 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classObjectHelper_ac4635dabbe7d6552d0bc6c3bcb2da485}\label{classObjectHelper_ac4635dabbe7d6552d0bc6c3bcb2da485}} 
+\index{Object\+Helper@{Object\+Helper}!for\+Each\+Object\+Field@{for\+Each\+Object\+Field}}
+\index{for\+Each\+Object\+Field@{for\+Each\+Object\+Field}!Object\+Helper@{Object\+Helper}}
+\subsubsection{\texorpdfstring{for\+Each\+Object\+Field()}{forEachObjectField()}}
+{\footnotesize\ttfamily static Object\+Helper\+::for\+Each\+Object\+Field (\begin{DoxyParamCaption}\item[{\&}]{\$obj,  }\item[{callable}]{\$callable }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Calls \$callable on each field of \$obj 
+\begin{DoxyParams}[1]{Parameters}
+callable & {\em \$callable} & a function taking 2 parameters\+: a string being the field\textquotesingle{}s nameand the field object. retusn true on success, false on error, null on fatal error \\
+\hline
+object & {\em \$obj} & a refence to an object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool true if everything succeeded 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classObjectHelper_aee0184a88585f2872a33f0311cfe1457}\label{classObjectHelper_aee0184a88585f2872a33f0311cfe1457}} 
+\index{Object\+Helper@{Object\+Helper}!prompt\+Each\+Object\+Field@{prompt\+Each\+Object\+Field}}
+\index{prompt\+Each\+Object\+Field@{prompt\+Each\+Object\+Field}!Object\+Helper@{Object\+Helper}}
+\subsubsection{\texorpdfstring{prompt\+Each\+Object\+Field()}{promptEachObjectField()}}
+{\footnotesize\ttfamily static Object\+Helper\+::prompt\+Each\+Object\+Field (\begin{DoxyParamCaption}\item[{\&}]{\$obj,  }\item[{callable}]{\$display\+Prompt,  }\item[{bool}]{\$mod\+Prompt = {\ttfamily false},  }\item[{array}]{\$ignored\+Fields = {\ttfamily \mbox{[}\mbox{]}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Prompt user to enter each obbjec\textquotesingle{}s field 
+\begin{DoxyParams}[1]{Parameters}
+object & {\em \$obj} & the object to iterate through \\
+\hline
+callable & {\em \$prompt\+Formatter} & a function that display prompt using field\textquotesingle{}s name and field \\
+\hline
+bool & {\em \$mod\+Prompt} & if true and value entered is empty, the old value is not modified \\
+\hline
+array & {\em \$ignored\+Fields} & an array of string containing fields\textquotesingle{} names that will be ingore at prompt \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\+Utils/Object\+Helper.\+php\end{DoxyCompactItemize}

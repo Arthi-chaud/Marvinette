@@ -1,0 +1,168 @@
+\hypertarget{classField}{}\section{Field Class Reference}
+\label{classField}\index{Field@{Field}}
+
+
+Object representing a class\textquotesingle{}s variable member, but allows error handling and prompt help messages.  
+
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classField_ae052e0e3c5726e58db49bdbc1e2df358}{\+\_\+\+\_\+to\+String} ()
+\item 
+\hyperlink{classField_a360a1d2e980c0168004a5e2d29505995}{\+\_\+\+\_\+construct} (callable \$error\+Handler, \$data\+Cleaner=null, ?string \$prompt\+Help=null)
+\begin{DoxyCompactList}\small\item\em A \hyperlink{classField}{Field} constructor, should be called in constructor of class. \end{DoxyCompactList}\item 
+\hyperlink{classField_a0256105b39f3e33f4a52ec0dabca6369}{get} ()
+\item 
+\hyperlink{classField_a0c9ef207aaf0de57c8f4a0a96a25d5e4}{set} (\$data)
+\begin{DoxyCompactList}\small\item\em Call the error handler, with no exception handling If a data cleaner is set, the value retuend by this function will be set to {\ttfamily \$data} {\ttfamily \$data} is set to the object\textquotesingle{}s data field. \end{DoxyCompactList}\item 
+\hyperlink{classField_a0a70ba06268a998a95875ab373c981c8}{get\+Prompt\+Help} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classField_a1264ea9bdc12d6d5b6e6189508276ebb}{Yes\+No\+Error\+Handler} (\$choice)
+\item 
+static \hyperlink{classField_a5f84b56e8ea34c9b15081751366392c8}{Yes\+No\+Data\+Cleaner} (\$choice)
+\item 
+static \hyperlink{classField_aae2d2da0cdb35adf97d9a83664613b7d}{Empty\+Data\+Cleaner} (\$input)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classField_a4ef2767bbc9edafc28b43fcafc9cfc14}\label{classField_a4ef2767bbc9edafc28b43fcafc9cfc14}} 
+{\bfseries \$data} = null
+\item 
+\mbox{\Hypertarget{classField_ab99fddcf18839cfba9038b7ca5cb0505}\label{classField_ab99fddcf18839cfba9038b7ca5cb0505}} 
+{\bfseries \$error\+Handler}
+\item 
+\mbox{\Hypertarget{classField_af12f4a8d51558e1e41cfd7aaed5a5e5e}\label{classField_af12f4a8d51558e1e41cfd7aaed5a5e5e}} 
+{\bfseries \$data\+Cleaner}
+\item 
+\mbox{\Hypertarget{classField_aec8b430e3b1f483094a122f89a657470}\label{classField_aec8b430e3b1f483094a122f89a657470}} 
+string {\bfseries \$prompt\+Help} = null
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Object representing a class\textquotesingle{}s variable member, but allows error handling and prompt help messages. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classField_a360a1d2e980c0168004a5e2d29505995}\label{classField_a360a1d2e980c0168004a5e2d29505995}} 
+\index{Field@{Field}!\+\_\+\+\_\+construct@{\+\_\+\+\_\+construct}}
+\index{\+\_\+\+\_\+construct@{\+\_\+\+\_\+construct}!Field@{Field}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+construct()}{\_\_construct()}}
+{\footnotesize\ttfamily Field\+::\+\_\+\+\_\+construct (\begin{DoxyParamCaption}\item[{callable}]{\$error\+Handler,  }\item[{}]{\$data\+Cleaner = {\ttfamily null},  }\item[{?string}]{\$prompt\+Help = {\ttfamily null} }\end{DoxyParamCaption})}
+
+
+
+A \hyperlink{classField}{Field} constructor, should be called in constructor of class. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+callable & {\em \$error\+Handler} & the function to handle error\+: must throw when error occurs (will be called using call\+\_\+user\+\_\+func) \\
+\hline
+callable & {\em \$datacleaner} & the function to clean the data (can be null) (will be called using call\+\_\+user\+\_\+func) \\
+\hline
+string & {\em \$prompt\+Help} & a help message, which will be displayed when the user is prompted to type the field \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classField_ae052e0e3c5726e58db49bdbc1e2df358}\label{classField_ae052e0e3c5726e58db49bdbc1e2df358}} 
+\index{Field@{Field}!\+\_\+\+\_\+to\+String@{\+\_\+\+\_\+to\+String}}
+\index{\+\_\+\+\_\+to\+String@{\+\_\+\+\_\+to\+String}!Field@{Field}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+to\+String()}{\_\_toString()}}
+{\footnotesize\ttfamily Field\+::\+\_\+\+\_\+to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Converts data to string when possible Avoid using {\ttfamily get} getter method \begin{DoxyReturn}{Returns}
+string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classField_aae2d2da0cdb35adf97d9a83664613b7d}\label{classField_aae2d2da0cdb35adf97d9a83664613b7d}} 
+\index{Field@{Field}!Empty\+Data\+Cleaner@{Empty\+Data\+Cleaner}}
+\index{Empty\+Data\+Cleaner@{Empty\+Data\+Cleaner}!Field@{Field}}
+\subsubsection{\texorpdfstring{Empty\+Data\+Cleaner()}{EmptyDataCleaner()}}
+{\footnotesize\ttfamily static Field\+::\+Empty\+Data\+Cleaner (\begin{DoxyParamCaption}\item[{}]{\$input }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Fata cleaner function If the user entered an empty line, the data will be set to null 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$input} & a string entered by the user \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string$\vert$null 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classField_a0256105b39f3e33f4a52ec0dabca6369}\label{classField_a0256105b39f3e33f4a52ec0dabca6369}} 
+\index{Field@{Field}!get@{get}}
+\index{get@{get}!Field@{Field}}
+\subsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily Field\+::get (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the value of data
+
+\begin{DoxyReturn}{Returns}
+mixed 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classField_a0a70ba06268a998a95875ab373c981c8}\label{classField_a0a70ba06268a998a95875ab373c981c8}} 
+\index{Field@{Field}!get\+Prompt\+Help@{get\+Prompt\+Help}}
+\index{get\+Prompt\+Help@{get\+Prompt\+Help}!Field@{Field}}
+\subsubsection{\texorpdfstring{get\+Prompt\+Help()}{getPromptHelp()}}
+{\footnotesize\ttfamily Field\+::get\+Prompt\+Help (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get prompt helper
+
+\begin{DoxyReturn}{Returns}
+?string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classField_a0c9ef207aaf0de57c8f4a0a96a25d5e4}\label{classField_a0c9ef207aaf0de57c8f4a0a96a25d5e4}} 
+\index{Field@{Field}!set@{set}}
+\index{set@{set}!Field@{Field}}
+\subsubsection{\texorpdfstring{set()}{set()}}
+{\footnotesize\ttfamily Field\+::set (\begin{DoxyParamCaption}\item[{}]{\$data }\end{DoxyParamCaption})}
+
+
+
+Call the error handler, with no exception handling If a data cleaner is set, the value retuend by this function will be set to {\ttfamily \$data} {\ttfamily \$data} is set to the object\textquotesingle{}s data field. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+mixed & {\em \$data} & a value entered by the user \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classField_a5f84b56e8ea34c9b15081751366392c8}\label{classField_a5f84b56e8ea34c9b15081751366392c8}} 
+\index{Field@{Field}!Yes\+No\+Data\+Cleaner@{Yes\+No\+Data\+Cleaner}}
+\index{Yes\+No\+Data\+Cleaner@{Yes\+No\+Data\+Cleaner}!Field@{Field}}
+\subsubsection{\texorpdfstring{Yes\+No\+Data\+Cleaner()}{YesNoDataCleaner()}}
+{\footnotesize\ttfamily static Field\+::\+Yes\+No\+Data\+Cleaner (\begin{DoxyParamCaption}\item[{}]{\$choice }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Data cleaner function If \$choice is a \textquotesingle{}yes\textquotesingle{} option string, the function returns true 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$choice} & a string entered by the user \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classField_a1264ea9bdc12d6d5b6e6189508276ebb}\label{classField_a1264ea9bdc12d6d5b6e6189508276ebb}} 
+\index{Field@{Field}!Yes\+No\+Error\+Handler@{Yes\+No\+Error\+Handler}}
+\index{Yes\+No\+Error\+Handler@{Yes\+No\+Error\+Handler}!Field@{Field}}
+\subsubsection{\texorpdfstring{Yes\+No\+Error\+Handler()}{YesNoErrorHandler()}}
+{\footnotesize\ttfamily static Field\+::\+Yes\+No\+Error\+Handler (\begin{DoxyParamCaption}\item[{}]{\$choice }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Error handler for object\textquotesingle{}s field Throws an exception if \$choice is not a valid \textquotesingle{}yes\textquotesingle{}/\textquotesingle{}no\textquotesingle{} string 
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$choice} & a string entered by the user \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Field.\+php\end{DoxyCompactItemize}
