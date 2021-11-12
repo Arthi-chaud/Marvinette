@@ -37,7 +37,7 @@ class FileManager
 	 */
 	public static function removeEndDirSeparator(string $path): string
 	{
-		while ((substr($path, -1, 1) == '/' || substr($path, -1, 1) == '\\') && strlen($path)) {
+		while ((substr($path, -1, 1) === '/' || substr($path, -1, 1) === '\\') && strlen($path)) {
 			$path = substr($path, 0, strlen($path) - 1);
 		}
 		return $path;

@@ -11,7 +11,7 @@ Class CommandLine
 		$shortopt = "";
 		$longopts = [];
 		foreach ($options as $option) {
-			if (strlen($option) == 1) {
+			if (strlen($option) === 1) {
 				$shortopt .= $option;
 			} else {
 				$longopts[] = $option;

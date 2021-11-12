@@ -44,7 +44,7 @@ class UserInterface
 
 	public static function displayTitle(): void
 	{
-		if (self::$titlesStack == []) {
+		if (self::$titlesStack === []) {
 			throw new MarvinetteException("No title set");
 		}
 		if (!isset($displayer)) {
@@ -112,10 +112,10 @@ class UserInterface
 		$cleaned = "";
 		for ($i = 0; $i < strlen($str); $i++) {
 			$c = $str[$i];
-			if ($c == ' ') {
+			if ($c === ' ') {
 				continue;
 			}
-			if ($i && $str[$i - 1]  == ' ') {
+			if ($i && $str[$i - 1]  === ' ') {
 				$cleaned .= strtoupper($c);
 			} else {
 				$cleaned .= strtolower($c);

@@ -21,7 +21,7 @@ class TestManager {
 		}
 		$test = new Test();
 		$ignoredFields = [];
-		if ($project->interpreter->get() == null) {
+		if ($project->interpreter->get() === null) {
 			$ignoredFields[] = 'interpreterArguments';
 		}
 		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
@@ -42,7 +42,7 @@ class TestManager {
 	{
 		UserInterface::setTitle("Create Sample Test");
 		$project = new Project(Project::ConfigurationFile);
-		if ($name == null) {
+		if ($name === null) {
 			$test = new Test();
 			$ignoredFields = array_slice(array_keys(get_object_vars($test)), 1);
 			ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
@@ -76,7 +76,7 @@ class TestManager {
 		}
 		$test = new Test(FileManager::normalizePath("$testsFolder/$testName"));
 		$ignoredFields = [];
-		if ($project->interpreter->get() == null) {
+		if ($project->interpreter->get() === null) {
 			$ignoredFields[] = 'interpreterArguments';
 		}
 		ObjectHelper::promptEachObjectField($test, function ($fieldName, $field) {
@@ -90,16 +90,16 @@ class TestManager {
 
 		$jsonContent = [];
 		foreach(get_object_vars($test) as $fieldName => $field) {
-			if ($fieldName == 'name') {
+			if ($fieldName === 'name') {
 				continue;
 			}
 			$fieldValue = $field->get();
 			if (in_array($fieldName, Test::StreamFields)) {
 				$fieldFileName = FileManager::normalizePath("$testsFolder/$testName/$fieldName");
 				$fileExists = file_exists(FileManager::normalizePath($fieldFileName));
-				if ($fileExists && $fieldValue == false)
+				if ($fileExists && $fieldValue === false)
 					unlink($fieldFileName);
-				else if (!$fileExists && $fieldValue == true)
+				else if (!$fileExists && $fieldValue === true)
 					touch($fieldFileName);
 			} else {
 				$jsonContent[$fieldName] = $field->get();
@@ -121,7 +121,7 @@ class TestManager {
 		if (!$project) {
 			$project = new Project(Project::ConfigurationFile);
 		}
-		if ($testName == null) {
+		if ($testName === null) {
 			$testName = self::selectTest($project);
 		}
 		if (is_null($testName)) {
@@ -163,12 +163,12 @@ class TestManager {
 	public static function executesAllTests(?Project $project = null): bool
 	{
 		UserInterface::setTitle("Executing");
-		if ($project == null) {
+		if ($project === null) {
 			$project = new Project(Project::ConfigurationFile);
 		}
 		$failedTestCount = 0;
 		$tests = self::getTestsFolders($project->testsFolder->get());
-		if ($tests == []) {
+		if ($tests === []) {
 			UserInterface::displayTitle();
 			UserInterface::$displayer->setColor(Color::Red)->displayText("No tests available");
 			throw new InvalidTestFolderException();
@@ -187,7 +187,7 @@ class TestManager {
 		UserInterface::$displayer->setColor(Color::Default)->displayText(" | Failed: ", false);
 		UserInterface::$displayer->setColor(Color::Red)->displayText(strval($failedTestCount));
 		UserInterface::popTitle();
-		return $failedTestCount == 0;
+		return $failedTestCount === 0;
 	}
 
 	public static function deleteTest(): void

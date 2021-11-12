@@ -32,11 +32,11 @@ function launch(): bool
 	];
 	$options = CommandLine::getArguments(array_keys($optionsCalls));
 	foreach ($optionsCalls as $option => $call) {
-		while (substr($option, -1) == ':') {
+		while (substr($option, -1) === ':') {
 			$option = substr($option, 0, strlen($option) - 1);
 		}
 		if (array_key_exists($option, $options)) {
-			return boolval(call_user_func($call, $options[$option] == false ? null : $options[$option]));
+			return boolval(call_user_func($call, $options[$option] === false ? null : $options[$option]));
 		}
 	}
 	UserInterface::displayHelp();

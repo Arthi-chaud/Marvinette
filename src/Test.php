@@ -47,7 +47,7 @@ class Test
 
 		$this->expectedReturnCode = new Field(
 		function($r) {
-			if ($r == "") {
+			if ($r === "" || is_null($r)) {
 				return;
 			}
 			if (!is_numeric($r) || (intval($r) < 0) || (intval($r) >= 255)) {
@@ -138,7 +138,7 @@ class Test
 			throw new MarvinetteException("$name: Name already taken");
 		mkdir($testPath, 0777, true);
 		ObjectHelper::forEachObjectField($test, function ($fieldName, $_) use (&$jsonArray, $testPath) {
-			if ($fieldName == 'name')
+			if ($fieldName === 'name')
 				return true;
 			if (in_array($fieldName, self::StreamFields)) {
 				file_put_contents($testPath . $fieldName, "");
@@ -172,7 +172,7 @@ class Test
 			throw new MarvinetteException("$jsonPath: File doesn't exist.");
 		}
 		$fileContent = file_get_contents($jsonPath);
-		if ($fileContent == false) {
+		if ($fileContent === false) {
 			throw new MarvinetteException("$jsonPath: Cannot read file.");
 		}
 		$jsonContent = json_decode($fileContent, true);
@@ -242,7 +242,7 @@ class Test
 		if (is_null($expectedReturnCode)) {
 			return;
 		}
-		if ($actualReturnCode != $expectedReturnCode) {
+		if ($actualReturnCode !== $expectedReturnCode) {
 			$exceptionMsg = "Return code: $actualReturnCode";
 			if ($message) {
 				$exceptionMsg = "$message $exceptionMsg";

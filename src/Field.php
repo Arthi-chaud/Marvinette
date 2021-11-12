@@ -52,7 +52,7 @@ class Field
 	 */
 	public static function EmptyDataCleaner($input): ?string
 	{
-		if ($input == "") {
+		if ($input === "") {
 			return null;
 		}
 		return $input;

@@ -41,7 +41,7 @@ class ObjectHelper
 			}
 			$displayPrompt($fieldName, $field);
 			$value = UserInput::getUserLine();
-			if ($modPrompt && $value == "") {
+			if ($modPrompt && $value === "") {
 				return true;
 			}
 			try {

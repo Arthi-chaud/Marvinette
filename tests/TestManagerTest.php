@@ -328,7 +328,7 @@ final class TestManagerTest extends MarvinetteTestCase
 
 	public function testExecuteAnotherTest()
 	{
-		$this->hideStdout();
+		//$this->hideStdout();
 		$this->defineStdin([
 			'Second Test',
 			'100 15',
@@ -359,7 +359,7 @@ final class TestManagerTest extends MarvinetteTestCase
 
 	public function testExecuteFailingTest()
 	{
-		$this->hideStdout();
+		//$this->hideStdout();
 		$this->defineStdin([
 			'Third Test',
 			'100 15',

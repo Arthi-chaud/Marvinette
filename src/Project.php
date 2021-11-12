@@ -34,7 +34,7 @@ class Project
 		});
 
 		$this->binaryPath = new Field(function($binaryPath) {}, function($binaryPath) {
-			if ($binaryPath == "") {
+			if ($binaryPath === "") {
 				$binaryPath = ".";
 			}
 			return FileManager::removeEndDirSeparator($binaryPath);
@@ -44,7 +44,7 @@ class Project
 		$this->interpreter = new Field(function($interpreter) {}, [Field::class, 'EmptyDataCleaner'], "By default: none (when it is an ELF file or a script using a shebang)");
 
 		$this->testsFolder = new Field(function($testFolder) {}, function($testFolder) {
-			if ($testFolder == "") {
+			if ($testFolder === "") {
 				$testFolder = "tests";
 			}
 			return FileManager::removeEndDirSeparator($testFolder);
@@ -112,7 +112,7 @@ class Project
 	 */
 	public function interpreterExists(): bool
 	{
-		return $this->getInterpreterFullPath() != null;
+		return $this->getInterpreterFullPath() !== null;
 	}
 	/**
 	 * Using PATh Env var, get interpreter's full path, or null if not 
@@ -127,10 +127,10 @@ class Project
 		$cleanInterpreterName = basename($this->interpreter->get(), ".$interpreterExtension");
 		foreach (explode(PATH_SEPARATOR , getenv('PATH')) as $path) {
 			$globbedPath = "$path/$cleanInterpreterName";
-			if (DIRECTORY_SEPARATOR == '\\') // if we're on windows
+			if (DIRECTORY_SEPARATOR === '\\') // if we're on windows
 				$globbedPath .= '.*';
 			$matching = glob(FileManager::normalizePath($globbedPath));
-			if ($matching != []) {
+			if ($matching !== []) {
 				return $matching[0];
 			}
 		}

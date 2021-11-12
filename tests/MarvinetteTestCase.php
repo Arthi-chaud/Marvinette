@@ -31,7 +31,7 @@ class MarvinetteTestCase extends TestCase
 			$fakeStdinHandle = $GLOBALS['testSTDIN'];
 			fclose($fakeStdinHandle);
 		}
-		if (count($lines) == 1)
+		if (count($lines) === 1)
 			$lines[] = '';
 		file_put_contents(UserInputTest::stdinClone, implode("\n", $lines));
 		$GLOBALS['testSTDIN'] = fopen(UserInputTest::stdinClone, 'r');
